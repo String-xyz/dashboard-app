@@ -1,0 +1,2 @@
+# dashboard
+Platform Management Dashboard
