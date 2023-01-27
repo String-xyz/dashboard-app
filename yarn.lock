@@ -127,6 +127,11 @@
     minimatch "^3.1.2"
     strip-json-comments "^3.1.1"
 
+"@fontsource/lora@^4.5.13":
+  version "4.5.13"
+  resolved "https://registry.yarnpkg.com/@fontsource/lora/-/lora-4.5.13.tgz#f68fe5a43699f3ac2921c894ec190de9a6decb45"
+  integrity sha512-SV8z2btHCVpjfyLpuqHNyKH56YuzJdv0tjqbi/Mb7hkXGWgz44RuGYSNAoYCes9y2fzJ2zpYUwfCrvcAEjDqMQ==
+
 "@humanwhocodes/config-array@^0.11.8":
   version "0.11.8"
   resolved "https://registry.yarnpkg.com/@humanwhocodes/config-array/-/config-array-0.11.8.tgz#03595ac2075a4dc0f191cc2131de14fbd7d410b9"
