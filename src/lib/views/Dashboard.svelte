@@ -21,6 +21,7 @@
 	.main {
 		padding: 70px;
 	}
+	
 	.grid {
 		grid-template-columns: repeat(2, 1fr);
 	}

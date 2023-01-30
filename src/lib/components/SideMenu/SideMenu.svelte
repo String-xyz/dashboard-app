@@ -46,11 +46,13 @@
 
 <style>
 	.side-menu {
+		background-color: white;
 		border: 1px solid #ededed;
 		width: 260px;
 		height: 100vh;
 		padding: 24px;
-		position: fixed;
+		position: absolute;
+		z-index: 999;
 	}
 
 	.divider {
