@@ -58,8 +58,9 @@
 		background-color: white;
 		border: 1px solid #ededed;
 		width: 260px;
-		height: 100vh;
+		height: 100%;
 		padding: 24px;
+		overflow: hidden;
 		position: absolute;
 		z-index: 999;
 	}
