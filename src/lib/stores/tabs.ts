@@ -15,6 +15,9 @@ export interface MenuItem {
 
 const assetPath = '/assets/tab/';
 
+const DOCS_URL = import.meta.env.VITE_DOCS_URL;
+const KYB_URL = import.meta.env.VITE_KYB_URL;
+
 export const tabs: MenuItem[] = [
 	{
 		name: 'Dashboard',
@@ -34,12 +37,12 @@ export const tabs: MenuItem[] = [
 	{
 		name: 'Verify Account',
 		icon: assetPath + 'verify_account.svg',
-		href: 'https://docs.google.com/forms/d/e/1FAIpQLScxHTnCS-w4371nx9ZTM4gVxV6MV-6CtwllzfxMeB61dsLrCw/viewform'
+		href: KYB_URL
 	},
 	{
 		name: 'View API Docs',
 		icon: assetPath + 'view_docs.svg',
-		href: 'https://docs.string.xyz/docs'
+		href: DOCS_URL
 	},
 	{
 		name: 'Settings',
@@ -47,5 +50,9 @@ export const tabs: MenuItem[] = [
 		view: Settings
 	}
 ]
+
+export const getTabByName = (name: string) => {
+	return tabs.find((item) => item.name === name) ?? tabs[0];
+}
 
 export const activeTab: Writable<MenuItem> = writable(tabs[0]);

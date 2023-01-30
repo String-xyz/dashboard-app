@@ -1,11 +1,11 @@
 <script>
 	import Avatar from '../Avatar.svelte';
-	import { tabs, activeTab, user } from '$lib/stores';
+	import { tabs, activeTab, user, getTabByName } from '$lib/stores';
 	import EnvIndicator from './EnvIndicator.svelte';
 	import MenuItem from './MenuItem.svelte';
 	import Signout from './Signout.svelte';
 
-	const settings = tabs.find((item) => item.name === 'Settings');
+	const settings = getTabByName('Settings');
 
 	const arrowAction = () => {
 		if (!settings) return;

@@ -14,6 +14,6 @@ export enum Roles {
 
 export const user: Writable<User> = writable({
 	name: 'Miguel Leal',
-	email: 'dante@string.xyz',
+	email: 'miguel@email.com',
 	role: Roles.OWNER
 });
