@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { activeTab, tabs } from '$lib/stores';
+	import { activeTab, getMenuItems } from '$lib/stores';
 	import SideMenu from '$lib/components/SideMenu/SideMenu.svelte';
 	import { onMount } from 'svelte';
 
 	onMount(() => {
-		$activeTab = tabs[0];
+		$activeTab = getMenuItems()[0];
 	});
 </script>
 

@@ -1,7 +1,11 @@
 <script lang='ts'>
 	import Card from "$lib/components/Dashboard/Card.svelte";
 	import { cards } from '$lib/stores'
+	import { onMount } from "svelte";
 
+	onMount(() => {
+		console.log('--2222 Loading dashboard...')
+	})
 </script>
 
 <div class="main">
