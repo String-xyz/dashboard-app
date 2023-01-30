@@ -1,12 +1,17 @@
 <script lang="ts">
-	import { activeTab } from '$lib/stores';
+	import { activeTab, tabs } from '$lib/stores';
 	import SideMenu from '$lib/components/SideMenu/SideMenu.svelte';
+	import { onMount } from 'svelte';
+
+	onMount(() => {
+		$activeTab = tabs[0];
+	});
 </script>
 
 <SideMenu />
 
 <div class="content">
-	<svelte:component this={$activeTab.view} />
+	<svelte:component this={$activeTab?.view} />
 </div>
 
 <style>

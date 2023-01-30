@@ -55,4 +55,4 @@ export const getTabByName = (name: string) => {
 	return tabs.find((item) => item.name === name) ?? tabs[0];
 }
 
-export const activeTab: Writable<MenuItem> = writable(tabs[0]);
+export const activeTab: Writable<MenuItem> = writable();
