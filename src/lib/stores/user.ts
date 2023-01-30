@@ -1,8 +1,7 @@
 import { writable, type Writable } from 'svelte/store';
 
 interface User {
-	fname?: string;
-	lname?: string;
+	name: string;
 	email: string;
 	role: string;
 }
@@ -14,8 +13,7 @@ export enum Roles {
 }
 
 export const user: Writable<User> = writable({
-	fname: 'Miguel',
-	lname: 'Leal',
-	email: 'miguel@email.com',
+	name: 'Miguel Leal',
+	email: 'dante@string.xyz',
 	role: Roles.OWNER
 });

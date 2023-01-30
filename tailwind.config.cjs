@@ -17,7 +17,18 @@ module.exports = {
 
 					warning: '#FFEB84',
 
-					error: '#F92572'
+					error: '#F92572',
+
+          "hover-light": "#DFF1FF",
+
+          "label-live": "#07AD5E",
+
+          "label-test": "#F3B04B",
+          
+          "red-warning": "#F56161",
+          
+          "dark-grey": "#BEBCBA",
+
 				}
 			}
 		]
