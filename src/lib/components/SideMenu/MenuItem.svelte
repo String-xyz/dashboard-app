@@ -5,7 +5,7 @@
 
 <li>
 	{#if tab.view}
-		<button on:click={() => ($activeTab = tab)} class:active={tab === $activeTab}>
+		<button on:click={() => ($activeTab = tab)} class:active={tab.view === $activeTab.view}>
 			<img src={tab.icon} alt="icon" />
 			{tab.name}
 		</button>
