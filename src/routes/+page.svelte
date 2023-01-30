@@ -4,4 +4,15 @@
 </script>
 
 <SideMenu />
-<svelte:component this={$activeTab.view} />
+
+<div class="content">
+	<svelte:component this={$activeTab.view} />
+</div>
+
+<style>
+	.content {
+		transform: translate(260px);
+		width: calc(100% - 260px);
+		height: 100%;
+	}
+</style>

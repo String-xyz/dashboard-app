@@ -1,6 +1,6 @@
 import { getTabByName, activeTab } from '$lib/stores';
 
-export interface Card {
+export interface CardItem {
 	icon: string;
 	iconAlt: string;
 	title: string;
@@ -20,7 +20,7 @@ const openLink = (link: string) => {
 	window.open(link, '_blank', 'noreferrer');
 }
 
-export const cards: Card[] = [
+export const cards: CardItem[] = [
 	{
 		icon: assetPath + 'key_icon.svg',
 		iconAlt: 'Key',
@@ -34,7 +34,7 @@ export const cards: Card[] = [
 		iconAlt: 'Team',
 		title: 'Manage Team Members',
 		subtitle: `Manage your team's permissions all in one place.`,
-		btnText: 'Create API Key',
+		btnText: 'Manage',
 		action: () => {activeTab.set(teamTab)}
 	},
 	{

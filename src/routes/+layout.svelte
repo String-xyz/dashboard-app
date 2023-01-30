@@ -2,6 +2,15 @@
 	import '../app.css';
 </script>
 
-<div class="text-neutral select-none">
+<div class="layout text-neutral">
 	<slot />
 </div>
+
+<style>
+	.layout {
+		user-select: none;
+		overflow: hidden;
+		width: 100%;
+		height: 100%;
+	}
+</style>
