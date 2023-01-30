@@ -7,6 +7,7 @@
 
 	const settings = getTabByName('Settings');
 	const tabs = getMenuItems();
+
 	const arrowAction = () => {
 		if (!settings) return;
 

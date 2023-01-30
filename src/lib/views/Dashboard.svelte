@@ -1,11 +1,6 @@
-<script lang='ts'>
-	import Card from "$lib/components/Dashboard/Card.svelte";
-	import { cards } from '$lib/stores'
-	import { onMount } from "svelte";
-
-	onMount(() => {
-		console.log('--2222 Loading dashboard...')
-	})
+<script lang="ts">
+	import Card from '$lib/components/Dashboard/Card.svelte';
+	import { cards } from '$lib/stores';
 </script>
 
 <div class="main">
@@ -25,7 +20,7 @@
 	.main {
 		padding: 70px;
 	}
-	
+
 	.grid {
 		grid-template-columns: repeat(2, 1fr);
 	}
