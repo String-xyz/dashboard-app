@@ -1,21 +1,20 @@
 <script lang="ts">
-	import { activeTab, type MenuItem } from "$lib/stores";
+	import { activeTab, type MenuItem } from '$lib/stores';
 	export let tab: MenuItem;
-
 </script>
 
 <li>
 	{#if tab.view}
 		<button
 			on:click={() => $activeTab = tab}
-			class:active={tab === $activeTab}	
+			class:active={tab === $activeTab}
 		>
 			<img src={tab.icon} alt="icon" />
 			{tab.name}
 		</button>
 	{:else}
 		<a
-			href={tab.href ?? "#"}
+			href={tab.href ?? '#'}
 			target="_blank"
 			rel="noreferrer"
 		>
@@ -25,11 +24,10 @@
 	{/if}
 </li>
 
-<style lang='postcss'>
+<style lang="postcss">
 	.active {
 		@apply text-neutral;
-		background-color: #DFF1FF;
+		background-color: #dff1ff;
 		border-radius: 4px;
 	}
 </style>
-

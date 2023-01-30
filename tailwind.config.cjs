@@ -19,16 +19,15 @@ module.exports = {
 
 					error: '#F92572',
 
-          "hover-light": "#DFF1FF",
+					'hover-light': '#DFF1FF',
 
-          "label-live": "#07AD5E",
+					'label-live': '#07AD5E',
 
-          "label-test": "#F3B04B",
-          
-          "red-warning": "#F56161",
-          
-          "dark-grey": "#BEBCBA",
+					'label-test': '#F3B04B',
 
+					'red-warning': '#F56161',
+
+					'dark-grey': '#BEBCBA'
 				}
 			}
 		]

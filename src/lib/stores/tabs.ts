@@ -1,10 +1,10 @@
-import { writable, type Writable } from "svelte/store";
-import type { SvelteComponent } from "svelte";
+import { writable, type Writable } from 'svelte/store';
+import type { SvelteComponent } from 'svelte';
 
-import Dashboard from "$lib/views/Dashboard.svelte";
-import ManageTeam from "$lib/views/ManageTeam.svelte";
-import ManageKeys from "$lib/views/ManageKeys.svelte";
-import Settings from "$lib/views/Settings.svelte";
+import Dashboard from '$lib/views/Dashboard.svelte';
+import ManageTeam from '$lib/views/ManageTeam.svelte';
+import ManageKeys from '$lib/views/ManageKeys.svelte';
+import Settings from '$lib/views/Settings.svelte';
 
 export interface MenuItem {
 	name: string;
@@ -13,7 +13,7 @@ export interface MenuItem {
 	href?: string;
 }
 
-const assetPath = '/assets/tab/'
+const assetPath = '/assets/tab/';
 
 export const tabs: MenuItem[] = [
 	{
@@ -45,6 +45,7 @@ export const tabs: MenuItem[] = [
 		name: 'Settings',
 		icon: assetPath + 'settings.svg',
 		view: Settings
-	},
+	}
 ]
+
 export const activeTab: Writable<MenuItem> = writable(tabs[0]);

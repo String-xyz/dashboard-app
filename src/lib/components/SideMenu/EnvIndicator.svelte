@@ -1,19 +1,19 @@
 <script lang="ts">
 	const ENV = import.meta.env.VITE_ENV;
 
-	const PROD_URL = import.meta.env.VITE_PROD_DASH_URL
+	const PROD_URL = import.meta.env.VITE_PROD_DASH_URL;
 
-	const TEST_URL = import.meta.env.VITE_TEST_DASH_URL
+	const TEST_URL = import.meta.env.VITE_TEST_DASH_URL;
 
-	const isLive = ENV === "live"
+	const isLive = ENV === 'live';
 
-	const checkmark = isLive ? "/assets/live_check.svg" : "/assets/test_check.svg"
+	const checkmark = isLive ? '/assets/live_check.svg' : '/assets/test_check.svg';
 
-	const indicatorText = isLive ? "You’re in live mode." : "You’re in sandbox mode."
+	const indicatorText = isLive ? 'You’re in live mode.' : 'You’re in sandbox mode.';
 
-	const visitText = isLive ? "Visit sandbox mode" : "Visit production mode"
+	const visitText = isLive ? 'Visit sandbox mode' : 'Visit production mode';
 
-	const altLocation = isLive ? TEST_URL : PROD_URL
+	const altLocation = isLive ? TEST_URL : PROD_URL;
 </script>
 
 <div class="env">
@@ -30,7 +30,7 @@
 
 <style>
 	.env {
-		border: 1px solid #F2F2F2;
+		border: 1px solid #f2f2f2;
 		border-radius: 4px;
 		padding: 10px;
 	}
