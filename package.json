@@ -38,6 +38,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@fontsource/lora": "^4.5.13"
+		"@fontsource/lora": "^4.5.13",
+		"zod": "^3.20.2"
 	}
 }
