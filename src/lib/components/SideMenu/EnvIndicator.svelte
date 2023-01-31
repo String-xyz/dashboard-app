@@ -24,7 +24,7 @@
 
 	<a href={altLocation} class="mt-2 text-xs text-primary">
 		{visitText}
-		<img src="/assets/ext_link.svg" alt="link" class="inline ml-2" />
+		<img src="/assets/indicator/ext_link.svg" alt="link" class="inline ml-2" />
 	</a>
 </div>
 

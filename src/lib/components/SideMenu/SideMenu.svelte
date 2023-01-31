@@ -29,7 +29,7 @@
 			<p class="text-sm break-all">
 				{$user.email}
 				<button on:click={arrowAction}>
-					<img src="/assets/right_arrow.svg" alt=">" class="ml-2" />
+					<img src="/assets/button/right_arrow.svg" alt=">" class="ml-2" />
 				</button>
 			</p>
 			<p class="text-xs">{$user.role}</p>
