@@ -1,7 +1,7 @@
 locals {
   region            = "us-west-2"
   root_domain       = "dev.string-api.xyz"
-  web_origin_id     = "plaform-web-app"
+  web_origin_id     = "platform-web-app"
   web_bucket_name   = "dashboard.dev.string-api.xyz"
   web_domain        = "dashboard.dev.string-api.xyz"
   www_web_domain    = "www.dashboard.dev.string-api.xyz"
