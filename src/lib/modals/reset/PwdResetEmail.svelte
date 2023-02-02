@@ -5,6 +5,7 @@
 	import ForgotPassword from './ForgotPassword.svelte';
 
 	import { activeModal } from '$lib/stores';
+	import SetPassword from './SetPassword.svelte';
 
 	let email = 'test@example.com';
 
@@ -13,8 +14,9 @@
 	}
 
 	const handleResend = () => {
-
+		$activeModal = SetPassword;
 	}
+	
 </script>
 
 <ModalBase size="size-md">

@@ -21,6 +21,10 @@
 
 	$: disabled = false;
 
+	const handleLogin = () => {
+		$activeModal = LoginSuccess;
+	}
+
 </script>
 
 <ModalBase>
@@ -47,7 +51,7 @@
 		<p on:click={() => ($activeModal = ForgotPassword)} class="text-sm cursor-pointer mb-8 ml-auto">
 			Forgot password?
 		</p>
-		<StyledButton className="w-full" {disabled} action={() => ($activeModal = LoginSuccess)}>
+		<StyledButton className="w-full" {disabled} action={handleLogin}>
 			Login
 		</StyledButton>
 		<!-- svelte-ignore a11y-click-events-have-key-events -->

@@ -29,7 +29,7 @@
 
 <ModalBase size="size-md">
 	<div class="main flex flex-col items-center">
-		<img src="/assets/email_icon.svg" alt="Email" class="mb-8" />
+		<img src="/assets/auth_key_icon.svg" alt="Key" class="mb-8" />
 		<h3 class="text-2xl font-bold mb-2">Forgot password?</h3>
 		<p class="mb-8">No worries, we’ll send you reset instructions</p>
 
