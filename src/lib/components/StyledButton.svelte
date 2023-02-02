@@ -1,24 +1,24 @@
-<script lang='ts'>
+<script lang="ts">
 	export let action = () => {};
 	export let disabled = false;
-	export let className = "";
+	export let className = '';
 </script>
 
 <button
 	on:click={action}
 	{disabled}
-	class={"btn btn-primary rounded border-2 font-bold text-sm h-11 mb-6 " + className}
+	class={'btn btn-primary rounded border-2 font-bold text-sm h-11 mb-6 ' + className}
 >
 	<slot />
 </button>
 
 <style>
 	.btn {
-		color: #FAF9F9;
+		color: #faf9f9;
 	}
 
 	.btn-outline {
-		color: #006AB7;
+		color: #006ab7;
 	}
 
 	.btn[disabled] {

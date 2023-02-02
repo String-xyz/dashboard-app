@@ -3,12 +3,12 @@
 
 </script>
 
-<div 
+<div
 	class="str-modal text-neutral border border-neutral"
-	class:size-xl="{size === 'size-xl'}"
-	class:size-lg="{size === 'size-lg'}"
-	class:size-md="{size === 'size-md'}"
-	class:size-sm="{size === 'size-sm'}"
+	class:size-xl={size === 'size-xl'}
+	class:size-lg={size === 'size-lg'}
+	class:size-md={size === 'size-md'}
+	class:size-sm={size === 'size-sm'}
 >
 	<div class="content w-full h-full">
 		<slot />
@@ -17,7 +17,7 @@
 
 <style>
 	.str-modal {
-		border: 1px solid #DBDBDB;
+		border: 1px solid #dbdbdb;
 		border-radius: 8px;
 		background: white;
 	}
@@ -41,5 +41,4 @@
 		width: 600px;
 		height: 440px;
 	}
-
 </style>

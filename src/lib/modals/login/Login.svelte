@@ -1,13 +1,13 @@
-<script lang='ts'>
-	import ModalBase from "../ModalBase.svelte";
-	import StyledInput from "$lib/components/StyledInput.svelte";
-	import StyledButton from "$lib/components/StyledButton.svelte";
+<script lang="ts">
+	import ModalBase from '../ModalBase.svelte';
+	import StyledInput from '$lib/components/StyledInput.svelte';
+	import StyledButton from '$lib/components/StyledButton.svelte';
 
-	import ForgotPassword from "../reset/ForgotPassword.svelte";
-	import CreateAccount from "./CreateAccount.svelte";
-	import LoginSuccess from "./LoginSuccess.svelte";
+	import ForgotPassword from '../reset/ForgotPassword.svelte';
+	import CreateAccount from './CreateAccount.svelte';
+	import LoginSuccess from './LoginSuccess.svelte';
 
-	import { activeModal } from "$lib/stores";
+	import { activeModal } from '$lib/stores';
 	import { z } from 'zod';
 
 	let emailInput: string;
@@ -24,18 +24,39 @@
 </script>
 
 <ModalBase>
-	<div class='main flex flex-col items-center'>
-		<img src='/assets/string_logo.svg' alt='String' width="76px" height="18px" class="mb-12" />
+	<div class="main flex flex-col items-center">
+		<img src="/assets/string_logo.svg" alt="String" width="76px" height="18px" class="mb-12" />
 		<h3 class="text-2xl font-bold">Login to String’s Developer dashboard</h3>
 		<p class="my-8">Unlock the magic of String’s API by entering your email below.</p>
-		<StyledInput className="mb-6 w-full" label="Email" placeholder="Enter email" bind:value={emailInput} autofocus />
-		<StyledInput className="mb-2 w-full" type='password' label="Password" placeholder="********" bind:value={pwdInput} />
+		<StyledInput
+			className="mb-6 w-full"
+			label="Email"
+			placeholder="Enter email"
+			bind:val={emailInput}
+			autofocus
+		/>
+		<StyledInput
+			className="mb-2 w-full"
+			type="password"
+			label="Password"
+			placeholder="********"
+			bind:val={pwdInput}
+		/>
 		<!-- Add visibility icon and allow to show and hide pwd -->
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
-		<p on:click={() => $activeModal = ForgotPassword} class="text-sm cursor-pointer mb-8 ml-auto">Forgot password?</p>
-		<StyledButton className="w-full" {disabled} action={() => $activeModal = LoginSuccess}>Login</StyledButton>
+		<p on:click={() => ($activeModal = ForgotPassword)} class="text-sm cursor-pointer mb-8 ml-auto">
+			Forgot password?
+		</p>
+		<StyledButton className="w-full" {disabled} action={() => ($activeModal = LoginSuccess)}>
+			Login
+		</StyledButton>
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
-		<span class="mt-4">New to String? <span on:click={() => $activeModal = CreateAccount} class="link link-primary">Create an account</span></span>
+		<span class="mt-4">New to String? 
+			<span
+				on:click={() => ($activeModal = CreateAccount)}
+				class="link link-primary">Create an account
+			</span>
+		</span>
 	</div>
 </ModalBase>
 

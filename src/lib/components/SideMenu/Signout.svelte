@@ -2,6 +2,7 @@
 	const signout = () => {
 		console.log('Mock signout');
 	}
+	
 </script>
 
 <div class="flex justify-center mt-auto">

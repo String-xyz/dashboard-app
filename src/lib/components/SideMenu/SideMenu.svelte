@@ -1,4 +1,4 @@
-<script lang='ts'>
+<script lang="ts">
 	import Avatar from '../Avatar.svelte';
 	import { getMenuItems, activeTab, user, getTabByName, type MenuItem as MItem } from '$lib/stores';
 	import EnvIndicator from './EnvIndicator.svelte';
@@ -6,7 +6,7 @@
 	import Signout from './Signout.svelte';
 	import { onMount } from 'svelte';
 
-	let tabs: MItem[]; 
+	let tabs: MItem[];
 
 	onMount(() => {
 		tabs = getMenuItems();

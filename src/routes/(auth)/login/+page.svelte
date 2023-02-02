@@ -1,8 +1,8 @@
 <script lang="ts">
-	import Login from "$lib/modals/login/Login.svelte";
+	import Login from '$lib/modals/login/Login.svelte';
 
-	import { activeModal } from "$lib/stores";
-	import { onDestroy } from "svelte";
+	import { activeModal } from '$lib/stores';
+	import { onDestroy } from 'svelte';
 
 	$activeModal = Login;
 
