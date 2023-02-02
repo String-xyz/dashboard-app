@@ -1,4 +1,4 @@
-<script lang='ts'>
+<script lang="ts">
 	import Avatar from '../Avatar.svelte';
 	import { getMenuItems, activeTab, user, getTabByName, type MenuItem as MItem } from '$lib/stores';
 	import EnvIndicator from './EnvIndicator.svelte';
@@ -6,7 +6,7 @@
 	import Signout from './Signout.svelte';
 	import { onMount } from 'svelte';
 
-	let tabs: MItem[]; 
+	let tabs: MItem[];
 
 	onMount(() => {
 		tabs = getMenuItems();
@@ -29,7 +29,7 @@
 			<p class="text-sm break-all">
 				{$user.email}
 				<button on:click={arrowAction}>
-					<img src="/assets/right_arrow.svg" alt=">" class="ml-2" />
+					<img src="/assets/button/right_arrow.svg" alt=">" class="ml-2" />
 				</button>
 			</p>
 			<p class="text-xs">{$user.role}</p>
@@ -58,8 +58,9 @@
 		background-color: white;
 		border: 1px solid #ededed;
 		width: 260px;
-		height: 100vh;
+		height: 100%;
 		padding: 24px;
+		overflow: hidden;
 		position: absolute;
 		z-index: 999;
 	}
