@@ -28,8 +28,8 @@
 <ModalBase size="size-xl">
 	<div class="main flex flex-col items-center">
 		<img src="/assets/auth_key_icon.svg" alt="Key" class="mb-8" />
-		<h3 class="text-2xl font-bold mb-2">Set new password</h3>
-		<p class="text-center mb-8">Your new password must be different to previously used passwords</p>
+		<h3 class="text-2xl font-bold mb-11">Set new password</h3>
+		<!-- <p class="text-center mb-8">Your new password must be different to previously used passwords</p> -->
 
 		<StyledInput
 			className="mb-2 w-full"
