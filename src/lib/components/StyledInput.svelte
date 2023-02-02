@@ -1,17 +1,26 @@
 <script lang="ts">
+	import { onMount } from "svelte";
+
 
 	export let label: string;
 	export let className: string = "";
+	export let autofocus = false;
 
 	let focused = false;
+	let inputElm: HTMLInputElement;
 
+	onMount(() => {
+		if (autofocus) {
+			inputElm.focus();
+		}
+	});
 </script>
 
 <fieldset class={"group " + className} class:border-primary={focused}>
 	{#if label}
-		<legend class="ml-3 px-2 text-sm" class:text-primary={focused}>
+		<legend class="ml-3 px-2 text-sm font-medium" class:text-primary={focused}>
 			{label}
-		</legend>	
+		</legend>
 	{:else}
 		<div class="mt-2" />
 	{/if}
@@ -20,6 +29,7 @@
 		class="pl-5 pr-2 mb-2"
 		on:focus={() => focused = true}
 		on:blur={() => focused = false}
+		bind:this={inputElm}
 		{...$$restProps}
 	>
 </fieldset>

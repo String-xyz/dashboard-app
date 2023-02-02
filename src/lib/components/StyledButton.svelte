@@ -12,7 +12,7 @@
 	<slot />
 </button>
 
-<style lang='postcss'>
+<style>
 	.btn {
 		color: #FAF9F9;
 	}
@@ -22,8 +22,8 @@
 	}
 
 	.btn[disabled] {
-		@apply btn-outline;
-		border-color: #b6d5ec;
+		background-color: transparent;
+		border: 2px solid #b6d5ec;
 		color: #b6d5ec !important;
 	}
 </style>

@@ -1,6 +1,6 @@
 import { writable, type Writable } from 'svelte/store';
 
-interface User {
+export interface User {
 	name: string;
 	email: string;
 	role: string;
