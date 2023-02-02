@@ -16,7 +16,9 @@
 		<img src="/assets/indicator/failure.svg" alt="Failure" class="mb-8" />
 
 		<h3 class="text-2xl font-bold mb-12">Let’s try that again...</h3>
-		<p class="mb-12 text-center">Oops, it looks like there was an issue with resetting your password. Please try again</p>
+		<p class="mb-12 text-center">
+			Oops, it looks like there was an issue with resetting your password. Please try again
+		</p>
 
 		<button on:click={backToLogin}>
 			<span>

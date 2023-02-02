@@ -18,12 +18,11 @@
 
 	const handleReset = () => {
 		$activeModal = ResetSuccess;
-	}
+	};
 
 	const backToLogin = () => {
 		$activeModal = Login;
-	}
-
+	};
 </script>
 
 <ModalBase size="size-xl">
@@ -49,9 +48,11 @@
 			label="Confirm password"
 			placeholder="********"
 			bind:val={pwdInput}
-		/>		
+		/>
 
-		<StyledButton className="mb-8 w-full" action={handleReset} {disabled}>Reset password</StyledButton>
+		<StyledButton className="mb-8 w-full" action={handleReset} {disabled}
+			>Reset password</StyledButton
+		>
 
 		<button on:click={backToLogin}>
 			<span>

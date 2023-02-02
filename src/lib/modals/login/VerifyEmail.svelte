@@ -1,13 +1,13 @@
-<script lang='ts'>
-	import ModalBase from "../ModalBase.svelte";
+<script lang="ts">
+	import ModalBase from '../ModalBase.svelte';
+	import StyledButton from '$lib/components/StyledButton.svelte';
 
-	import { activeModal } from "$lib/stores";
-	import CreateAccount from "./CreateAccount.svelte";
-	import StyledButton from "$lib/components/StyledButton.svelte";
-
-
-	let email = "john@example.com"
+	import CreateAccount from './CreateAccount.svelte';
 	
+	import { activeModal } from '$lib/stores';
+
+	let email = 'john@example.com';
+
 	const back = () => {
 		$activeModal = CreateAccount;
 	}
@@ -15,12 +15,12 @@
 	const handleResend = () => {
 
 	}
-	
+
 </script>
 
 <ModalBase>
-	<div class='flex flex-col justify-center items-center w-full h-full'>
-		<img src='/assets/email_icon.svg' alt='Email' class="mb-12" />
+	<div class="flex flex-col justify-center items-center w-full h-full">
+		<img src="/assets/email_icon.svg" alt="Email" class="mb-12" />
 
 		<h3 class="text-2xl font-bold">Check your email...</h3>
 		<p class="my-8">We’ve sent a verification email to {email}</p>
@@ -31,7 +31,6 @@
 			</StyledButton>
 			<StyledButton className="w-40" action={handleResend}>Resend</StyledButton>
 		</div>
-		<img src='/assets/string_logo.svg' alt='String' width="76px" height="18px" class="mt-12" />
-
+		<img src="/assets/string_logo.svg" alt="String" width="76px" height="18px" class="mt-12" />
 	</div>
 </ModalBase>
