@@ -50,6 +50,7 @@
 			placeholder="********"
 			bind:val={pwdInput}
 			autofocus
+			required
 		/>
 		<!-- Under password input put Must be at least 8 characters when it fails Zod -->
 		<StyledButton className="w-full" action={acceptInvite} {disabled}>Accept Invite</StyledButton>

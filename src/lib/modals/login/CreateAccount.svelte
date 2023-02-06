@@ -36,18 +36,22 @@
 			label="Your Full Name"
 			placeholder="Ex. John Doe"
 			bind:val={fullNameInput}
+			required
 		/>
 		<StyledInput
 			className="mb-6 w-full"
 			label="Company Name"
 			placeholder="Enter Company name"
 			bind:val={companyNameInput}
+			required
 		/>
 		<StyledInput
 			className="mb-8 w-full"
+			type="email"
 			label="Email"
 			placeholder="Enter email"
 			bind:val={emailInput}
+			required
 		/>
 
 		<StyledButton className="w-full" {disabled} action={createAccount}>Continue</StyledButton>
@@ -65,4 +69,5 @@
 		padding-left: 60px;
 		padding-right: 60px;
 	}
+
 </style>

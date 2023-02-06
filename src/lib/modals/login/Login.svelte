@@ -32,12 +32,15 @@
 		<img src="/assets/string_logo.svg" alt="String" width="76px" height="18px" class="mb-12" />
 		<h3 class="text-2xl font-bold">Login to String’s Developer dashboard</h3>
 		<p class="my-8">Unlock the magic of String’s API by entering your email below.</p>
+		<!-- <form on:submit|preventDefault={handleVerify}> -->
 		<StyledInput
 			className="mb-6 w-full"
+			type='email'
 			label="Email"
 			placeholder="Enter email"
 			bind:val={emailInput}
 			autofocus
+			required
 		/>
 		<StyledInput
 			className="mb-2 w-full"
@@ -45,6 +48,7 @@
 			label="Password"
 			placeholder="********"
 			bind:val={pwdInput}
+			required
 		/>
 		<!-- Add visibility icon and allow to show and hide pwd -->
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -69,4 +73,5 @@
 		padding-top: 50px;
 		padding-bottom: 32px;
 	}
+
 </style>

@@ -18,11 +18,12 @@
 
 	const handleReset = () => {
 		$activeModal = ResetSuccess;
-	};
+	}
 
 	const backToLogin = () => {
 		$activeModal = Login;
-	};
+	}
+
 </script>
 
 <ModalBase size="size-xl">
@@ -38,6 +39,7 @@
 			placeholder="********"
 			bind:val={pwdInput}
 			autofocus
+			required
 		/>
 
 		<p class="mb-8 text-sm mr-auto">Must be at least 8 characters</p>
@@ -45,9 +47,10 @@
 		<StyledInput
 			className="mb-8 w-full"
 			type="password"
-			label="Confirm password"
+			label="Confirm Password"
 			placeholder="********"
 			bind:val={pwdInput}
+			required
 		/>
 
 		<StyledButton className="mb-8 w-full" action={handleReset} {disabled}
@@ -69,4 +72,5 @@
 		padding-right: 60px;
 		padding-top: 52px;
 	}
+
 </style>

@@ -25,6 +25,7 @@
 	const backToLogin = () => {
 		$activeModal = Login;
 	}
+
 </script>
 
 <ModalBase size="size-md">
@@ -35,10 +36,12 @@
 
 		<StyledInput
 			className="mb-8 w-full"
+			type='email'
 			label="Email"
 			placeholder="Enter your email"
 			bind:val={emailInput}
 			autofocus
+			required
 		/>
 
 		<StyledButton className="mb-8 w-full" action={reset} {disabled}>Reset password</StyledButton>
@@ -58,4 +61,5 @@
 		padding-right: 60px;
 		padding-top: 70px;
 	}
+
 </style>

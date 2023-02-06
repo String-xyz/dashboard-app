@@ -4,7 +4,7 @@
 </script>
 
 <div class="main">
-	<h3 class="text-2xl">Let’s get you started!</h3>
+	<h3 class="text-2xl font-bold">Let’s get you started!</h3>
 	<div class="divider mb-6" />
 
 	<div class="flex justify-center items-center w-full">
@@ -30,4 +30,5 @@
 			grid-template-columns: 1fr;
 		}
 	}
+
 </style>
