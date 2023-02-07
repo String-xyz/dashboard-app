@@ -1,5 +1,5 @@
 import { writable, type Writable } from 'svelte/store';
-import { Roles, type User } from '$lib/stores';
+import { Role, type User } from '$lib/stores';
 
 interface InviteData extends User {
 	platformName: string;
@@ -8,7 +8,7 @@ interface InviteData extends User {
 export const mockinviteduser: InviteData = {
 	name: 'James Odin',
 	email: 'james@email.com',
-	role: Roles.ADMIN,
+	role: Role.ADMIN,
 	platformName: 'Black Mesa'
 };
 

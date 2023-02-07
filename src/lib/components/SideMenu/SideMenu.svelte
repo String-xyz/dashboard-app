@@ -1,16 +1,9 @@
 <script lang="ts">
 	import Avatar from '../Avatar.svelte';
-	import { getMenuItems, activeTab, user, getTabByName, type MenuItem as MItem } from '$lib/stores';
+	import { activeTab, menuItems, user, getTabByName } from '$lib/stores';
 	import EnvIndicator from './EnvIndicator.svelte';
 	import MenuItem from './MenuItem.svelte';
 	import Signout from './Signout.svelte';
-	import { onMount } from 'svelte';
-
-	let tabs: MItem[];
-
-	onMount(() => {
-		tabs = getMenuItems();
-	});
 
 	const settings = getTabByName('Settings');
 
@@ -42,8 +35,8 @@
 
 	<nav>
 		<ul class="menu bg-transparent">
-			{#if tabs}
-				{#each tabs as tab}
+			{#if $menuItems}
+				{#each $menuItems as tab}
 					<MenuItem {tab} />
 				{/each}
 			{/if}

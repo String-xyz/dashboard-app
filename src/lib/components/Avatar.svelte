@@ -1,6 +1,7 @@
 <script lang="ts">
 	export let name: string;
 	export let type: 'self' | 'other' = 'self';
+	export let className = '';
 
 	const assetPathSelf = '/assets/avatar/self';
 	const assetPathOther = '/assets/avatar/other';
@@ -12,4 +13,4 @@
 	const initial = `${path}/${firstInitial}.svg`;
 </script>
 
-<img src={initial} alt="profile" />
+<img src={initial} alt="profile" class={className} />

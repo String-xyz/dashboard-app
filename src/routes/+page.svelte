@@ -1,17 +1,19 @@
 <script lang="ts">
-	import { activeTab, getMenuItems } from '$lib/stores';
+	import { activeTab, activeModal } from '$lib/stores';
 	import SideMenu from '$lib/components/SideMenu/SideMenu.svelte';
-	import { onMount } from 'svelte';
 
-	onMount(() => {
-		$activeTab = getMenuItems()[0];
-	});
 </script>
 
-<SideMenu />
+<svelte:head>
+  <title>String Dashboard</title>
+</svelte:head>
 
-<div class="content">
-	<svelte:component this={$activeTab?.view} />
+<div class="main" class:backdrop={$activeModal}>
+	<SideMenu />
+
+	<div class="content">
+		<svelte:component this={$activeTab?.view} />
+	</div>
 </div>
 
 <style>
@@ -20,4 +22,9 @@
 		width: calc(100% - 260px);
 		height: 100%;
 	}
+
+	/* .backdrop {
+		filter: blur(4px);
+	} */
+
 </style>
