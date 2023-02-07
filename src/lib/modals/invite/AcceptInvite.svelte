@@ -13,6 +13,7 @@
 
 	const passwordSchema = z.string().min(8);
 	let isPassValid = true;
+	let username = 'w'; // we need a default values in order to correctly show the avatar
 
 	// Bind a verification function to the password input
 	$: {
@@ -30,14 +31,17 @@
 
 	$: disabled = !isPassValid;
 
-	// TODO: Get invite data from a new endpoint --> GET /invite/<id>
-	$_invite = {
-		...$_invite,
-		platformName: 'Alphabet Inc',
-		name: 'John Doe',
-		email: 'wilfredo@string.xyz',
-		role: 'admin'
-	};
+
+	onMount(async () => {
+		try {
+			const invite = await apiClient.getInvite($_invite.id);
+			$_invite = invite;
+			username = invite.name || '';
+		} catch (e) {
+			console.error(e);
+			$activeModal = InviteFailed;
+		}
+	});
 
 	const acceptInvite = async () => {
 		try {
@@ -62,9 +66,9 @@
 		<div class="user my-8 flex justify-between items-center py-3 w-full">
 			<div class="flex justify-items-start pl-3">
 				<!-- Should be type other, we need to decide how to handle the bg -->
-				<Avatar name={$_invite.name || ""} type="self" />
+				<Avatar name={username} type="self" />
 				<div class="ml-4">
-					<p class="text-sm">{$_invite.name}</p>
+					<p class="text-sm">{username}</p>
 					<p class="text-xs email">{$_invite.email}</p>
 				</div>
 			</div>

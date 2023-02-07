@@ -72,6 +72,11 @@ export function createApiClient(): ApiClient {
 		return data;
 	}
 
+	async function getInvite(inviteId: string) {
+		const { data } = await httpClient.get<Invite>(`/invites/${inviteId}`);
+		return data;
+	}
+
 	async function resendInvite(inviteId: string) {
 		const { data } = await httpClient.post<Member>(`/invites/${inviteId}/resend`);
 		return data;
@@ -153,6 +158,7 @@ export function createApiClient(): ApiClient {
 		resetPassword,
 		sendInvite,
 		acceptInvite,
+		getInvite,
 		listInvites,
 		resendInvite,
 		changeInviteRole,
@@ -184,6 +190,7 @@ export interface ApiClient {
 	/* Invitations */
 	sendInvite(email: string, role: Role) : Promise<Invite>;
 	acceptInvite(inviteId: string, password: string) : Promise<Member>;
+	getInvite(inviteId: string) : Promise<Invite>;
 	listInvites(filter: InviteStatus) : Promise<Invite[]>;
 	resendInvite(inviteId: string) : Promise<Member>;
 	changeInviteRole(inviteId: string, role: Role) : Promise<void>;
