@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export function createApiClient(): ApiClient {
-	const baseUrl = import.meta.env.VITE_API_BASE_PATH;
+	const baseUrl = import.meta.env.VITE_API_URL;
 	const commonHeaders = { 'Content-Type': 'application/json'};
 	const httpClient = axios.create({
 		baseURL: baseUrl,
@@ -60,8 +60,9 @@ export function createApiClient(): ApiClient {
 		return data;
 	}
 
-	async function acceptInvite(inviteId: string) {
-		const { data } = await httpClient.post<Member>(`/invites/${inviteId}/accept`);
+	async function acceptInvite(inviteId: string, password: string) {
+		const body = { password };
+		const { data } = await httpClient.post<Member>(`/invites/${inviteId}`, body);
 		return data;
 	}
 
@@ -90,8 +91,8 @@ export function createApiClient(): ApiClient {
 		
 	/*********** PLATFORM ***********/
 
-	async function createPlatform(name: string, ownerEmail: string) {
-		const { data } = await httpClient.post('/platforms', { name, ownerEmail });
+	async function createPlatform(platformName: string, ownerEmail: string, ownerName: string) {
+		const { data } = await httpClient.post('/platforms', { platformName, email: ownerEmail, name: ownerName });
 		return data;
 	}
 
@@ -167,6 +168,40 @@ export function createApiClient(): ApiClient {
 	};
 }
 
+export interface ApiClient {
+	/* Login */
+	login(email: string, password: string) : Promise<Member>;
+	
+	/* Members */
+	getMembers() : Promise<Member[]>;
+	getMember(memberId: string) : Promise<Member>;
+	changeMemberRole(memberId: string, role: Role) : Promise<void>;
+	setPassword(memberId: string, password: string) : Promise<void>;
+	deactivateMember(memberId: string) : Promise<void>;
+	sendResetPasswordToken(email: string) : Promise<void>;
+	resetPassword(token: string, password: string) : Promise<void>;
+		
+	/* Invitations */
+	sendInvite(email: string, role: Role) : Promise<Invite>;
+	acceptInvite(inviteId: string, password: string) : Promise<Member>;
+	listInvites(filter: InviteStatus) : Promise<Invite[]>;
+	resendInvite(inviteId: string) : Promise<Member>;
+	changeInviteRole(inviteId: string, role: Role) : Promise<void>;
+	revokeInvite(inviteId: string) : Promise<void>;
+
+	/* Platform */
+	createPlatform(platformName: string, ownerEmail: string, ownerName: string) : Promise<Platform>;
+	getPlatform() : Promise<Platform>;
+	updatePlatform(name: string) : Promise<Platform>;
+	
+	/* Api keys */
+	createApiKey: () => Promise<{ apiKey: ApiKeyResponse }>;
+	listApiKeys: () => Promise<ApiKeyResponse[]>;
+	getApiKey(keyId: string) : Promise<ApiKeyResponse>;
+	deactivateApiKey: (keyId: string) => Promise<ApiKeyResponse>;
+	editApiKey: (keyId: string, description: string) => Promise<ApiKeyResponse>;
+}
+
 interface ApiKeyResponse {
 	id: string;
 	status: string;
@@ -175,10 +210,6 @@ interface ApiKeyResponse {
 	createdAt: string;
 	updatedAt: string;
 }
-
-type Invite = {
-	id: string;
-};
 
 type Platform = {
 	id: string;
@@ -207,36 +238,10 @@ type Member = {
 type Role = 'member' | 'admin' | 'owner';
 type InviteStatus = 'pending' | 'accepted' | 'revoked' | 'expired';
 
-export interface ApiClient {
-	/* Login */
-	login(email: string, password: string) : Promise<Member>;
-	
-	/* Members */
-	getMembers() : Promise<Member[]>;
-	getMember(memberId: string) : Promise<Member>;
-	changeMemberRole(memberId: string, role: Role) : Promise<void>;
-	setPassword(memberId: string, password: string) : Promise<void>;
-	deactivateMember(memberId: string) : Promise<void>;
-	sendResetPasswordToken(email: string) : Promise<void>;
-	resetPassword(token: string, password: string) : Promise<void>;
-		
-	/* Invitations */
-	sendInvite(email: string, role: Role) : Promise<Invite>;
-	acceptInvite(inviteId: string) : Promise<Member>;
-	listInvites(filter: InviteStatus) : Promise<Invite[]>;
-	resendInvite(inviteId: string) : Promise<Member>;
-	changeInviteRole(inviteId: string, role: Role) : Promise<void>;
-	revokeInvite(inviteId: string) : Promise<void>;
-
-	/* Platform */
-	createPlatform(name: string, ownerEmail: string) : Promise<Platform>;
-	getPlatform() : Promise<Platform>;
-	updatePlatform(name: string) : Promise<Platform>;
-	
-	/* Api keys */
-	createApiKey: () => Promise<{ apiKey: ApiKeyResponse }>;
-	listApiKeys: () => Promise<ApiKeyResponse[]>;
-	getApiKey(keyId: string) : Promise<ApiKeyResponse>;
-	deactivateApiKey: (keyId: string) => Promise<ApiKeyResponse>;
-	editApiKey: (keyId: string, description: string) => Promise<ApiKeyResponse>;
+export type Invite = {
+	id: string;
+	platformName?: string;
+	memberName?: string;
+	email?: string;
+	role?: Role;
 }

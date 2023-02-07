@@ -3,11 +3,13 @@
 	import StyledInput from '$lib/components/StyledInput.svelte';
 	import StyledButton from '$lib/components/StyledButton.svelte';
 	import Avatar from '$lib/components/Avatar.svelte';
-
 	import InviteSuccess from './InviteSuccess.svelte';
-
-	import { activeModal, invitee } from '$lib/stores';
+	import InviteFailed from './InviteFailed.svelte';
+	
+	import { apiClient } from '$lib/services';
+	import { activeModal, _invite} from '$lib/stores';
 	import { z } from 'zod';
+	import { onMount } from 'svelte';
 
 	const passwordSchema = z.string().min(8);
 
@@ -18,8 +20,26 @@
 
 	$: disabled = !isPassValid;
 
-	const acceptInvite = () => {
-		$activeModal = InviteSuccess;
+	onMount(() => {
+		// TODO: Get invite data from a new endpoint --> GET /invite/<id>
+		$_invite = {
+			...$_invite,
+			platformName: 'Alphabet Inc',
+			memberName: 'John Doe',
+			email: 'wilfredo@string.xyz',
+			role: 'admin'
+		};
+	});
+
+	const acceptInvite = async () => {
+		try {
+			const member = await apiClient.acceptInvite($_invite.id, pwdInput);
+			console.log(member);
+			$activeModal = InviteSuccess;
+		} catch (e) {
+			console.error(e);
+			$activeModal = InviteFailed;
+		}
 	}
 
 </script>
@@ -28,19 +48,19 @@
 	<div class="main flex flex-col items-center">
 		<img src="/assets/string_logo.svg" alt="String" width="76px" height="18px" class="mb-10" />
 		<h3 class="text-2xl font-bold mb-2">You’ve been invited to join</h3>
-		<h3 class="text-2xl font-bold mb-2">"{$invitee.platformName}"</h3>
+		<h3 class="text-2xl font-bold mb-2">"{$_invite.platformName}"</h3>
 		<p>Confirm your invitation by accepting your invite</p>
 
 		<div class="user my-8 flex justify-between items-center py-3 w-full">
 			<div class="flex justify-items-start pl-3">
 				<!-- Should be type other, we need to decide how to handle the bg -->
-				<Avatar name={$invitee.name} type="self" />
+				<Avatar name={$_invite.memberName || ""} type="self" />
 				<div class="ml-4">
-					<p class="text-sm">{$invitee.name}</p>
-					<p class="text-xs email">{$invitee.email}</p>
+					<p class="text-sm">{$_invite.memberName}</p>
+					<p class="text-xs email">{$_invite.email}</p>
 				</div>
 			</div>
-			<p class="text-sm mr-4">{$invitee.role}</p>
+			<p class="text-sm mr-4">{$_invite.role}</p>
 		</div>
 
 		<StyledInput

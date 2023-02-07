@@ -6,8 +6,9 @@
 	import Login from './Login.svelte';
 	import VerifyEmail from './VerifyEmail.svelte';
 
-	import { activeModal } from '$lib/stores';
+	import { activeModal, user } from '$lib/stores';
 	import { z } from 'zod';
+	import { apiClient } from '$lib/services';
 
 	let fullNameInput: string;
 	let companyNameInput: string;
@@ -15,12 +16,32 @@
 
 	const emailSchema = z.string().trim().email();
 	const nameSchema = z.string().min(1);
+	let isEmailValid = false;
 
-	$: console.log(emailInput);
+	// Bind a verification function to the email input. This will be called every time the input changes
+	$: {
+		try {
+			emailSchema.parse(emailInput);
+			isEmailValid = true;
+		} catch (error) {
+			isEmailValid = false;
+		}
+	}
+
+
 	$: disabled = false;
 
-	const createAccount = () => {
-		$activeModal = VerifyEmail;
+	const createAccount = async () => {
+		if (!isEmailValid) return console.error("Invalid email or password");
+
+		try {
+			const platform = await apiClient.createPlatform(companyNameInput, emailInput, fullNameInput);
+			console.debug(platform);
+			$user.email = emailInput;
+			$activeModal = VerifyEmail;
+		} catch (error) {
+			console.log(error);
+		}
 	}
 
 </script>

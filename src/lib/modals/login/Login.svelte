@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { z } from 'zod';
 	import ModalBase from '../ModalBase.svelte';
 	import StyledInput from '$lib/components/StyledInput.svelte';
 	import StyledButton from '$lib/components/StyledButton.svelte';
@@ -8,22 +9,50 @@
 	import LoginSuccess from './LoginSuccess.svelte';
 
 	import { activeModal } from '$lib/stores';
-	import { z } from 'zod';
 
-	let emailInput: string;
-	let pwdInput: string;
+	let emailInput = "";
+	let pwdInput = "";
 
 	const emailSchema = z.string().trim().email();
 	const passwordSchema = z.string().min(8);
 
 	let isEmailValid = false;
-	let isPassValid = false;
+	let isPassValid = false;	
 
 	$: disabled = false;
 
-	const handleLogin = () => {
-		$activeModal = LoginSuccess;
+	// Bind a verification function to the email input
+	$: {
+		try {
+			emailSchema.parse(emailInput);
+			isEmailValid = true;
+		} catch (error) {
+			isEmailValid = false;
+		}
 	}
+
+	// Bind a verification function to the password input
+	$: {
+		try {
+			passwordSchema.parse(pwdInput);
+			isPassValid = true;
+		} catch (error) {
+			isPassValid = false;
+		}
+	}
+
+
+	const handleLogin = async () => {
+		if (!isEmailValid || !isPassValid) return console.debug("Invalid email or password");
+
+		try {
+			// const member = await apiClient.login(emailInput, pwdInput);
+			$activeModal = LoginSuccess
+			localStorage.setItem('loggedIn', 'true');
+		} catch (error) {
+			console.log(error);
+		}
+	};
 
 </script>
 
