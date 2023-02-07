@@ -1,8 +1,7 @@
 export function createAuthService() {
 	async function isUserLoggedIn() {
-		// TODO: temporary solution for development. Replace with real auth check (e.g refresh token)
-		const loggedIn = localStorage.getItem('loggedIn');
-		return loggedIn ? true : false;
+		// user is logged in when there is a StringJWT cookie set. In the future, we will use a refresh token
+		return window.document.cookie.includes('StringJWT');
 	}
 
 	return { isUserLoggedIn };

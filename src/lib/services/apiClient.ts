@@ -29,8 +29,8 @@ export function createApiClient(): ApiClient {
 	}
 
 	async function changeMemberRole(memberId: string, role: Role) {
+		// TODO: do we need to await this? 
 		await httpClient.put(`/members/${memberId}`, { role });
-		return;
 	}
 
 	async function setPassword(memberId: string, password: string) {
@@ -241,7 +241,7 @@ type InviteStatus = 'pending' | 'accepted' | 'revoked' | 'expired';
 export type Invite = {
 	id: string;
 	platformName?: string;
-	memberName?: string;
+	name?: string;
 	email?: string;
 	role?: Role;
 }

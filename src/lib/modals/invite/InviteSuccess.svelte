@@ -1,6 +1,14 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import ModalBase from '../ModalBase.svelte';
 	import { _invite } from '$lib/stores';
+
+	onMount(() => {
+		setTimeout(() => {
+			// redirect to the dashboard
+			window.location.href = '/';
+		}, 3000);
+	});
 </script>
 
 <ModalBase size="size-md">

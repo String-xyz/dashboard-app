@@ -12,24 +12,32 @@
 	import { onMount } from 'svelte';
 
 	const passwordSchema = z.string().min(8);
+	let isPassValid = true;
+
+	// Bind a verification function to the password input
+	$: {
+		try {
+			passwordSchema.parse(pwdInput);
+			isPassValid = true;
+		} catch (error) {
+			isPassValid = false;
+		}
+	}
 
 	let pwdInput: string;
 
 	// Set to true for testing, will be behind Zod parsing
-	let isPassValid = true;
 
 	$: disabled = !isPassValid;
 
-	onMount(() => {
-		// TODO: Get invite data from a new endpoint --> GET /invite/<id>
-		$_invite = {
-			...$_invite,
-			platformName: 'Alphabet Inc',
-			memberName: 'John Doe',
-			email: 'wilfredo@string.xyz',
-			role: 'admin'
-		};
-	});
+	// TODO: Get invite data from a new endpoint --> GET /invite/<id>
+	$_invite = {
+		...$_invite,
+		platformName: 'Alphabet Inc',
+		name: 'John Doe',
+		email: 'wilfredo@string.xyz',
+		role: 'admin'
+	};
 
 	const acceptInvite = async () => {
 		try {
@@ -54,9 +62,9 @@
 		<div class="user my-8 flex justify-between items-center py-3 w-full">
 			<div class="flex justify-items-start pl-3">
 				<!-- Should be type other, we need to decide how to handle the bg -->
-				<Avatar name={$_invite.memberName || ""} type="self" />
+				<Avatar name={$_invite.name || ""} type="self" />
 				<div class="ml-4">
-					<p class="text-sm">{$_invite.memberName}</p>
+					<p class="text-sm">{$_invite.name}</p>
 					<p class="text-xs email">{$_invite.email}</p>
 				</div>
 			</div>
