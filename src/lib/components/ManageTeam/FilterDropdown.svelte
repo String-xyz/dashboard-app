@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { activeFilter, filterOptions } from "$lib/stores";
-	import StyledButton from "../StyledButton.svelte";
+	import { activeFilter, filterOptions, currentUser, isPermissioned, Role } from "$lib/stores";
 
 	let dropdownElem: HTMLButtonElement;
 
@@ -35,7 +34,7 @@
 	</button>
 	<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 	<ul tabindex="0" class="dropdown-content menu w-60">
-		{#each filterOptions as filter}
+		{#each filterOptions.filter(f => isPermissioned($currentUser.role, f.minPerms ?? Role.MEMBER)) as filter}
 			{@const active = $activeFilter == filter}
 			<li class:active={active}>
 				<button on:click={() => {$activeFilter = filter}} class="font-bold text-xs tracking-wider uppercase">

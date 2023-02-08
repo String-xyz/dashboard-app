@@ -2,10 +2,12 @@
 	import ModalBase from '../ModalBase.svelte';
 	import StyledInput from '$lib/components/StyledInput.svelte';
 	import StyledButton from '$lib/components/StyledButton.svelte';
-
-	import { activeModal } from '$lib/stores';
-	import { z } from 'zod';
 	import RoleDropdown from '$lib/components/ManageTeam/RoleDropdown.svelte';
+
+	import { z } from 'zod';
+	import { activeModal, type User } from '$lib/stores';
+
+	export let member: User;
 
 	let emailInput: string;
 	let nameInput: string;
@@ -44,7 +46,7 @@
 			bind:val={nameInput}
 			required
 		/>
-		<RoleDropdown />
+		<RoleDropdown {member} />
 		<StyledButton className="w-full" action={handleSend}>
 			Send Invite
 		</StyledButton>

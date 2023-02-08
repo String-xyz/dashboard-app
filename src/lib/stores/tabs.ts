@@ -5,12 +5,14 @@ import Dashboard from '$lib/views/Dashboard.svelte';
 import ManageTeam from '$lib/views/ManageTeam.svelte';
 import ManageKeys from '$lib/views/ManageKeys.svelte';
 import Settings from '$lib/views/Settings.svelte';
+import { Role } from '$lib/stores';
 
 export interface MenuItem {
 	name: string;
 	icon: string;
 	view?: typeof SvelteComponent;
 	href?: string;
+	minPerms?: Role;
 }
 
 const assetPath = '/assets/tab/';
@@ -39,7 +41,8 @@ export const menuItems: Writable<MenuItem[]> = writable([
 	{
 		name: 'Verify Account',
 		icon: assetPath + 'verify_account.svg',
-		href: KYB_URL
+		href: KYB_URL,
+		minPerms: Role.ADMIN
 	},
 	{
 		name: 'View API Docs',

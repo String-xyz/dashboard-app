@@ -7,6 +7,7 @@ export interface User {
 	self?: boolean;
 	joinDate?: string;
 	deactivatedAt?: string;
+	isInvite?: boolean;
 }
 
 export enum Role {
@@ -15,15 +16,17 @@ export enum Role {
 	OWNER = 'Owner'
 }
 
-export const user: Writable<User> = writable({
+export const rolesList = Object.values(Role);
+
+export const currentUser: Writable<User> = writable({
 	name: 'Miguel Leal',
 	email: 'miguel@string.xyz',
-	role: Role.OWNER,
+	role: Role.MEMBER,
 	self: true
 });
 
 export const members: Writable<User[]> = writable([
-	getStore(user),
+	getStore(currentUser),
 	{
 		name: 'Dante Ielpi',
 		email: 'dante@string.xyz',
@@ -32,6 +35,17 @@ export const members: Writable<User[]> = writable([
 	{
 		name: 'Andrin Foster',
 		email: 'andrin@string.xyz',
-		role: Role.ADMIN
+		role: Role.MEMBER,
+		isInvite: true
 	}
-])
+]);
+
+export const isPermissioned = (userRole: Role, minReqRole: Role) => {
+	if (userRole == minReqRole) return true;
+
+	if (userRole == Role.OWNER) return true;
+
+	if (userRole == Role.ADMIN && minReqRole !== Role.OWNER) return true;
+
+	return false;
+}

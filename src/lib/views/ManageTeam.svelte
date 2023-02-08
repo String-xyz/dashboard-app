@@ -4,7 +4,7 @@
 	import StyledButton from '$lib/components/StyledButton.svelte';
 	import InviteTeammate from '$lib/modals/team/InviteTeammate.svelte';
 
-	import { activeModal, Role, user } from '$lib/stores';
+	import { activeModal, Role, currentUser } from '$lib/stores';
 
 	const inviteMember = () => {
 		$activeModal = InviteTeammate;
@@ -16,7 +16,7 @@
 	<header>
 		<div class="flex justify-between items-center">
 			<h3 class="text-2xl font-bold">Manage Team</h3>
-			{#if $user.role !== Role.MEMBER}
+			{#if $currentUser.role !== Role.MEMBER}
 				<StyledButton className="btn-outline !m-0 w-40" action={inviteMember}>
 					<img src={"/assets/button/plus.svg"} alt="+" class="inline mr-3" />
 					Invite Team
@@ -38,31 +38,11 @@
 	</div>
 
 	<MemberTable />
-
-	<!-- <div class="backdrop">
-		<svelte:component this={$activeModal} />
-	</div> -->
 </div>
 
 <style>
 	.main {
 		padding: 70px;
 	}
-
-	/* .backdrop {
-		transform: translate(-260px);
-		z-index: 2;
-		width: 100%;
-		height: 100%;
-		position:absolute;
-		top:0px;
-		right:0px;
-		bottom:0px;
-		left:0px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		backdrop-filter: blur(4px);
-	} */
 
 </style>
