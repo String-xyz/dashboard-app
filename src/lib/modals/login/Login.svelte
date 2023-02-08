@@ -3,12 +3,12 @@
 	import ModalBase from '../ModalBase.svelte';
 	import StyledInput from '$lib/components/StyledInput.svelte';
 	import StyledButton from '$lib/components/StyledButton.svelte';
-
 	import ForgotPassword from '../reset/ForgotPassword.svelte';
 	import CreateAccount from './CreateAccount.svelte';
 	import LoginSuccess from './LoginSuccess.svelte';
 
 	import { activeModal } from '$lib/stores';
+	import { apiClient } from '$lib/services';
 
 	let emailInput = "";
 	let pwdInput = "";
@@ -46,9 +46,9 @@
 		if (!isEmailValid || !isPassValid) return console.debug("Invalid email or password");
 
 		try {
-			// const member = await apiClient.login(emailInput, pwdInput);
+			const member = await apiClient.login(emailInput, pwdInput);
+			console.debug('--- member', member);
 			$activeModal = LoginSuccess
-			localStorage.setItem('loggedIn', 'true');
 		} catch (error) {
 			console.error(error);
 		}
