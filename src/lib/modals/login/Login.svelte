@@ -49,7 +49,6 @@
 			const member = await apiClient.login(emailInput, pwdInput);
 			console.debug('--- member', member);
 			$activeModal = LoginSuccess
-			localStorage.setItem('loggedIn', 'true');
 		} catch (error) {
 			console.error(error);
 		}
