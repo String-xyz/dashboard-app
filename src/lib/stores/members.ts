@@ -21,7 +21,7 @@ export const rolesList = Object.values(Role);
 export const currentUser: Writable<User> = writable({
 	name: 'Miguel Leal',
 	email: 'miguel@string.xyz',
-	role: Role.MEMBER,
+	role: Role.OWNER,
 	self: true
 });
 
@@ -35,7 +35,7 @@ export const members: Writable<User[]> = writable([
 	{
 		name: 'Andrin Foster',
 		email: 'andrin@string.xyz',
-		role: Role.MEMBER,
+		role: Role.ADMIN,
 		isInvite: true
 	}
 ]);

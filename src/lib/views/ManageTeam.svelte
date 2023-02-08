@@ -12,7 +12,7 @@
 
 </script>
 
-<div class="main">
+<div class="main h-full">
 	<header>
 		<div class="flex justify-between items-center">
 			<h3 class="text-2xl font-bold">Manage Team</h3>
@@ -43,6 +43,7 @@
 <style>
 	.main {
 		padding: 70px;
+		overflow: none;
 	}
 
 </style>

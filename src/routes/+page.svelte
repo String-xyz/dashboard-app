@@ -8,7 +8,7 @@
   <title>String Dashboard</title>
 </svelte:head>
 
-<div class="main" class:backdrop={$activeModal}>
+<div class="root h-full" class:backdrop={$activeModal}>
 	<SideMenu />
 
 	<div class="content">

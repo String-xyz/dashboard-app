@@ -14,7 +14,7 @@
 		<p class="ml-6">Team</p>
 		<p class="mr-6">Access Level</p>
 	</div>
-	<div>
+	<div class="overflow-hidden">
 	{#each $members as member}
 		<div class="row flex justify-between items-center p-6 ">
 			{#if member.self}
@@ -72,5 +72,7 @@
 	.members {
 		border: 1px solid #F2F2F2;
 		border-radius: 4px;
+		max-height: 590px;
+		overflow: scroll;
 	}
 </style>

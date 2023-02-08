@@ -3,7 +3,7 @@
 	import { cards } from '$lib/stores';
 </script>
 
-<div class="main">
+<div class="main h-full">
 	<h3 class="text-2xl font-bold">Let’s get you started!</h3>
 	<div class="divider mb-6" />
 

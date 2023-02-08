@@ -5,7 +5,7 @@
 
 <button
 	on:click={action}
-	class={'btn btn-primary rounded border-2 font-bold text-sm tracking-wider h-11 mb-6 ' + className}
+	class={'btn btn-primary rounded border-2 font-bold text-sm tracking-wider min-h-0 h-11 mb-6 ' + className}
 	{...$$restProps}
 >
 	<slot />
