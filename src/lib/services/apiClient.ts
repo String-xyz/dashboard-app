@@ -44,8 +44,7 @@ export function createApiClient(): ApiClient {
 	}
 	
 	async function sendResetPasswordToken(email: string) {
-		await httpClient.post('/members/password-reset', { email });
-		return;
+		await httpClient.get('/members/password-reset', { params: { email } });
 	}
 
 	async function resetPassword(token: string, password: string) {

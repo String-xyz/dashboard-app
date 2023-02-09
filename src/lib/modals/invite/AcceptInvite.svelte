@@ -7,13 +7,12 @@
 	import InviteFailed from './InviteFailed.svelte';
 	
 	import { apiClient } from '$lib/services';
-	import { activeModal, _invite} from '$lib/stores';
+	import { activeModal, _invite, user } from '$lib/stores';
 	import { z } from 'zod';
 	import { onMount } from 'svelte';
 
 	const passwordSchema = z.string().min(8);
 	let isPassValid = true;
-	let username = 'w'; // we need a default values in order to correctly show the avatar
 
 	// Bind a verification function to the password input
 	$: {
@@ -35,8 +34,14 @@
 	onMount(async () => {
 		try {
 			const invite = await apiClient.getInvite($_invite.id);
+			if (!invite || !invite.id || !invite.platformName || !invite.role || !invite.name || !invite.email) {
+				throw new Error('Invalid invite');
+			}
+
 			$_invite = invite;
-			username = invite.name || '';
+			$user.name = invite.name;
+			$user.role = invite.role;
+			$user.email = invite.email;
 		} catch (e) {
 			console.error(e);
 			$activeModal = InviteFailed;
@@ -66,9 +71,9 @@
 		<div class="user my-8 flex justify-between items-center py-3 w-full">
 			<div class="flex justify-items-start pl-3">
 				<!-- Should be type other, we need to decide how to handle the bg -->
-				<Avatar name={username} type="self" />
+				<Avatar name={$user.name} type="self" />
 				<div class="ml-4">
-					<p class="text-sm">{username}</p>
+					<p class="text-sm">{$user.name}</p>
 					<p class="text-xs email">{$_invite.email}</p>
 				</div>
 			</div>
