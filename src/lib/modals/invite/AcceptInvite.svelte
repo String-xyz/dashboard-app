@@ -2,7 +2,6 @@
 	import ModalBase from '../ModalBase.svelte';
 	import StyledInput from '$lib/components/StyledInput.svelte';
 	import StyledButton from '$lib/components/StyledButton.svelte';
-	import Avatar from '$lib/components/Avatar.svelte';
 	import UserCard from '$lib/components/ManageTeam/UserCard.svelte';
 
 	import InviteSuccess from './InviteSuccess.svelte';
@@ -33,7 +32,14 @@
 	onMount(async () => {
 		try {
 			const invite = await apiClient.getInvite($_invite.id);
+			if (!invite || !invite.id || !invite.platformName || !invite.role || !invite.name || !invite.email) {
+				throw new Error('Invalid invite');
+			}
+
 			$_invite = invite;
+			$currentUser.name = invite.name;
+			$currentUser.role = invite.role;
+			$currentUser.email = invite.email;
 		} catch (e) {
 			console.error(e);
 			$activeModal = InviteFailed;

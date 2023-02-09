@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { z } from 'zod';
 	import ModalBase from '../ModalBase.svelte';
 	import StyledInput from '$lib/components/StyledInput.svelte';
 	import StyledButton from '$lib/components/StyledButton.svelte';
@@ -7,19 +8,41 @@
 	import ResetSuccess from './ResetSuccess.svelte';
 	import ResetFailed from './ResetFailed.svelte';
 
-	import { activeModal } from '$lib/stores';
+	import { activeModal, resetToken } from '$lib/stores';
+	import { apiClient } from '$lib/services';
 
 	let pwdInput: string;
 	let confPwdInput: string;
+	const passwordSchema = z.string().min(8);
 
 	// Set to true for testing, will be behind Zod parsing
 	let isPwdValid = true;
 
 	$: disabled = !isPwdValid;
-
-	const handleReset = () => {
-		$activeModal = ResetSuccess;
+	$: {
+		try {
+			passwordSchema.parse(pwdInput);
+			isPwdValid = true;
+		} catch (error) {
+			isPwdValid = false;
+		}
 	}
+
+	const handleReset = async () => {
+		if (pwdInput !== confPwdInput) return console.error("Passwords do not match");
+		if (!$resetToken) {
+			console.error("No reset token found");
+			return $activeModal = ResetFailed;
+		}
+
+		try {
+			await apiClient.resetPassword($resetToken, pwdInput);
+			$activeModal = ResetSuccess;
+		} catch (e) {
+			console.error(e);
+			$activeModal = ResetFailed;
+		}
+	};
 
 	const backToLogin = () => {
 		$activeModal = Login;

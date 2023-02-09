@@ -1,26 +1,38 @@
 <script lang="ts">
+	import { z } from 'zod';
 	import ModalBase from '../ModalBase.svelte';
 	import StyledInput from '$lib/components/StyledInput.svelte';
 	import StyledButton from '$lib/components/StyledButton.svelte';
-
 	import PwdResetEmail from './PwdResetEmail.svelte';
 	import Login from '../login/Login.svelte';
 
-	import { activeModal } from '$lib/stores';
-	import { z } from 'zod';
+	import { activeModal, currentUser } from '$lib/stores';
+	import { apiClient } from '$lib/services';
 
+	let isEmailValid = false;
 	const emailSchema = z.string().trim().email();
-
 	let emailInput: string;
-
-	// Set to true for testing, will be behind Zod parsing
-	let isEmailValid = true;
-
 	$: disabled = !isEmailValid;
-
-	const reset = () => {
-		$activeModal = PwdResetEmail;
+	
+	// validate email input on change
+	$: {
+		try {
+			emailSchema.parse(emailInput);
+			isEmailValid = true;
+		} catch (error) {
+			isEmailValid = false;
+		}
 	}
+
+	const reset = async () => {
+		try {
+			await apiClient.sendResetPasswordToken(emailInput);
+			$currentUser.email = emailInput;
+			$activeModal = PwdResetEmail;
+		} catch (e) {
+			console.error(e);
+		}
+	};
 
 	const backToLogin = () => {
 		$activeModal = Login;
