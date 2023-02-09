@@ -1,4 +1,5 @@
 import axios from 'axios';
+import type { Role } from '$lib/stores';
 
 export function createApiClient(): ApiClient {
 	const baseUrl = import.meta.env.VITE_API_URL;
@@ -230,25 +231,22 @@ type Platform = {
 	ipAddresses: string[];
 };
 
-type Member = {
+export interface Member {
 	id: string;
 	createdAt: string;
 	updatedAt: string;
 	deactivatedAt: string;
-	activatedAt: string;
 	email: string;
-	password: string;
 	name: string;
-	role: string;
+	role: Role;
 };
 
-type Role = 'member' | 'admin' | 'owner';
 type InviteStatus = 'pending' | 'accepted' | 'revoked' | 'expired';
 
 export type Invite = {
 	id: string;
-	platformName?: string;
-	name?: string;
-	email?: string;
-	role?: Role;
+	platformName: string;
+	name: string;
+	email: string;
+	role: Role;
 }

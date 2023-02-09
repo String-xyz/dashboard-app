@@ -1,3 +1,4 @@
+export * from './auth';
 export * from './members';
 export * from './tabs';
 export * from './cards';

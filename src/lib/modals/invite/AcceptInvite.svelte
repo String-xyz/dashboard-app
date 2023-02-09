@@ -10,15 +10,13 @@
 	
 	import { z } from 'zod';
 	import { onMount } from 'svelte';
-	import { activeModal, _invite} from '$lib/stores';
+	import { activeModal, currentUser, _invite} from '$lib/stores';
 	import { apiClient } from '$lib/services';
 
 	const passwordSchema = z.string().min(8);
 
 	let pwdInput: string;
 	let isPassValid = true;
-
-	let username = 'w'; // we need a default values in order to correctly show the avatar
 
 	// Bind a verification function to the password input
 	$: {
@@ -36,7 +34,6 @@
 		try {
 			const invite = await apiClient.getInvite($_invite.id);
 			$_invite = invite;
-			username = invite.name || '';
 		} catch (e) {
 			console.error(e);
 			$activeModal = InviteFailed;
@@ -46,7 +43,8 @@
 	const acceptInvite = async () => {
 		try {
 			const member = await apiClient.acceptInvite($_invite.id, pwdInput);
-			console.log(member);
+			$currentUser = {...member, self: true};
+
 			$activeModal = InviteSuccess;
 		} catch (e) {
 			console.error(e);
@@ -63,10 +61,12 @@
 		<h3 class="text-2xl font-bold mb-2">"{$_invite.platformName}"</h3>
 		<p>Confirm your invitation by accepting your invite</p>
 
-		<UserCard user={$_invite} className="my-8" />
+		{#if $_invite.name}
+			<UserCard user={$_invite} className="my-8" />
+		{/if}
 
 		<StyledInput
-			className="mb-10 w-full"
+			className="mb-1 w-full"
 			type="password"
 			label="Set your password"
 			placeholder="********"
@@ -74,6 +74,8 @@
 			autofocus
 			required
 		/>
+		<p class="mb-9 text-sm mr-auto">Must be at least 8 characters</p>
+
 		<!-- Under password input put Must be at least 8 characters when it fails Zod -->
 		<StyledButton className="w-full" action={acceptInvite} {disabled}>Accept Invite</StyledButton>
 	</div>

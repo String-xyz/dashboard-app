@@ -1,29 +1,12 @@
 import { writable, type Writable, get as getStore } from 'svelte/store';
+import { currentUser, Role } from '$lib/stores';
+import type { Member } from '$lib/services';
 
-export interface User {
-	name: string;
-	email: string;
-	role: Role;
+export interface User extends Member {
 	self?: boolean;
 	joinDate?: string;
-	deactivatedAt?: string;
 	isInvite?: boolean;
 }
-
-export enum Role {
-	MEMBER = 'Member',
-	ADMIN = 'Admin',
-	OWNER = 'Owner'
-}
-
-export const rolesList = Object.values(Role);
-
-export const currentUser: Writable<User> = writable({
-	name: 'Miguel Leal',
-	email: 'miguel@string.xyz',
-	role: Role.OWNER,
-	self: true
-});
 
 export const members: Writable<User[]> = writable([
 	getStore(currentUser),
@@ -44,13 +27,3 @@ export const members: Writable<User[]> = writable([
 		role: Role.ADMIN
 	}
 ]);
-
-export const isPermissioned = (userRole: Role, minReqRole: Role) => {
-	if (userRole == minReqRole) return true;
-
-	if (userRole == Role.OWNER) return true;
-
-	if (userRole == Role.ADMIN && minReqRole !== Role.OWNER) return true;
-
-	return false;
-}

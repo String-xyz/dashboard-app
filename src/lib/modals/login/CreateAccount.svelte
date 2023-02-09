@@ -6,7 +6,7 @@
 	import Login from './Login.svelte';
 	import VerifyEmail from './VerifyEmail.svelte';
 
-	import { activeModal, user } from '$lib/stores';
+	import { activeModal, loginEmail } from '$lib/stores';
 	import { z } from 'zod';
 	import { apiClient } from '$lib/services';
 
@@ -37,7 +37,7 @@
 		try {
 			const platform = await apiClient.createPlatform(companyNameInput, emailInput, fullNameInput);
 			console.debug(platform);
-			$user.email = emailInput;
+			$loginEmail = emailInput;
 			$activeModal = VerifyEmail;
 		} catch (error) {
 			console.log(error);

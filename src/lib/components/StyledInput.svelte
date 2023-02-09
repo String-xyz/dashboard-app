@@ -3,6 +3,7 @@
 
 	export let label: string;
 	export let className: string = '';
+	export let borderError = false;
 	export let autofocus = false;
 	export let wrapper = false;
 	export let focused = false;
@@ -18,7 +19,7 @@
 
 </script>
 
-<fieldset class={'group ' + className} class:!border-primary={focused}>
+<fieldset class={'group ' + className} class:!border-primary={focused} class:!border-error={borderError && !focused}>
 	{#if label}
 		<legend class="ml-3 px-2 text-sm font-medium" class:text-primary={focused}>
 			{label}

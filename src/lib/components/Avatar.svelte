@@ -13,6 +13,6 @@
 	const initial = `${path}/${firstInitial}.svg`;
 </script>
 
-{#if initial != ''}
+{#if name}
 	<img src={initial} alt="profile" class={className} />
 {/if}

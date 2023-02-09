@@ -7,8 +7,10 @@
 	import { activeTab, menuItems } from '$lib/stores';
 	import { authService } from '$lib/services';
 
+	let isLoggedIn = false;
+
 	onMount(async () => {
-		let isLoggedIn = false;
+		isLoggedIn = false;
 		try {
 			isLoggedIn = await authService.isUserLoggedIn();
 		} catch (error) {
@@ -29,17 +31,19 @@
 	<title>String Dashboard</title>
 </svelte:head>
 
-<div class="root h-full">
-	<SideMenu />
+{#if isLoggedIn}
+	<div class="root h-full">
+		<SideMenu />
 
-	<div class="content">
-		<svelte:component this={$activeTab?.view} />
+		<div class="content">
+			<svelte:component this={$activeTab?.view} />
+		</div>
+
+		<!-- In-page modals -->
+		<InviteTeammate />
+		<RemoveTeammate />
 	</div>
-
-	<!-- In-page modals -->
-	<InviteTeammate />
-	<RemoveTeammate />
-</div>
+{/if}
 
 <style>
 	.content {
