@@ -22,7 +22,7 @@ export const members: Writable<User[]> = writable([
 		isInvite: true
 	},
 	{
-		name: 'Wilfredo Acala',
+		name: 'Wilfredo Alcala',
 		email: 'wilfredo@string.xyz',
 		role: Role.ADMIN
 	}
