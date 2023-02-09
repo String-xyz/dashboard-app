@@ -2,22 +2,21 @@
 	import FilterDropdown from '$lib/components/ManageTeam/FilterDropdown.svelte';
 	import MemberTable from '$lib/components/ManageTeam/MemberTable.svelte';
 	import StyledButton from '$lib/components/StyledButton.svelte';
-	import InviteTeammate from '$lib/modals/team/InviteTeammate.svelte';
 
-	import { activeModal, Role, currentUser } from '$lib/stores';
-
-	const inviteMember = () => {
-		$activeModal = InviteTeammate;
-	}
+	import { Role, currentUser, inviteModalOpen } from '$lib/stores';
 
 </script>
+
+<svelte:head>
+	<title>Manage Team | String Dashboard</title>
+</svelte:head>
 
 <div class="main h-full">
 	<header>
 		<div class="flex justify-between items-center">
 			<h3 class="text-2xl font-bold">Manage Team</h3>
 			{#if $currentUser.role !== Role.MEMBER}
-				<StyledButton className="btn-outline !m-0 w-40" action={inviteMember}>
+				<StyledButton className="btn-outline !m-0 w-40" action={() => $inviteModalOpen = !$inviteModalOpen}>
 					<img src={"/assets/button/plus.svg"} alt="+" class="inline mr-3" />
 					Invite Team
 				</StyledButton> 

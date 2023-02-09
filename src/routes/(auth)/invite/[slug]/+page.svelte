@@ -24,7 +24,7 @@
 </script>
 
 <svelte:head>
-  <title>Invite | String Dashboard</title>
+	<title>Invite | String Dashboard</title>
 </svelte:head>
 
 <svelte:component this={$activeModal} />

@@ -1,11 +1,14 @@
 <script lang="ts">
-	import { activeTab, activeModal } from '$lib/stores';
 	import SideMenu from '$lib/components/SideMenu/SideMenu.svelte';
+	import InviteTeammate from '$lib/modals/team/InviteTeammate.svelte';
+	import RemoveTeammate from '$lib/modals/team/RemoveTeammate.svelte';
+	
+	import { activeTab, activeModal } from '$lib/stores';
 
 </script>
 
 <svelte:head>
-  <title>String Dashboard</title>
+	<title>String Dashboard</title>
 </svelte:head>
 
 <div class="root h-full" class:backdrop={$activeModal}>
@@ -14,6 +17,10 @@
 	<div class="content">
 		<svelte:component this={$activeTab?.view} />
 	</div>
+
+	<!-- In-page modals -->
+	<InviteTeammate />
+	<RemoveTeammate />
 </div>
 
 <style>

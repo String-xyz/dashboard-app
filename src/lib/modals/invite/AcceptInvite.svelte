@@ -2,7 +2,7 @@
 	import ModalBase from '../ModalBase.svelte';
 	import StyledInput from '$lib/components/StyledInput.svelte';
 	import StyledButton from '$lib/components/StyledButton.svelte';
-	import Avatar from '$lib/components/Avatar.svelte';
+	import UserCard from '$lib/components/ManageTeam/UserCard.svelte';
 
 	import InviteSuccess from './InviteSuccess.svelte';
 
@@ -31,17 +31,7 @@
 		<h3 class="text-2xl font-bold mb-2">"{$invitee.platformName}"</h3>
 		<p>Confirm your invitation by accepting your invite</p>
 
-		<div class="user my-8 flex justify-between items-center py-3 w-full">
-			<div class="flex justify-items-start pl-3">
-				<!-- Should be type other, we need to decide how to handle the bg -->
-				<Avatar name={$invitee.name} type="self" />
-				<div class="ml-4">
-					<p class="text-sm">{$invitee.name}</p>
-					<p class="text-xs email">{$invitee.email}</p>
-				</div>
-			</div>
-			<p class="text-sm mr-4">{$invitee.role}</p>
-		</div>
+		<UserCard user={$invitee} className="my-8" />
 
 		<StyledInput
 			className="mb-10 w-full"
@@ -58,15 +48,6 @@
 </ModalBase>
 
 <style>
-	.user {
-		border: 1px solid #f2f2f2;
-		border-radius: 4px;
-	}
-
-	.email {
-		color: #bebcba;
-	}
-
 	.main {
 		padding-left: 60px;
 		padding-right: 60px;

@@ -15,7 +15,7 @@ module.exports = {
 
 					success: '#15E883',
 
-					warning: '#FFEB84',
+					warning: '#F56161',
 
 					error: '#F92572',
 
@@ -24,8 +24,6 @@ module.exports = {
 					'label-live': '#07AD5E',
 
 					'label-test': '#F3B04B',
-
-					'red-warning': '#F56161',
 
 					'dark-grey': '#BEBCBA'
 				}

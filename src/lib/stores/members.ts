@@ -37,6 +37,11 @@ export const members: Writable<User[]> = writable([
 		email: 'andrin@string.xyz',
 		role: Role.ADMIN,
 		isInvite: true
+	},
+	{
+		name: 'Wilfredo Acala',
+		email: 'wilfredo@string.xyz',
+		role: Role.ADMIN
 	}
 ]);
 

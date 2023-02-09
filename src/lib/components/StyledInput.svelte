@@ -4,9 +4,10 @@
 	export let label: string;
 	export let className: string = '';
 	export let autofocus = false;
+	export let wrapper = false;
+	export let focused = false;
 	export let val = '';
 
-	let focused = false;
 	let inputElm: HTMLInputElement;
 
 	onMount(() => {
@@ -26,14 +27,18 @@
 		<div class="mt-2" />
 	{/if}
 
-	<input
-		class="pl-5 pr-2 mb-2"
-		on:focus={() => (focused = true)}
-		on:blur={() => (focused = false)}
-		bind:this={inputElm}
-		bind:value={val}
-		{...$$restProps}
-	/>
+	{#if wrapper}
+		<slot />
+	{:else}
+		<input
+			class="pl-5 pr-2 mb-2"
+			on:focus={() => (focused = true)}
+			on:blur={() => (focused = false)}
+			bind:this={inputElm}
+			bind:value={val}
+			{...$$restProps}
+		/>
+	{/if}
 </fieldset>
 
 <style>

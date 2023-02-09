@@ -1,5 +1,5 @@
 <script lang="ts">
-	export let name: string;
+	export let name = '';
 	export let type: 'self' | 'other' = 'self';
 	export let className = '';
 
@@ -13,4 +13,6 @@
 	const initial = `${path}/${firstInitial}.svg`;
 </script>
 
-<img src={initial} alt="profile" class={className} />
+{#if name}
+	<img src={initial} alt="profile" class={className} />
+{/if}
