@@ -2,7 +2,7 @@
 	import type { User } from "$lib/stores";
 	import Avatar from "../Avatar.svelte";
 
-	export let user: User | null;
+	export let user: User;
 	export let className = '';
 
 </script>

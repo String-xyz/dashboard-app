@@ -24,10 +24,18 @@
 		<div class="main flex flex-col items-center w-full">
 			<button class="ml-auto mb-1" on:click={close}><img src="/assets/close.svg" alt="Close" /></button>
 			<h3 class="text-3xl font-bold mb-12">Hold on...</h3>
-			<p class="text-center">Are you sure you want to remove this teammate? They will lose access to all of String’s admin panel.</p>
-			<UserCard user={$deactUser} className="my-12"/>
+			{#if $deactUser?.isInvite}
+				<p class="text-center">Are you sure you want to revoke this invite? They will lose the ability to join String’s admin panel.</p>
+			{:else}
+				<p class="text-center">Are you sure you want to remove this teammate? They will lose access to all of String’s admin panel.</p>
+			{/if}
+
+			{#if $deactUser}
+				<UserCard user={$deactUser} className="my-12"/>
+			{/if}
+
 			<StyledButton className="btn-warning w-full mb-0" action={handleDeactivate}>
-				Remove
+				{$deactUser?.isInvite ? "Revoke" : "Remove"}
 			</StyledButton>
 			<button class="mt-7 p-1 bg-transparent text-sm text-primary font-bold tracking-wider border-none no-animation uppercase" on:click={close}>
 				Cancel
