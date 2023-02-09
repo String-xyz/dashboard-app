@@ -5,12 +5,18 @@
 	import ForgotPassword from './ForgotPassword.svelte';
 
 	import { activeModal, user } from '$lib/stores';
+	import { apiClient } from '$lib/services';
 
 	const back = () => {
 		$activeModal = ForgotPassword;
 	}
 
-	const handleResend = () => {
+	const handleResend = async () => {
+		try {
+			await apiClient.sendResetPasswordToken($user.email);
+		} catch (e) {
+			console.error(e);
+		}
 	}
 	
 </script>
