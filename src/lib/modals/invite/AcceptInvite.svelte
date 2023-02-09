@@ -2,24 +2,56 @@
 	import ModalBase from '../ModalBase.svelte';
 	import StyledInput from '$lib/components/StyledInput.svelte';
 	import StyledButton from '$lib/components/StyledButton.svelte';
+	import Avatar from '$lib/components/Avatar.svelte';
 	import UserCard from '$lib/components/ManageTeam/UserCard.svelte';
 
 	import InviteSuccess from './InviteSuccess.svelte';
-
-	import { activeModal, invitee } from '$lib/stores';
+	import InviteFailed from './InviteFailed.svelte';
+	
 	import { z } from 'zod';
+	import { onMount } from 'svelte';
+	import { activeModal, _invite} from '$lib/stores';
+	import { apiClient } from '$lib/services';
 
 	const passwordSchema = z.string().min(8);
 
 	let pwdInput: string;
-
-	// Set to true for testing, will be behind Zod parsing
 	let isPassValid = true;
+
+	let username = 'w'; // we need a default values in order to correctly show the avatar
+
+	// Bind a verification function to the password input
+	$: {
+		try {
+			passwordSchema.parse(pwdInput);
+			isPassValid = true;
+		} catch (error) {
+			isPassValid = false;
+		}
+	}
 
 	$: disabled = !isPassValid;
 
-	const acceptInvite = () => {
-		$activeModal = InviteSuccess;
+	onMount(async () => {
+		try {
+			const invite = await apiClient.getInvite($_invite.id);
+			$_invite = invite;
+			username = invite.name || '';
+		} catch (e) {
+			console.error(e);
+			$activeModal = InviteFailed;
+		}
+	});
+
+	const acceptInvite = async () => {
+		try {
+			const member = await apiClient.acceptInvite($_invite.id, pwdInput);
+			console.log(member);
+			$activeModal = InviteSuccess;
+		} catch (e) {
+			console.error(e);
+			$activeModal = InviteFailed;
+		}
 	}
 
 </script>
@@ -28,10 +60,10 @@
 	<div class="main flex flex-col items-center">
 		<img src="/assets/string_logo.svg" alt="String" width="76px" height="18px" class="mb-10" />
 		<h3 class="text-2xl font-bold mb-2">You’ve been invited to join</h3>
-		<h3 class="text-2xl font-bold mb-2">"{$invitee.platformName}"</h3>
+		<h3 class="text-2xl font-bold mb-2">"{$_invite.platformName}"</h3>
 		<p>Confirm your invitation by accepting your invite</p>
 
-		<UserCard user={$invitee} className="my-8" />
+		<UserCard user={$_invite} className="my-8" />
 
 		<StyledInput
 			className="mb-10 w-full"

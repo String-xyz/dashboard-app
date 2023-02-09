@@ -3,7 +3,25 @@
 	import InviteTeammate from '$lib/modals/team/InviteTeammate.svelte';
 	import RemoveTeammate from '$lib/modals/team/RemoveTeammate.svelte';
 	
-	import { activeTab, activeModal } from '$lib/stores';
+	import { onMount } from 'svelte';
+	import { activeTab, menuItems } from '$lib/stores';
+	import { authService } from '$lib/services';
+
+	onMount(async () => {
+		let isLoggedIn = false;
+		try {
+			isLoggedIn = await authService.isUserLoggedIn();
+		} catch (error) {
+			console.log(error);
+		}
+
+		if (!isLoggedIn) {
+			window.location.href = '/login';;
+			return
+		}
+
+		$activeTab = $menuItems[0];
+	});
 
 </script>
 
@@ -11,7 +29,7 @@
 	<title>String Dashboard</title>
 </svelte:head>
 
-<div class="root h-full" class:backdrop={$activeModal}>
+<div class="root h-full">
 	<SideMenu />
 
 	<div class="content">
@@ -29,9 +47,5 @@
 		width: calc(100% - 260px);
 		height: 100%;
 	}
-
-	/* .backdrop {
-		filter: blur(4px);
-	} */
 
 </style>

@@ -39,6 +39,7 @@
 	"type": "module",
 	"dependencies": {
 		"@fontsource/lora": "^4.5.13",
+		"axios": "^1.3.2",
 		"zod": "^3.20.2"
 	}
 }

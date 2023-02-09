@@ -1,15 +1,17 @@
 <script lang="ts">
-	import type { User } from "$lib/stores";
 	import Avatar from "../Avatar.svelte";
 
-	export let user: User;
+	import type { User } from "$lib/stores";
+	import type { Invite } from "$lib/services";
+
+	export let user: User | Invite;
 	export let className = '';
 
 </script>
 
 <div class={"user flex justify-between items-center py-3 w-full " + className}>
 	<div class="flex justify-items-start pl-3">
-		<Avatar name={user?.name} type="self" />
+		<Avatar name={user?.name ?? ""} type="self" />
 		<div class="ml-4">
 			<p class="text-sm">{user?.name}</p>
 			<p class="text-xs subtext">{user?.email}</p>

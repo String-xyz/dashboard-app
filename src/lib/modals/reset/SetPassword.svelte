@@ -10,6 +10,7 @@
 	import { activeModal } from '$lib/stores';
 
 	let pwdInput: string;
+	let confPwdInput: string;
 
 	// Set to true for testing, will be behind Zod parsing
 	let isPwdValid = true;
@@ -49,7 +50,7 @@
 			type="password"
 			label="Confirm Password"
 			placeholder="********"
-			bind:val={pwdInput}
+			bind:val={confPwdInput}
 			required
 		/>
 

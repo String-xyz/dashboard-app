@@ -38,4 +38,5 @@
 	.size-sm {
 		height: 440px;
 	}
+
 </style>

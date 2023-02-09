@@ -2,28 +2,57 @@
 	import ModalBase from '../ModalBase.svelte';
 	import StyledInput from '$lib/components/StyledInput.svelte';
 	import StyledButton from '$lib/components/StyledButton.svelte';
-
 	import ForgotPassword from '../reset/ForgotPassword.svelte';
 	import CreateAccount from './CreateAccount.svelte';
 	import LoginSuccess from './LoginSuccess.svelte';
 
-	import { activeModal } from '$lib/stores';
 	import { z } from 'zod';
+	import { activeModal } from '$lib/stores';
+	import { apiClient } from '$lib/services';
 
-	let emailInput: string;
-	let pwdInput: string;
+	let emailInput = "";
+	let pwdInput = "";
 
 	const emailSchema = z.string().trim().email();
 	const passwordSchema = z.string().min(8);
 
 	let isEmailValid = false;
-	let isPassValid = false;
+	let isPassValid = false;	
 
 	$: disabled = false;
 
-	const handleLogin = () => {
-		$activeModal = LoginSuccess;
+	// Bind a verification function to the email input
+	$: {
+		try {
+			emailSchema.parse(emailInput);
+			isEmailValid = true;
+		} catch (error) {
+			isEmailValid = false;
+		}
 	}
+
+	// Bind a verification function to the password input
+	$: {
+		try {
+			passwordSchema.parse(pwdInput);
+			isPassValid = true;
+		} catch (error) {
+			isPassValid = false;
+		}
+	}
+
+
+	const handleLogin = async () => {
+		if (!isEmailValid || !isPassValid) return console.debug("Invalid email or password");
+
+		try {
+			const member = await apiClient.login(emailInput, pwdInput);
+			console.debug('--- member', member);
+			$activeModal = LoginSuccess
+		} catch (error) {
+			console.error(error);
+		}
+	};
 
 </script>
 
@@ -32,7 +61,6 @@
 		<img src="/assets/string_logo.svg" alt="String" width="76px" height="18px" class="mb-12" />
 		<h3 class="text-2xl font-bold">Login to String’s Developer dashboard</h3>
 		<p class="my-8">Unlock the magic of String’s API by entering your email below.</p>
-		<!-- <form on:submit|preventDefault={handleVerify}> -->
 		<StyledInput
 			className="mb-6 w-full"
 			type='email'
