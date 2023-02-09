@@ -4,17 +4,19 @@
 
 	import ForgotPassword from './ForgotPassword.svelte';
 
-	import { activeModal } from '$lib/stores';
-	import SetPassword from './SetPassword.svelte';
-
-	let email = 'test@example.com';
+	import { activeModal, user } from '$lib/stores';
+	import { apiClient } from '$lib/services';
 
 	const back = () => {
 		$activeModal = ForgotPassword;
 	}
 
-	const handleResend = () => {
-		$activeModal = SetPassword;
+	const handleResend = async () => {
+		try {
+			await apiClient.sendResetPasswordToken($user.email);
+		} catch (e) {
+			console.error(e);
+		}
 	}
 	
 </script>
@@ -25,7 +27,7 @@
 
 		<h3 class="text-2xl font-bold mb-2">Check your email</h3>
 		<p class="">We sent a password reset link to</p>
-		<p class="mb-10 font-semibold">{email}</p>
+		<p class="mb-10 font-semibold">{$user.email}</p>
 
 		<div class="flex items-center">
 			<StyledButton className="btn-outline w-40 mr-6" action={back}>

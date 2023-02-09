@@ -1,3 +1,4 @@
+import { browser } from '$app/environment';
 import { writable, type Writable } from 'svelte/store';
 
 export interface User {
@@ -17,3 +18,17 @@ export const user: Writable<User> = writable({
 	email: 'miguel@email.com',
 	role: Roles.OWNER
 });
+
+if (browser) {
+	// get from local storage
+	const stored = localStorage.getItem('user');
+	if (stored) {
+		user.set(JSON.parse(stored));
+	}
+
+	// set in local storage
+	user.subscribe(value => {
+		localStorage.setItem('user', JSON.stringify(value));
+	});
+	
+}
