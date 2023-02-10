@@ -1,6 +1,6 @@
 <script lang="ts">
+	import { cards } from '$lib/constants/cards';
 	import Card from '$lib/components/Dashboard/Card.svelte';
-	import { cards } from '$lib/stores';
 </script>
 
 <div class="main h-full">
