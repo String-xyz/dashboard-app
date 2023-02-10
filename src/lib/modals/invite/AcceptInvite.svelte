@@ -8,9 +8,8 @@
 	import InviteFailed from './InviteFailed.svelte';
 	
 	import { z } from 'zod';
-	import { onMount } from 'svelte';
 	import { activeModal, currentUser, _invite} from '$lib/stores';
-	import { apiClient } from '$lib/services';
+	import { authService } from '$lib/services';
 
 	const passwordSchema = z.string().min(8);
 
@@ -29,28 +28,11 @@
 
 	$: disabled = !isPassValid;
 
-	onMount(async () => {
-		try {
-			const invite = await apiClient.getInvite($_invite.id);
-			if (!invite || !invite.id || !invite.platformName || !invite.role || !invite.name || !invite.email) {
-				throw new Error('Invalid invite');
-			}
-
-			$_invite = invite;
-			$currentUser.name = invite.name;
-			$currentUser.role = invite.role;
-			$currentUser.email = invite.email;
-		} catch (e) {
-			console.error(e);
-			$activeModal = InviteFailed;
-		}
-	});
-
 	const acceptInvite = async () => {
 		try {
-			const member = await apiClient.acceptInvite($_invite.id, pwdInput);
-			$currentUser = {...member, self: true};
-
+			const user = await authService.acceptInvite($_invite, pwdInput);
+			
+			$currentUser = user;
 			$activeModal = InviteSuccess;
 		} catch (e) {
 			console.error(e);

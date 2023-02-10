@@ -3,18 +3,28 @@
 	import InviteFailed from '$lib/modals/invite/InviteFailed.svelte';
 
 	import { activeModal, _invite } from '$lib/stores';
-	import { onDestroy } from 'svelte';
+	import { onMount, onDestroy } from 'svelte';
+	import { authService } from '$lib/services';
+
 	import type { PageData } from './$types';
 
 	export let data: PageData;
 
-	if (!data || !data.id) {
-		console.error("No invite data found, redirecting to invite failed modal");
-		$activeModal = InviteFailed;
-	} else {
-		$_invite = { id: data.id };
-		$activeModal = AcceptInvite;
-	}
+	onMount(async () => { 
+		if (!data || !data.id) {
+			console.error("No invite data found, redirecting to invite failed modal");
+			$activeModal = InviteFailed;
+		}
+
+		try {
+			const invite = await authService.getInviteById(data.id);
+			$_invite = invite;
+			$activeModal = AcceptInvite;
+		} catch (e) {
+			console.error(e);
+			$activeModal = InviteFailed;
+		}
+	});
 
 	onDestroy(() => {
 		$activeModal = null;

@@ -8,7 +8,7 @@
 
 	import { z } from 'zod';
 	import { activeModal, currentUser, loginEmail } from '$lib/stores';
-	import { apiClient } from '$lib/services';
+	import { authService } from '$lib/services';
 
 	let emailInput = "";
 	let pwdInput = "";
@@ -34,9 +34,9 @@
 		$loginEmail = emailInput
 
 		try {
-			const member = await apiClient.login(emailInput, pwdInput);
-			$currentUser = {...member, self: true};
-
+			const user = await authService.login(emailInput, pwdInput);
+			
+			$currentUser = user;
 			$activeModal = LoginSuccess
 		} catch (error) {
 			console.error(error);

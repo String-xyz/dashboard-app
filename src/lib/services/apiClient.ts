@@ -3,7 +3,7 @@ import type { Role } from '$lib/stores';
 
 export function createApiClient(): ApiClient {
 	const baseUrl = import.meta.env.VITE_API_URL;
-	const commonHeaders = { 'Content-Type': 'application/json'};
+	const commonHeaders = { 'Content-Type': 'application/json' };
 	const httpClient = axios.create({
 		baseURL: baseUrl,
 		headers: commonHeaders,
@@ -234,7 +234,7 @@ export interface Member {
 	id: string;
 	createdAt: string;
 	updatedAt: string;
-	deactivatedAt: string;
+	deactivatedAt?: string;
 	email: string;
 	name: string;
 	role: Role;
@@ -244,8 +244,8 @@ type InviteStatus = 'pending' | 'accepted' | 'revoked' | 'expired';
 
 export type Invite = {
 	id: string;
-	platformName: string;
 	name: string;
 	email: string;
 	role: Role;
+	platformName: string;
 }
