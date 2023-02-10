@@ -4,9 +4,7 @@ import { browser } from '$app/environment';
 import type { User } from "./members";
 
 export const loginEmail = writable("");
-export const resetToken: Writable<string> = writable();
-
-export const currentUser: Writable<User> = writable();
+export const resetToken = writable("");
 
 export enum Role {
 	MEMBER = 'Member',
@@ -15,6 +13,12 @@ export enum Role {
 }
 
 export const rolesList = Object.values(Role);
+
+export const currentUser: Writable<User> = writable({
+	name: "",
+	email: "",
+	role: Role.MEMBER
+});
 
 export const isPermissioned = (userRole: Role, minReqRole: Role) => {
 	if (userRole == minReqRole) return true;
@@ -30,12 +34,16 @@ if (browser) {
 	// get from local storage
 	const stored = localStorage.getItem('user');
 	if (stored) {
-		currentUser.set(JSON.parse(stored));
+		try {
+			currentUser.set(JSON.parse(stored));
+		} catch (e) {
+			console.error(e);
+		}
 	}
 
 	// set in local storage
 	currentUser.subscribe(value => {
 		localStorage.setItem('user', JSON.stringify(value));
 	});
-	
+
 }

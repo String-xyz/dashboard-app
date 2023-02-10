@@ -1,11 +1,15 @@
 import { writable, type Writable, get as getStore } from 'svelte/store';
 import { currentUser, Role } from '$lib/stores';
-import type { Member } from '$lib/services';
 
-export interface User extends Member {
+export interface User {
+	id?: string;
+	name: string;
+	email: string;
+	role: Role;
+	isInvite?: boolean;
 	self?: boolean;
 	joinDate?: string;
-	isInvite?: boolean;
+	deactivatedAt?: string;
 }
 
 export const members: Writable<User[]> = writable([
