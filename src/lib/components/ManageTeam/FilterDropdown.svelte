@@ -27,9 +27,9 @@
 		on:blur={() => dropdownOpen = false}
 		bind:this={dropdownElem}
 		tabindex="0"
-		class="btn btn-neutral btn-outline btn-dropdown rounded-3xl font-bold tracking-wider text-xs"
+		class="btn btn-neutral btn-outline rounded-3xl font-bold tracking-wider text-xs"
 	>
-		All
+		{$activeFilter.filter}
 		<img src="/assets/button/dropdown_arrow.svg" alt="dropdown" class="ml-3 inline" />	
 	</button>
 	<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
@@ -56,11 +56,6 @@
 		border: 1px solid #e6e4df;
 		border-radius: 4px;
 		background-color: #faf9f9;
-	}
-
-	.btn-dropdown {
-		width: 90px !important;
-		height: 34px !important;
 	}
 
 	.btn-neutral {
