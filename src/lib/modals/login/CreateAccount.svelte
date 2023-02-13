@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { z } from 'zod';
+
 	import ModalBase from '../ModalBase.svelte';
 	import StyledInput from '$lib/components/StyledInput.svelte';
 	import StyledButton from '$lib/components/StyledButton.svelte';
@@ -6,8 +8,7 @@
 	import Login from './Login.svelte';
 	import VerifyEmail from './VerifyEmail.svelte';
 
-	import { activeModal, user } from '$lib/stores';
-	import { z } from 'zod';
+	import { activeModal, loginEmail } from '$lib/stores';
 	import { apiClient } from '$lib/services';
 
 	let fullNameInput: string;
@@ -37,7 +38,7 @@
 		try {
 			const platform = await apiClient.createPlatform(companyNameInput, emailInput, fullNameInput);
 			console.debug(platform);
-			$user.email = emailInput;
+			$loginEmail = emailInput;
 			$activeModal = VerifyEmail;
 		} catch (error) {
 			console.log(error);
@@ -57,18 +58,22 @@
 			label="Your Full Name"
 			placeholder="Ex. John Doe"
 			bind:val={fullNameInput}
+			required
 		/>
 		<StyledInput
 			className="mb-6 w-full"
 			label="Company Name"
 			placeholder="Enter Company name"
 			bind:val={companyNameInput}
+			required
 		/>
 		<StyledInput
 			className="mb-8 w-full"
+			type="email"
 			label="Email"
 			placeholder="Enter email"
 			bind:val={emailInput}
+			required
 		/>
 
 		<StyledButton className="w-full" {disabled} action={createAccount}>Continue</StyledButton>
@@ -86,4 +91,5 @@
 		padding-left: 60px;
 		padding-right: 60px;
 	}
+
 </style>

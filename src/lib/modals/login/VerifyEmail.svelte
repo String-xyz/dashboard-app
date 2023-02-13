@@ -4,15 +4,15 @@
 
 	import CreateAccount from './CreateAccount.svelte';
 	
-	import { activeModal, user } from '$lib/stores';
+	import { activeModal, loginEmail } from '$lib/stores';
 
 	const back = () => {
 		$activeModal = CreateAccount;
-	};
+	}
 
-	const handleResend = () => {
+	// const handleResend = () => {
 		
-	};
+	// }
 
 </script>
 
@@ -21,9 +21,9 @@
 		<img src="/assets/email_icon.svg" alt="Email" class="mb-12" />
 
 		<h3 class="text-2xl font-bold">Check your email...</h3>
-		<p class="my-8">We’ve sent a verification email to {$user.email}</p>
+		<p class="my-8">We’ve sent a verification email to {$loginEmail}</p>
 		<div class="flex items-center mt-8">
-			<StyledButton className="btn-outline w-40 mr-6" action={back}>
+			<StyledButton className="btn-outline w-40" action={back}>
 				<img src="/assets/button/left_chevron.svg" alt="<" class="mr-3" />
 				Go Back
 			</StyledButton>

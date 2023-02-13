@@ -1,16 +1,9 @@
 <script lang="ts">
 	import Avatar from '../Avatar.svelte';
-	import { getMenuItems, activeTab, user, getTabByName, type MenuItem as MItem } from '$lib/stores';
+	import { activeTab, menuItems, currentUser, getTabByName, isPermissioned, Role } from '$lib/stores';
 	import EnvIndicator from './EnvIndicator.svelte';
 	import MenuItem from './MenuItem.svelte';
 	import Signout from './Signout.svelte';
-	import { onMount } from 'svelte';
-
-	let tabs: MItem[];
-
-	onMount(() => {
-		tabs = getMenuItems();
-	});
 
 	const settings = getTabByName('Settings');
 
@@ -24,15 +17,15 @@
 <div class="side-menu flex flex-col">
 	<img src="/assets/string_logo.svg" alt="String" width="75px" height="18px" />
 	<div class="user my-6 flex justify-items-start">
-		<Avatar name={$user.name} />
+		<Avatar name={$currentUser.name} />
 		<div class="ml-2">
 			<p class="text-sm break-all">
-				{$user.email}
+				{$currentUser.email}
 				<button on:click={arrowAction}>
 					<img src="/assets/button/right_arrow.svg" alt=">" class="ml-2" />
 				</button>
 			</p>
-			<p class="text-xs">{$user.role}</p>
+			<p class="text-xs">{$currentUser.role}</p>
 		</div>
 	</div>
 
@@ -42,8 +35,8 @@
 
 	<nav>
 		<ul class="menu bg-transparent">
-			{#if tabs}
-				{#each tabs as tab}
+			{#if $menuItems}
+				{#each $menuItems.filter(t => isPermissioned($currentUser.role, t.minPerms ?? Role.MEMBER)) as tab}
 					<MenuItem {tab} />
 				{/each}
 			{/if}

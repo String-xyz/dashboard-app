@@ -12,4 +12,8 @@
 	
 </script>
 
+<svelte:head>
+	<title>Login | String Dashboard</title>
+</svelte:head>
+
 <svelte:component this={$activeModal} />

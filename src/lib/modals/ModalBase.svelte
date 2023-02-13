@@ -20,25 +20,23 @@
 		border: 1px solid #dbdbdb;
 		border-radius: 8px;
 		background: white;
+		width: 600px;
 	}
 
 	.size-xl {
-		width: 600px;
 		height: 650px;
 	}
 
 	.size-lg {
-		width: 600px;
 		height: 600px;
 	}
 
 	.size-md {
-		width: 600px;
 		height: 550px;
 	}
 
 	.size-sm {
-		width: 600px;
 		height: 440px;
 	}
+
 </style>

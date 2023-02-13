@@ -1,17 +1,20 @@
 <script lang="ts">
+	import { z } from 'zod';
+
 	import ModalBase from '../ModalBase.svelte';
 	import StyledInput from '$lib/components/StyledInput.svelte';
 	import StyledButton from '$lib/components/StyledButton.svelte';
-	import Avatar from '$lib/components/Avatar.svelte';
+	import UserCard from '$lib/components/ManageTeam/UserCard.svelte';
+
 	import InviteSuccess from './InviteSuccess.svelte';
 	import InviteFailed from './InviteFailed.svelte';
 	
-	import { apiClient } from '$lib/services';
-	import { activeModal, _invite, user } from '$lib/stores';
-	import { z } from 'zod';
-	import { onMount } from 'svelte';
+	import { activeModal, currentUser, _invite} from '$lib/stores';
+	import { authService } from '$lib/services';
 
 	const passwordSchema = z.string().min(8);
+
+	let pwdInput: string;
 	let isPassValid = true;
 
 	// Bind a verification function to the password input
@@ -24,34 +27,13 @@
 		}
 	}
 
-	let pwdInput: string;
-
-	// Set to true for testing, will be behind Zod parsing
-
 	$: disabled = !isPassValid;
-
-
-	onMount(async () => {
-		try {
-			const invite = await apiClient.getInvite($_invite.id);
-			if (!invite || !invite.id || !invite.platformName || !invite.role || !invite.name || !invite.email) {
-				throw new Error('Invalid invite');
-			}
-
-			$_invite = invite;
-			$user.name = invite.name;
-			$user.role = invite.role;
-			$user.email = invite.email;
-		} catch (e) {
-			console.error(e);
-			$activeModal = InviteFailed;
-		}
-	});
 
 	const acceptInvite = async () => {
 		try {
-			const member = await apiClient.acceptInvite($_invite.id, pwdInput);
-			console.log(member);
+			const user = await authService.acceptInvite($_invite, pwdInput);
+			
+			$currentUser = user;
 			$activeModal = InviteSuccess;
 		} catch (e) {
 			console.error(e);
@@ -68,41 +50,27 @@
 		<h3 class="text-2xl font-bold mb-2">"{$_invite.platformName}"</h3>
 		<p>Confirm your invitation by accepting your invite</p>
 
-		<div class="user my-8 flex justify-between items-center py-3 w-full">
-			<div class="flex justify-items-start pl-3">
-				<!-- Should be type other, we need to decide how to handle the bg -->
-				<Avatar name={$user.name} type="self" />
-				<div class="ml-4">
-					<p class="text-sm">{$user.name}</p>
-					<p class="text-xs email">{$_invite.email}</p>
-				</div>
-			</div>
-			<p class="text-sm mr-4">{$_invite.role}</p>
-		</div>
+		{#if $_invite.name}
+			<UserCard user={$_invite} className="my-8" />
+		{/if}
 
 		<StyledInput
-			className="mb-10 w-full"
+			className="mb-1 w-full"
 			type="password"
 			label="Set your password"
 			placeholder="********"
 			bind:val={pwdInput}
 			autofocus
+			required
 		/>
+		<p class="mb-9 text-sm mr-auto">Must be at least 8 characters</p>
+
 		<!-- Under password input put Must be at least 8 characters when it fails Zod -->
 		<StyledButton className="w-full" action={acceptInvite} {disabled}>Accept Invite</StyledButton>
 	</div>
 </ModalBase>
 
 <style>
-	.user {
-		border: 1px solid #f2f2f2;
-		border-radius: 4px;
-	}
-
-	.email {
-		color: #bebcba;
-	}
-
 	.main {
 		padding-left: 60px;
 		padding-right: 60px;

@@ -1,12 +1,14 @@
 <script lang="ts">
 	import { z } from 'zod';
+
 	import ModalBase from '../ModalBase.svelte';
 	import StyledInput from '$lib/components/StyledInput.svelte';
 	import StyledButton from '$lib/components/StyledButton.svelte';
+
 	import PwdResetEmail from './PwdResetEmail.svelte';
 	import Login from '../login/Login.svelte';
 
-	import { activeModal, user } from '$lib/stores';
+	import { activeModal, currentUser } from '$lib/stores';
 	import { apiClient } from '$lib/services';
 
 	let isEmailValid = false;
@@ -27,7 +29,7 @@
 	const reset = async () => {
 		try {
 			await apiClient.sendResetPasswordToken(emailInput);
-			$user.email = emailInput;
+			$currentUser.email = emailInput;
 			$activeModal = PwdResetEmail;
 		} catch (e) {
 			console.error(e);
@@ -36,7 +38,8 @@
 
 	const backToLogin = () => {
 		$activeModal = Login;
-	};
+	}
+
 </script>
 
 <ModalBase size="size-md">
@@ -47,10 +50,12 @@
 
 		<StyledInput
 			className="mb-8 w-full"
+			type='email'
 			label="Email"
 			placeholder="Enter your email"
 			bind:val={emailInput}
 			autofocus
+			required
 		/>
 
 		<StyledButton className="mb-8 w-full" action={reset} {disabled}>Reset password</StyledButton>
@@ -70,4 +75,5 @@
 		padding-right: 60px;
 		padding-top: 70px;
 	}
+
 </style>

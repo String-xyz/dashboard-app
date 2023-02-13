@@ -1,14 +1,16 @@
 <script lang="ts">
 	import { z } from 'zod';
+
 	import ModalBase from '../ModalBase.svelte';
 	import StyledInput from '$lib/components/StyledInput.svelte';
 	import StyledButton from '$lib/components/StyledButton.svelte';
+
 	import ForgotPassword from '../reset/ForgotPassword.svelte';
 	import CreateAccount from './CreateAccount.svelte';
 	import LoginSuccess from './LoginSuccess.svelte';
 
-	import { activeModal } from '$lib/stores';
-	import { apiClient } from '$lib/services';
+	import { activeModal, currentUser, loginEmail } from '$lib/stores';
+	import { authService } from '$lib/services';
 
 	let emailInput = "";
 	let pwdInput = "";
@@ -16,43 +18,32 @@
 	const emailSchema = z.string().trim().email();
 	const passwordSchema = z.string().min(8);
 
-	let isEmailValid = false;
-	let isPassValid = false;	
+	let isEmailValid = true;
+	let isPassValid = true;
 
 	$: disabled = false;
 
-	// Bind a verification function to the email input
-	$: {
-		try {
-			emailSchema.parse(emailInput);
-			isEmailValid = true;
-		} catch (error) {
-			isEmailValid = false;
-		}
-	}
+	const isValidInput = () => {
+		isEmailValid = emailSchema.safeParse(emailInput).success;
+		isPassValid = passwordSchema.safeParse(pwdInput).success;
 
-	// Bind a verification function to the password input
-	$: {
-		try {
-			passwordSchema.parse(pwdInput);
-			isPassValid = true;
-		} catch (error) {
-			isPassValid = false;
-		}
+		return isEmailValid && isPassValid;
 	}
-
 
 	const handleLogin = async () => {
-		if (!isEmailValid || !isPassValid) return console.debug("Invalid email or password");
+		if (!isValidInput()) return;
+
+		$loginEmail = emailInput
 
 		try {
-			const member = await apiClient.login(emailInput, pwdInput);
-			console.debug('--- member', member);
+			const user = await authService.login(emailInput, pwdInput);
+			
+			$currentUser = user;
 			$activeModal = LoginSuccess
 		} catch (error) {
 			console.error(error);
 		}
-	};
+	}
 
 </script>
 
@@ -62,18 +53,28 @@
 		<h3 class="text-2xl font-bold">Login to String’s Developer dashboard</h3>
 		<p class="my-8">Unlock the magic of String’s API by entering your email below.</p>
 		<StyledInput
-			className="mb-6 w-full"
+			className="w-full"
+			type='email'
 			label="Email"
 			placeholder="Enter email"
 			bind:val={emailInput}
+			borderError={!isEmailValid && emailInput !== ""}
 			autofocus
+			required
 		/>
+		{#if !isEmailValid && emailInput !== ""}
+			<p class="text-error mt-2 mb-4 mr-auto">Invalid email address</p>
+		{:else}
+			<div class="mb-6"/>
+		{/if}
+
 		<StyledInput
 			className="mb-2 w-full"
 			type="password"
 			label="Password"
 			placeholder="********"
 			bind:val={pwdInput}
+			required
 		/>
 		<!-- Add visibility icon and allow to show and hide pwd -->
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -98,4 +99,5 @@
 		padding-top: 50px;
 		padding-bottom: 32px;
 	}
+
 </style>

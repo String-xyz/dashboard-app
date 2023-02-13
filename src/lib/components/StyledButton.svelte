@@ -1,13 +1,12 @@
 <script lang="ts">
 	export let action = () => {};
-	export let disabled = false;
 	export let className = '';
 </script>
 
 <button
 	on:click={action}
-	{disabled}
-	class={'btn btn-primary rounded border-2 font-bold text-sm h-11 mb-6 ' + className}
+	class={'btn btn-primary rounded border-2 font-bold text-sm tracking-wider min-h-0 h-11 mb-6 ' + className}
+	{...$$restProps}
 >
 	<slot />
 </button>
@@ -26,4 +25,5 @@
 		border: 2px solid #b6d5ec;
 		color: #b6d5ec !important;
 	}
+
 </style>
