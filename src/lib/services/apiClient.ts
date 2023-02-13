@@ -230,7 +230,7 @@ type Platform = {
 	ipAddresses: string[];
 };
 
-export interface Member {
+export type Member = {
 	id: string;
 	createdAt: string;
 	updatedAt: string;
