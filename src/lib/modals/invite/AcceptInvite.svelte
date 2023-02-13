@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { z } from 'zod';
+
 	import ModalBase from '../ModalBase.svelte';
 	import StyledInput from '$lib/components/StyledInput.svelte';
 	import StyledButton from '$lib/components/StyledButton.svelte';
@@ -7,7 +9,6 @@
 	import InviteSuccess from './InviteSuccess.svelte';
 	import InviteFailed from './InviteFailed.svelte';
 	
-	import { z } from 'zod';
 	import { activeModal, currentUser, _invite} from '$lib/stores';
 	import { authService } from '$lib/services';
 

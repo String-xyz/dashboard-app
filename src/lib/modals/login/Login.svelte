@@ -1,12 +1,14 @@
 <script lang="ts">
+	import { z } from 'zod';
+
 	import ModalBase from '../ModalBase.svelte';
 	import StyledInput from '$lib/components/StyledInput.svelte';
 	import StyledButton from '$lib/components/StyledButton.svelte';
+
 	import ForgotPassword from '../reset/ForgotPassword.svelte';
 	import CreateAccount from './CreateAccount.svelte';
 	import LoginSuccess from './LoginSuccess.svelte';
 
-	import { z } from 'zod';
 	import { activeModal, currentUser, loginEmail } from '$lib/stores';
 	import { authService } from '$lib/services';
 

@@ -1,6 +1,7 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import ModalBase from '../ModalBase.svelte';
+
+	import { onMount } from 'svelte';
 	import { _invite } from '$lib/stores';
 
 	onMount(() => {

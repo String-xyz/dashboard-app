@@ -1,9 +1,10 @@
 <script lang="ts">
+	import { z } from 'zod';
+
 	import StyledInput from '$lib/components/StyledInput.svelte';
 	import StyledButton from '$lib/components/StyledButton.svelte';
 	import RoleDropdown from '$lib/components/ManageTeam/RoleDropdown.svelte';
 
-	import { z } from 'zod';
 	import { inviteModalOpen } from '$lib/stores';
 
 	const emailSchema = z.string().trim().email();
