@@ -1,9 +1,9 @@
-import { apiClient, type Invite } from ".";
+import type { ApiClient, Invite } from "./apiClient";
 import type { User } from "$lib/stores";
 
 const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' } as Intl.DateTimeFormatOptions;
 
-export function createAuthService() {
+export function createAuthService(apiClient: ApiClient) {
 
 	async function login(email: string, pwd: string): Promise<User> {
 		const member = await apiClient.login(email, pwd);
