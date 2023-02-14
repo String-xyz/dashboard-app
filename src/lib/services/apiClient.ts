@@ -209,16 +209,16 @@ export interface ApiClient {
 	editApiKey: (keyId: string, description: string) => Promise<ApiKeyResponse>;
 }
 
-interface ApiKeyResponse {
+export interface ApiKeyResponse {
 	id: string;
-	status: string;
-	authType: string;
-	data: string;
 	createdAt: string;
 	updatedAt: string;
+	type: string;
+	data: string;
+	description: string | null;
 }
 
-type Platform = {
+export type Platform = {
 	id: string;
 	createdAt: string;
 	updatedAt: string;
@@ -240,7 +240,7 @@ export type Member = {
 	role: Role;
 };
 
-type InviteStatus = 'pending' | 'accepted' | 'revoked' | 'expired';
+export type InviteStatus = 'pending' | 'accepted' | 'revoked' | 'expired';
 
 export type Invite = {
 	id: string;

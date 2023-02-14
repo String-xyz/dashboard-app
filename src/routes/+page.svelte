@@ -2,7 +2,8 @@
 	import SideMenu from '$lib/components/SideMenu/SideMenu.svelte';
 	import InviteTeammate from '$lib/modals/team/InviteTeammate.svelte';
 	import RemoveTeammate from '$lib/modals/team/RemoveTeammate.svelte';
-	
+	import KeyCreateSuccess from '$lib/modals/keys/KeyCreateSuccess.svelte';
+
 	import { onMount } from 'svelte';
 	import { activeTab, menuItems } from '$lib/stores';
 	import { authService } from '$lib/services';
@@ -42,6 +43,7 @@
 		<!-- In-page modals -->
 		<InviteTeammate />
 		<RemoveTeammate />
+		<KeyCreateSuccess />
 	</div>
 {/if}
 
