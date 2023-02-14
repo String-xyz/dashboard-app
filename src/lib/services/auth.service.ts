@@ -35,5 +35,16 @@ export function createAuthService(apiClient: ApiClient) {
 		return {...newMember, joinDate, self: true}
 	}
 
-	return { login, isUserLoggedIn, getInviteById, acceptInvite };
+	async function logout() {
+		try {
+			await apiClient.logout();
+			window.location.href = '/';
+			localStorage.removeItem('user');
+		} catch (e) {
+			console.error(e);
+		}
+			
+	}
+
+	return { login, logout, isUserLoggedIn, getInviteById, acceptInvite };
 }

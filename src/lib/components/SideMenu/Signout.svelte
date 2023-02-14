@@ -1,6 +1,13 @@
 <script lang="ts">
-	const signout = () => {
-		console.log('Mock signout');
+	import { authService } from "$lib/services";
+
+
+	const signout = async () => {
+		try {
+			await authService.logout();
+		} catch (error) {
+			console.error(error);
+		}
 	}
 
 </script>

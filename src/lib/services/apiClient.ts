@@ -17,6 +17,11 @@ export function createApiClient(): ApiClient {
 		return data;
 	}
 
+	async function logout() {
+		await httpClient.post('/login/logout');
+		return;
+	}
+
 	/*********** MEMBERS ***********/
 
 	async function getMembers() {
@@ -149,6 +154,7 @@ export function createApiClient(): ApiClient {
 
 	return {
 		login,
+		logout,
 		getMembers,
 		getMember,
 		changeMemberRole,
@@ -177,6 +183,7 @@ export function createApiClient(): ApiClient {
 export interface ApiClient {
 	/* Login */
 	login(email: string, password: string) : Promise<Member>;
+	logout() : Promise<void>;
 	
 	/* Members */
 	getMembers() : Promise<Member[]>;
