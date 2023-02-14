@@ -5,12 +5,13 @@
 	import StyledButton from '$lib/components/StyledButton.svelte';
 	import RoleDropdown from '$lib/components/ManageTeam/RoleDropdown.svelte';
 
-	import { inviteModalOpen } from '$lib/stores';
+	import { inviteModalOpen, Role } from '$lib/stores';
 
 	const emailSchema = z.string().trim().email();
 	const nameSchema = z.string().min(0);
 
 	let dropdownOpen: boolean;
+	let inviteRole: Role;
 
 	let emailInput: string;
 	let nameInput: string;
@@ -61,7 +62,7 @@
 					wrapper={true}
 					focused={dropdownOpen}
 				>
-					<RoleDropdown isInvite={true} bind:dropdownOpen />
+					<RoleDropdown isInvite={true} bind:dropdownOpen bind:inviteRole />
 				</StyledInput>
 			</div>
 			<StyledButton className="w-full mb-0" action={handleInvite}>

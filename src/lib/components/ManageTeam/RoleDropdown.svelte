@@ -3,11 +3,10 @@
 
 	export let member: User | null = null;
 	export let isInvite = false;
+	export let inviteRole: Role = Role.MEMBER;
 	export let dropdownOpen = false;
 
 	let dropdownElem: HTMLButtonElement;
-
-	let inviteRole = Role.MEMBER;
 
 	const assetPath = "/assets/dropdown/"
 
@@ -27,8 +26,11 @@
 	const setMemberRole = (toRole: Role) => {
 		if (isInvite) {
 			inviteRole = toRole;
-			// Update invite role here
 		}
+
+		const btn = document.activeElement as HTMLButtonElement
+		btn.blur();
+		
 		if (!member) return;
 
 		// call apiClient here
@@ -62,7 +64,7 @@
 		{#each rolesList.filter(r => r != Role.OWNER || $currentUser.role == Role.OWNER) as role}
 			{@const active = isInvite ? inviteRole == role : (member?.role ?? Role.MEMBER) == role}
 			<li class:active={active}>
-				<button on:click={() => {setMemberRole(role)}} class="font-bold text-xs tracking-wider uppercase">
+				<button on:click={() => setMemberRole(role)} class="font-bold text-xs tracking-wider uppercase">
 					<img src={ active ? radioActive[0] : radioInactive[0] } alt={ active ? radioActive[1] : radioInactive[1] }/>
 					<p class="my-1">{role}</p>
 				</button>
