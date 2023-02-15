@@ -34,10 +34,9 @@
 	onMount(async () => {
 		
 		/* If user is already logged in, redirect to dashboard */
-		// commenting out for testing purposes
-		// if (await authService.isUserLoggedIn()) {
-		// 	window.location.href = '/';
-		// }
+		if (await authService.isUserLoggedIn()) {
+			window.location.href = '/';
+		}
 	});
 
 

@@ -23,10 +23,10 @@
 	async function handleCreateApiKey() {
 		try {
 			const apiKey = await apiClient.createApiKey();
-			console.debug('--- apiKey', apiKey);
-			// TODO: redirect user to the API key management page
+			// TODO: show success message 
 		} catch (error) {
 			console.error('--- error', error);
+			// TODO: show error message
 		}
 	}
 </script>

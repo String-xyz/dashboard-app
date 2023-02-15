@@ -1,33 +1,6 @@
-import { writable, type Writable, get as getStore } from 'svelte/store';
-import { currentUser, Role } from '$lib/stores';
+import { writable, type Writable } from 'svelte/store';
+import type { TeamItem } from '$lib/types';
+import type { Member } from '$lib/services';
 
-export interface User {
-	id?: string;
-	name: string;
-	email: string;
-	role: Role;
-	isInvite?: boolean;
-	self?: boolean;
-	joinDate?: string;
-	deactivatedAt?: string;
-}
-
-export const members: Writable<User[]> = writable([
-	getStore(currentUser),
-	{
-		name: 'Dante Ielpi',
-		email: 'dante@string.xyz',
-		role: Role.ADMIN
-	},
-	{
-		name: 'Andrin Foster',
-		email: 'andrin@string.xyz',
-		role: Role.ADMIN,
-		isInvite: true
-	},
-	{
-		name: 'Wilfredo Alcala',
-		email: 'wilfredo@string.xyz',
-		role: Role.ADMIN
-	}
-]);
+export const members: Writable<Member[]> = writable([]);
+export const teamItems: Writable<TeamItem[]> = writable([]);

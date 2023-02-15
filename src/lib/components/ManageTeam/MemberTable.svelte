@@ -1,5 +1,7 @@
 <script lang="ts">
-	import { members, Role, currentUser } from '$lib/stores'
+	import { Role } from '$lib/types'
+	import { teamItems, currentUser } from '$lib/stores'
+
 	import Avatar from '../Avatar.svelte';
 	import StyledButton from '../StyledButton.svelte';
 	import RoleDropdown from './RoleDropdown.svelte';
@@ -7,7 +9,6 @@
 	const handleResend = () => {
 
 	}
-
 </script>
 <div class="members w-full">
 	<div class="flex justify-between py-4 font-bold">
@@ -15,7 +16,7 @@
 		<p class="mr-6">Access Level</p>
 	</div>
 	<div>
-		{#each $members as member}
+		{#each $teamItems as member}
 			<div class="row flex justify-between items-center p-6 ">
 				{#if member.self}
 					<div class="flex justify-items-start items-center">

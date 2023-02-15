@@ -1,6 +1,9 @@
 <script lang="ts">
+	import { Role } from '$lib/types';
+	import { authService } from '$lib/services';
+	import { activeTab, menuItems, currentUser, getTabByName } from '$lib/stores';
+
 	import Avatar from '../Avatar.svelte';
-	import { activeTab, menuItems, currentUser, getTabByName, isPermissioned, Role } from '$lib/stores';
 	import EnvIndicator from './EnvIndicator.svelte';
 	import MenuItem from './MenuItem.svelte';
 	import Signout from './Signout.svelte';
@@ -36,7 +39,7 @@
 	<nav>
 		<ul class="menu bg-transparent">
 			{#if $menuItems}
-				{#each $menuItems.filter(t => isPermissioned($currentUser.role, t.minPerms ?? Role.MEMBER)) as tab}
+				{#each $menuItems.filter(t => authService.isPermissioned($currentUser.role, t.minPerms ?? Role.MEMBER)) as tab}
 					<MenuItem {tab} />
 				{/each}
 			{/if}

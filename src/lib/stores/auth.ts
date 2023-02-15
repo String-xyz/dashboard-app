@@ -1,35 +1,15 @@
 import { writable, type Writable } from "svelte/store";
 import { browser } from '$app/environment';
+import type { Member } from "$lib/services";
+import { Role } from "$lib/types";
 
-import type { User } from "./members";
 
 export const loginEmail = writable("");
 export const resetToken = writable("");
-
-export enum Role {
-	MEMBER = 'Member',
-	ADMIN = 'Admin',
-	OWNER = 'Owner'
-}
-
 export const rolesList = Object.values(Role);
+export const currentUser: Writable<Member> = writable();
 
-export const currentUser: Writable<User> = writable({
-	name: "",
-	email: "",
-	role: Role.MEMBER
-});
-
-export const isPermissioned = (userRole: Role, minReqRole: Role) => {
-	if (userRole == minReqRole) return true;
-
-	if (userRole == Role.OWNER) return true;
-
-	if (userRole == Role.ADMIN && minReqRole !== Role.OWNER) return true;
-
-	return false;
-}
-
+/* Local storage */
 if (browser) {
 	// get from local storage
 	const stored = localStorage.getItem('user');
@@ -45,5 +25,4 @@ if (browser) {
 	currentUser.subscribe(value => {
 		localStorage.setItem('user', JSON.stringify(value));
 	});
-
 }

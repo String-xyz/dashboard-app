@@ -1,5 +1,5 @@
 import { writable } from "svelte/store";
-import { Role } from "$lib/stores";
+import { Role } from "$lib/types";
 
 export enum Filter {
 	ALL_MEMBERS = 'all',
@@ -34,4 +34,4 @@ export const filterOptions: FilterOption[] = [
 	}
 ]
 
-export const activeFilter = writable(filterOptions[0]);
+export const activeFilter = writable<FilterOption>(filterOptions[1]);
