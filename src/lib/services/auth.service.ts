@@ -1,15 +1,11 @@
-import type { ApiClient, Invite } from "./apiClient";
-import type { User } from "$lib/stores";
-
-const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' } as Intl.DateTimeFormatOptions;
+import type { ApiClient, Invite, Member } from "./apiClient";
+import { Role } from "$lib/types";
 
 export function createAuthService(apiClient: ApiClient) {
 
-	async function login(email: string, pwd: string): Promise<User> {
+	async function login(email: string, pwd: string): Promise<Member> {
 		const member = await apiClient.login(email, pwd);
-		const joinDate = new Date(member.createdAt).toLocaleDateString('en-US', dateOptions);
-
-		return {...member, joinDate, self: true}
+		return member;
 	}
 
 	async function isUserLoggedIn(): Promise<boolean> {
@@ -26,13 +22,13 @@ export function createAuthService(apiClient: ApiClient) {
 		return invite;
 	}
 
-	async function acceptInvite(invite: Invite, password: string): Promise<User> {
+	async function acceptInvite(invite: Invite, password: string): Promise<Member> {
 		const newMember = await apiClient.acceptInvite(invite.id, password);
-		const joinDate = new Date(newMember.createdAt).toLocaleDateString('en-US', dateOptions);
+
 		// Because acceptInvite doesn't return Role
 		newMember.role = invite.role;
 
-		return {...newMember, joinDate, self: true}
+		return newMember;
 	}
 
 	async function logout() {
@@ -46,5 +42,13 @@ export function createAuthService(apiClient: ApiClient) {
 			
 	}
 
-	return { login, logout, isUserLoggedIn, getInviteById, acceptInvite };
+	const isPermissioned = (userRole: Role, minReqRole: Role) => {
+		if (userRole == minReqRole) return true;
+		if (userRole == Role.OWNER) return true;
+		if (userRole == Role.ADMIN && minReqRole !== Role.OWNER) return true;
+	
+		return false;
+	}
+	
+	return { login, logout, isUserLoggedIn, getInviteById, acceptInvite, isPermissioned };
 }

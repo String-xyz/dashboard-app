@@ -1,11 +1,13 @@
 <script lang="ts">
 	import { z } from 'zod';
-
+	import type { Role } from '$lib/types';
+	import { apiClient } from '$lib/services';
+	import { inviteModalOpen } from '$lib/stores';
+	
 	import StyledInput from '$lib/components/StyledInput.svelte';
 	import StyledButton from '$lib/components/StyledButton.svelte';
 	import RoleDropdown from '$lib/components/ManageTeam/RoleDropdown.svelte';
-
-	import { inviteModalOpen, Role } from '$lib/stores';
+	
 
 	const emailSchema = z.string().trim().email();
 	const nameSchema = z.string().min(0);
@@ -19,9 +21,15 @@
 	let isEmailValid = false;
 	let isNameValid = false;
 
-	const handleInvite = () => {
-		// Send invite
-		// then
+	const handleInvite = async () => {
+		// TODO: validate email and name
+		try {
+			const invite = await apiClient.sendInvite(emailInput, nameInput, inviteRole);
+			console.debug("invite", invite);
+		} catch (e) {
+			console.error(e);
+		}
+
 		$inviteModalOpen = false;
 	}
 

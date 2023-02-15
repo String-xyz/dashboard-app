@@ -1,8 +1,10 @@
 <script lang="ts">
-	import { Role, rolesList, currentUser, type User, deactModalOpen, deactUser } from "$lib/stores";
+	import { Role, type TeamItem } from "$lib/types";
+	import { apiClient } from "$lib/services";
+	import { rolesList, currentUser, deactModalOpen, deactUser } from "$lib/stores";
 
-	export let member: User | null = null;
-	export let isInvite = false;
+	export let member: TeamItem | null = null;
+	export let isInvite = member?.isInvite ?? false;
 	export let inviteRole: Role = Role.MEMBER;
 	export let dropdownOpen = false;
 
@@ -23,7 +25,7 @@
 		}
 	}
 
-	const setMemberRole = (toRole: Role) => {
+	const setMemberRole = async (toRole: Role) => {
 		if (isInvite) {
 			inviteRole = toRole;
 		}
@@ -32,10 +34,18 @@
 		btn.blur();
 		
 		if (!member) return;
-
-		// call apiClient here
-		member.role = toRole;
-
+		
+		try {
+			let res;
+			if (member.isInvite) res = await apiClient.changeInviteRole(member.id, toRole);
+			else res = await apiClient.changeMemberRole(member.id, toRole);
+			
+			member.role = toRole;
+		} catch (error) {
+			// TODO: Show error notification
+			console.log(error);
+		}
+		
 	}
 
 	const openDeactivateModal = () => {
