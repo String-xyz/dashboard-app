@@ -17,7 +17,7 @@ jobs:
         uses: actions/checkout@v3
         
       - name: configure aws credentials
-        uses: aws-actions/configure-aws-credentials@v1.6.1
+        uses: aws-actions/configure-aws-credentials@v1.7.0
         with:
           aws-region: us-west-2
           role-to-assume: ${{ secrets.AWS_ASSUME_ROLE }}
@@ -33,5 +33,5 @@ jobs:
           yarn build
       - name: deploy
         run: |
-          aws s3 cp --recursive build/ s3::/${{ secrets.AWS_S3_BUCKET }}
+          aws s3 cp --recursive build/ s3:://${{ secrets.AWS_S3_BUCKET }}
           aws cloudfront create-invalidation --distribution-id ${{secrets.DISTRIBUTION_ID}} --paths "/*"
