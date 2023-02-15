@@ -20,7 +20,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v1.6.1
         with:
           aws-region: us-west-2
-          role-to-assume: ${{ secrets.ASSUME_ROLE }}
+          role-to-assume: ${{ secrets.AWS_ASSUME_ROLE }}
       - name: setup nodeJS
         uses: actions/setup-node@v3
         with:
