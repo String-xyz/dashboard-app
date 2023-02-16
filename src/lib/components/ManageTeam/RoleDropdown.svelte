@@ -19,7 +19,10 @@
 	const radioInactive = [assetPath + "radio_inactive.svg", "radio-inactive"]
 
 	onMount(() => {
-		if (member) inviteRole = member.role;
+		if (member) {
+			inviteRole = member.role;
+			isInvite = member.isInvite || false;
+		}
 	});
 
 	const toggleDropdown = () => {
