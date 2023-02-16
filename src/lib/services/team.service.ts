@@ -23,11 +23,21 @@ export function createTeamService(apiClient: ApiClient) {
 	}
 
 	function filterTeamItems(_teamItems: TeamItem[], filter: Filter) {
-		if (filter === Filter.ALL_MEMBERS) return _teamItems;
+		if (filter === Filter.ALL_MEMBERS) {
+
+			// sort by [...active, ...invites, ...deactivated]
+			const sortedItems = [
+				..._teamItems.filter((item) => !item.isInvite),
+				..._teamItems.filter((item) => item.isInvite),
+				..._teamItems.filter((teamItem) => teamItem.deactivatedAt || false)
+			];
+			return sortedItems;
+		}
+
 		if (filter === Filter.PENDING_INVITE) return _teamItems.filter((teamItem) => teamItem.isInvite && teamItem.status === 'pending');
 		if (filter === Filter.DELETED) return _teamItems.filter((teamItem) => teamItem.deactivatedAt || false);
 		if (filter === Filter.ACTIVE) return _teamItems.filter((teamItem) => teamItem.deactivatedAt === undefined && !teamItem.isInvite);
-		
+
 		return _teamItems;
 	}
 
