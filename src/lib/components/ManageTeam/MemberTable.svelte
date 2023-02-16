@@ -48,7 +48,7 @@
 					<!-- If they are an admin or above, and it is not an admin trying to modify an admin -->
 					{#if $currentUser.role !== Role.MEMBER && $currentUser.role !== member.role}
 						<div>
-							<RoleDropdown {member} />
+							<RoleDropdown {member} isInvite={member.isInvite} />
 
 							{#if member.isInvite}
 								<StyledButton className="rounded-3xl w-32 h-8 mb-0 ml-4" action={() => handleResend(member.id)}>

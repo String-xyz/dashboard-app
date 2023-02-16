@@ -4,7 +4,7 @@
 	import { rolesList, currentUser, deactModalOpen, deactUser } from "$lib/stores";
 
 	export let member: TeamItem | null = null;
-	export let isInvite = member?.isInvite ?? false;
+	export let isInvite = true;
 	export let inviteRole: Role = Role.MEMBER;
 	export let dropdownOpen = false;
 
@@ -35,9 +35,10 @@
 		
 		if (!member) return;
 		
+		// executes when a member is injected as property
 		try {
 			let res;
-			if (member.isInvite) res = await apiClient.changeInviteRole(member.id, toRole);
+			if (isInvite) res = await apiClient.changeInviteRole(member.id, toRole);
 			else res = await apiClient.changeMemberRole(member.id, toRole);
 			
 			member.role = toRole;
@@ -80,13 +81,11 @@
 				</button>
 			</li>
 		{/each}
-		{#if !isInvite}
-			<li>
-				<button on:click={openDeactivateModal} class="text-warning text-sm">
-					{member?.isInvite ? "Revoke invite" : "Remove member"}
-				</button>
-			</li>
-		{/if}
+		<li>
+			<button on:click={openDeactivateModal} class="text-warning text-sm">
+				{member?.isInvite ? "Revoke invite" : "Remove member"}
+			</button>
+		</li>
 	</ul>
 </div>
 

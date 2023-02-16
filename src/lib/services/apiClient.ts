@@ -92,8 +92,7 @@ export function createApiClient(): ApiClient {
 	}
 
 	async function revokeInvite(inviteId: string) {
-		const body = { status: 'revoked' };
-		await httpClient.put(`/invites/${inviteId}`, body);
+		await httpClient.put(`/invites/${inviteId}/deactivate`);
 		return;
 	}
 

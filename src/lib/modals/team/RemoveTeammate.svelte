@@ -11,7 +11,9 @@
 		try {
 			if (!$deactUser) return;
 
-			await apiClient.deactivateMember($deactUser?.id);
+			if ($deactUser.isInvite) await apiClient.revokeInvite($deactUser?.id);
+			else await apiClient.deactivateMember($deactUser?.id);
+
 			$deactModalOpen = false;
 			// TODO: Show success notification
 		} catch (e) {
