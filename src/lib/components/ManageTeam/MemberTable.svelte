@@ -5,9 +5,15 @@
 	import Avatar from '../Avatar.svelte';
 	import StyledButton from '../StyledButton.svelte';
 	import RoleDropdown from './RoleDropdown.svelte';
+	import { apiClient } from '$lib/services';
 
-	const handleResend = () => {
-
+	const handleResend = async (id: string) => {
+		try {
+			const res = await apiClient.resendInvite(id);
+		} catch (e) {
+			console.error('resend invite error', e);
+			// TODO: Show notification error
+		}
 	}
 </script>
 <div class="members w-full">
@@ -45,7 +51,7 @@
 							<RoleDropdown {member} />
 
 							{#if member.isInvite}
-								<StyledButton className="rounded-3xl w-32 h-8 mb-0 ml-4" action={handleResend}>
+								<StyledButton className="rounded-3xl w-32 h-8 mb-0 ml-4" action={() => handleResend(member.id)}>
 									Resend
 									<img src="/assets/button/resend.svg" alt="resend" class="ml-2" />
 								</StyledButton>
