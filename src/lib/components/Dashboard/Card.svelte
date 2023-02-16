@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { KYB_URL, DOCS_URL } from '$lib/config';
 	import { cards, CARD_NAME, type CardItem } from '$lib/constants/cards';
-	import { openLink } from '$lib/common';
+	import { openLink } from '$lib/utils';
 
 	import { activeTab, getTabByName } from '$lib/stores';
 	import StyledButton from '../StyledButton.svelte';

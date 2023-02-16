@@ -34,4 +34,4 @@ export const filterOptions: FilterOption[] = [
 	}
 ]
 
-export const activeFilter = writable<FilterOption>(filterOptions[1]);
+export const activeFilter = writable(filterOptions[0]);

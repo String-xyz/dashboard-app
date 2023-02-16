@@ -21,8 +21,16 @@
 	let isEmailValid = false;
 	let isNameValid = false;
 
+	const isValidInput = () => {
+		isEmailValid = emailSchema.safeParse(emailInput).success;
+		isNameValid = nameSchema.safeParse(nameInput).success;
+
+		return isEmailValid && isNameValid;
+	}
+
 	const handleInvite = async () => {
-		// TODO: validate email and name
+		if (!isValidInput()) return;
+
 		try {
 			const invite = await apiClient.sendInvite(emailInput, nameInput, inviteRole);
 			console.debug("invite", invite);

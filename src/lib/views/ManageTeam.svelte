@@ -18,7 +18,7 @@
 
 		try {
 			_teamItems = await teamService.buildTeamItems($currentUser);
-			$activeFilter.filter = Filter.ACTIVE;
+			$activeFilter.filter = Filter.ALL_MEMBERS;
 		} catch (error) {
 			console.log(error);
 			// TODO: Show error notification
