@@ -35,7 +35,7 @@
 								<p class="text-xs">Invitation sent!</p>
 							{:else}
 								<p class="mb-1 text-sm font-semibold">{member.email}</p>
-								<p class="text-xs greyed">Member since {member.joinDate}</p>
+								<p class="text-xs greyed">{member.role} since {member.joinDate}</p>
 							{/if}
 						</div>
 					</div>
