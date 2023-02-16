@@ -27,10 +27,11 @@ export function createTeamService(apiClient: ApiClient) {
 
 			// sort by [...active, ...invites, ...deactivated]
 			const sortedItems = [
-				..._teamItems.filter((item) => !item.isInvite),
-				..._teamItems.filter((item) => item.isInvite),
-				..._teamItems.filter((teamItem) => teamItem.deactivatedAt || false)
+				..._teamItems.filter((item) => !item.isInvite && !item.deactivatedAt), // not deactivated members
+				..._teamItems.filter((item) => item.isInvite && !item.deactivatedAt), // not revoked invites
+				..._teamItems.filter((item) => item.deactivatedAt || false) // anything deactivated
 			];
+
 			return sortedItems;
 		}
 
