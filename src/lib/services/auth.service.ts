@@ -42,12 +42,20 @@ export function createAuthService(apiClient: ApiClient) {
 			
 	}
 
-	const isPermissioned = (userRole: Role, targetRole: Role) => {
+	const canModify = (userRole: Role, targetRole: Role) => {
 		if (userRole == Role.OWNER) return true;
 		if (userRole == Role.ADMIN && targetRole == Role.MEMBER) return true;
 	
 		return false;
 	}
+
+	const canView = (userRole: Role, minPerms: Role) => {
+		if (userRole == minPerms) return true;
+		if (userRole == Role.OWNER) return true;
+		if (userRole == Role.ADMIN && minPerms !== Role.OWNER) return true;
 	
-	return { login, logout, isUserLoggedIn, getInviteById, acceptInvite, isPermissioned };
+		return false;
+	}
+	
+	return { login, logout, isUserLoggedIn, getInviteById, acceptInvite, canModify, canView };
 }

@@ -25,8 +25,7 @@ export const filterOptions: FilterOption[] = [
 	},
 	{
 		name: "Deleted",
-		filter: Filter.DELETED,
-		minPerms: Role.ADMIN
+		filter: Filter.DELETED
 	},
 	{
 		name: "Pending Invite",

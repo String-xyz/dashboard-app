@@ -39,7 +39,7 @@
 	<nav>
 		<ul class="menu bg-transparent">
 			{#if $menuItems}
-				{#each $menuItems.filter(t => authService.isPermissioned($currentUser.role, t.minPerms ?? Role.MEMBER)) as tab}
+				{#each $menuItems.filter(t => authService.canView($currentUser.role, t.minPerms ?? Role.MEMBER)) as tab}
 					<MenuItem {tab} />
 				{/each}
 			{/if}

@@ -46,7 +46,7 @@
 						</div>
 					</div>
 					<!-- If they are an admin or above, and it is not an admin trying to modify an admin -->
-					{#if authService.isPermissioned($currentUser.role,  member.role)}
+					{#if authService.canModify($currentUser.role,  member.role)}
 						<div>
 							<RoleDropdown {member} isInvite={member.isInvite} />
 
