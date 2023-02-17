@@ -5,7 +5,6 @@
 	import type { ApiKey } from "$lib/types";
 
 	export let key: ApiKey;
-	export let keyIdx: number;
 	export let dropdownOpen = false;
 
 	let dropdownElem: HTMLButtonElement;
@@ -54,7 +53,8 @@
 	const deactivateKey = async () => {
 		try {
 			const deactivatedKey = await keyService.deactivateApiKey(key.id);
-			$apiKeyList[keyIdx] = deactivatedKey;
+			
+			$apiKeyList = await keyService.listApiKeys();
 		} catch (e) {
 			console.error(e);
 		}

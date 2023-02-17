@@ -11,8 +11,9 @@
 		const newApiKey = await keyService.createApiKey();
 
 		$createdApiKey = newApiKey;
-		$apiKeyList.push(newApiKey);
 		$keySuccessModalOpen = true;
+
+		$apiKeyList = await keyService.listApiKeys();
 	}
 
 	onMount(async () => {

@@ -17,8 +17,9 @@
 		const newApiKey = await keyService.createApiKey();
 
 		$createdApiKey = newApiKey;
-		$apiKeyList.push(newApiKey);
 		$keySuccessModalOpen = true;
+
+		$apiKeyList = await keyService.listApiKeys();
 	}
 
 	const updateDescription = async (keyid: string, keyIdx: number, description: string) => {
@@ -33,11 +34,23 @@
 		$editKey = null;
 	}
 
+	const handleKeyboard = (e: KeyboardEvent) => {
+		if ($editKey) {
+			if (e.key == "Enter") {
+				updateDescription($editKey.id, $apiKeyList.indexOf($editKey), descInput);
+			} else if (e.key == "Escape") {
+				cancelEdit();
+			}
+		}
+	}
+
 	const truncate = (key: string) => {
 		return key.slice(0, 10)
 	}
 
 </script>
+
+<svelte:window on:keydown={(e) => handleKeyboard(e)} />
 
 {#if $apiKeyList?.length > 0}
 	<div class="keys w-full mb-7">
@@ -100,7 +113,7 @@
 							</StyledButton>
 						{:else}
 							<p class="text-xs mr-4">Created on {key.createdAt}</p>
-							<KeyDropdown {key} keyIdx={i} />
+							<KeyDropdown {key} />
 						{/if}
 
 					</div>

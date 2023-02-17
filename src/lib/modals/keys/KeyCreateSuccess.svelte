@@ -12,20 +12,21 @@
 		if (!descInput || !$createdApiKey) return;
 
 		// Update API Key and apiKeyList store
-		const updatedKey = await keyService.editApiKey($createdApiKey.id, descInput);
-		
-		const keyIdx = $apiKeyList.indexOf($createdApiKey);
-		$apiKeyList[keyIdx] = updatedKey;
+		await keyService.editApiKey($createdApiKey.id, descInput);	
 	}
 
 	const close = async () => {
 		await saveDescription();
+		descInput = "";
+
+		$apiKeyList = await keyService.listApiKeys();
 
 		$keySuccessModalOpen = false;
 		$createdApiKey = null;
 	}
 
 </script>
+
 <input type="checkbox" id="key-success-modal" class="modal-toggle" bind:checked={$keySuccessModalOpen} />
 
 <label for="key-success-modal" class="modal cursor-pointer">
