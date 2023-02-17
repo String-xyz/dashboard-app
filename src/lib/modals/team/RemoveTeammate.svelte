@@ -1,13 +1,26 @@
 <script lang="ts">
+	import { apiClient } from '$lib/services';
+
 	import UserCard from '$lib/components/ManageTeam/UserCard.svelte';
 	import StyledButton from '$lib/components/StyledButton.svelte';
 
 	import { deactModalOpen, deactUser } from '$lib/stores';
 
-	const handleDeactivate = () => {
+	const handleDeactivate = async () => {
 		// Deactivate user
+		try {
+			if (!$deactUser) return;
 
-		$deactModalOpen = false;
+			if ($deactUser.isInvite) await apiClient.revokeInvite($deactUser?.id);
+			else await apiClient.deactivateMember($deactUser?.id);
+
+			$deactModalOpen = false;
+			// TODO: Show success notification
+		} catch (e) {
+			console.error(e);
+			// TODO: Show error notification
+		}
+		
 	}
 
 	const close = () => {

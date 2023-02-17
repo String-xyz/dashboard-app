@@ -1,19 +1,29 @@
 <script lang="ts">
-	import { Role, rolesList, currentUser, type User, deactModalOpen, deactUser } from "$lib/stores";
+	import { Role, type TeamItem } from "$lib/types";
+	import { apiClient } from "$lib/services";
+	import { rolesList, currentUser, deactModalOpen, deactUser } from "$lib/stores";
+	import { onMount } from "svelte";
 
-	export let member: User | null = null;
-	export let isInvite = false;
+	export let member: TeamItem | null = null;
+	export let isInvite = true;
+	export let inviteRole: Role = Role.MEMBER;
 	export let dropdownOpen = false;
 
-	let dropdownElem: HTMLButtonElement;
 
-	let inviteRole = Role.MEMBER;
+	let dropdownElem: HTMLButtonElement;
 
 	const assetPath = "/assets/dropdown/"
 
 	//src, alt text
 	const radioActive = [assetPath + "radio_checked.svg", "radio-checked"]
 	const radioInactive = [assetPath + "radio_inactive.svg", "radio-inactive"]
+
+	onMount(() => {
+		if (member) {
+			inviteRole = member.role;
+			isInvite = member.isInvite || false;
+		}
+	});
 
 	const toggleDropdown = () => {
 		if (dropdownOpen) {
@@ -24,17 +34,31 @@
 		}
 	}
 
-	const setMemberRole = (toRole: Role) => {
+	const setMemberRole = async (toRole: Role) => {
 		if (isInvite) {
 			inviteRole = toRole;
-			// Update invite role here
 		}
+
+		const btn = document.activeElement as HTMLButtonElement
+		btn.blur();
+		
 		if (!member) return;
-
-		// call apiClient here
-		member.role = toRole;
-
+		
+		// executes when a member is injected as property
+		try {
+			let res;
+			if (isInvite) res = await apiClient.changeInviteRole(member.id, toRole);
+			else res = await apiClient.changeMemberRole(member.id, toRole);
+			
+			member.role = toRole;
+		} catch (error) {
+			// TODO: Show error notification
+			console.log(error);
+		}
+		
 	}
+
+	const getFilteredRoles = () => rolesList.filter(r => r != Role.OWNER || ($currentUser.role == Role.OWNER && !isInvite));
 
 	const openDeactivateModal = () => {
 		if (!member) return;
@@ -59,22 +83,22 @@
 	</button>
 	<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 	<ul tabindex="0" class="dropdown-content menu w-60">
-		{#each rolesList.filter(r => r != Role.OWNER || $currentUser.role == Role.OWNER) as role}
+		{#each getFilteredRoles() as role}
 			{@const active = isInvite ? inviteRole == role : (member?.role ?? Role.MEMBER) == role}
 			<li class:active={active}>
-				<button on:click={() => {setMemberRole(role)}} class="font-bold text-xs tracking-wider uppercase">
+				<button on:click={() => setMemberRole(role)} class="font-bold text-xs tracking-wider uppercase">
 					<img src={ active ? radioActive[0] : radioInactive[0] } alt={ active ? radioActive[1] : radioInactive[1] }/>
 					<p class="my-1">{role}</p>
 				</button>
 			</li>
 		{/each}
-		{#if !isInvite}
-			<li>
-				<button on:click={openDeactivateModal} class="text-warning text-sm">
-					{member?.isInvite ? "Revoke invite" : "Remove member"}
-				</button>
-			</li>
+		<li>
+		{#if member}
+			<button on:click={openDeactivateModal} class="text-warning text-sm">
+				{member?.isInvite ? "Revoke invite" : "Remove member"}
+			</button>
 		{/if}
+		</li>
 	</ul>
 </div>
 

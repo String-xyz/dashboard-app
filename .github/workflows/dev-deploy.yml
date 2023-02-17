@@ -1,0 +1,39 @@
+name: deploy to development
+permissions:
+  id-token: write
+  contents: read
+on: 
+  push:
+    branches: [develop]
+
+jobs:
+  deploy:
+    environment: 
+      name: development
+      url: https://dashboard.dev.string-api.xyz
+
+    name: build push and deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v1.7.0
+        with:
+          aws-region: us-west-2
+          role-to-assume: ${{ secrets.AWS_ASSUME_ROLE }}
+      - name: setup nodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: install dependencies
+        run: |
+          yarn install
+      - name: build
+        run: |
+          yarn build
+      - name: deploy
+        run: |
+          aws s3 cp --recursive build/ s3://${{ secrets.AWS_S3_BUCKET }}
+          aws cloudfront create-invalidation --distribution-id ${{secrets.DISTRIBUTION_ID}} --paths "/*"

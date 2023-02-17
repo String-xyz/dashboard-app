@@ -1,14 +1,9 @@
 import { writable, type Writable, get as getStore } from 'svelte/store';
 import type { SvelteComponent } from 'svelte';
-
-import Dashboard from '$lib/views/Dashboard.svelte';
-import ManageTeam from '$lib/views/ManageTeam.svelte';
-import ManageKeys from '$lib/views/ManageKeys.svelte';
-import Settings from '$lib/views/Settings.svelte';
-import { Role } from '$lib/stores';
+import { Role } from '$lib/types';
 
 export interface MenuItem {
-	name: string;
+	name: MenuItems;
 	icon: string;
 	view?: typeof SvelteComponent;
 	href?: string;
@@ -20,39 +15,42 @@ const assetPath = '/assets/tab/';
 const DOCS_URL = import.meta.env.VITE_DOCS_URL;
 const KYB_URL = import.meta.env.VITE_KYB_URL;
 
-// Make Store to try to solve the error
-// ReferenceError: Cannot access 'view' before initialization
+export enum MenuItems { 
+	DASHBOARD = 'Dashboard',
+	MANAGE_TEAM = 'Manage Team',
+	MANAGE_KEYS = 'Manage API Keys',
+	VERIFY_ACCOUNT = 'Verify Account',
+	VIEW_DOCS = 'View API Docs',
+	SETTINGS = 'Settings'
+};
+
 export const menuItems: Writable<MenuItem[]> = writable([
 	{
-		name: 'Dashboard',
+		name: MenuItems.DASHBOARD,
 		icon: assetPath + 'dashboard.svg',
-		view: Dashboard
 	},
 	{
-		name: 'Manage Team',
+		name: MenuItems.MANAGE_TEAM,
 		icon: assetPath + 'manage_team.svg',
-		view: ManageTeam
 	},
 	{
-		name: 'Manage API Keys',
+		name: MenuItems.MANAGE_KEYS,
 		icon: assetPath + 'manage_keys.svg',
-		view: ManageKeys
 	},
 	{
-		name: 'Verify Account',
+		name: MenuItems.VERIFY_ACCOUNT,
 		icon: assetPath + 'verify_account.svg',
 		href: KYB_URL,
 		minPerms: Role.ADMIN
 	},
 	{
-		name: 'View API Docs',
+		name: MenuItems.VIEW_DOCS,
 		icon: assetPath + 'view_docs.svg',
 		href: DOCS_URL
 	},
 	{
-		name: 'Settings',
+		name: MenuItems.SETTINGS,
 		icon: assetPath + 'settings.svg',
-		view: Settings
 	}
 ]);
 

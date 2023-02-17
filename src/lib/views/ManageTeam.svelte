@@ -1,9 +1,30 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+	import { Role, type TeamItem } from '$lib/types';
+	import { teamService } from '$lib/services';
+	import { currentUser, inviteModalOpen, teamItems, activeFilter, Filter } from '$lib/stores';
+
 	import FilterDropdown from '$lib/components/ManageTeam/FilterDropdown.svelte';
 	import MemberTable from '$lib/components/ManageTeam/MemberTable.svelte';
 	import StyledButton from '$lib/components/StyledButton.svelte';
 
-	import { Role, currentUser, inviteModalOpen } from '$lib/stores';
+	let _teamItems: TeamItem[] = []; // local copy of team items. This only gets updated when the component is mounted
+
+	$: canEdit = $currentUser.role !== Role.MEMBER;
+	
+	onMount(async () => {
+		// subscribe to filter changes so we can update the member table
+		activeFilter.subscribe((filter) => $teamItems = teamService.filterTeamItems(_teamItems, filter.filter));
+
+		try {
+			_teamItems = await teamService.buildTeamItems($currentUser);
+			$activeFilter.filter = Filter.ALL_MEMBERS;
+		} catch (error) {
+			console.log(error);
+			// TODO: Show error notification
+		}
+	});
+
 
 </script>
 
@@ -15,8 +36,8 @@
 	<header>
 		<div class="flex justify-between items-center">
 			<h3 class="text-2xl font-bold">Manage Team</h3>
-			{#if $currentUser.role !== Role.MEMBER}
-				<StyledButton className="btn-outline w-40" action={() => $inviteModalOpen = !$inviteModalOpen}>
+			{#if canEdit}
+				<StyledButton className="btn-outline w-40" action={() => $inviteModalOpen = true}>
 					<img src={"/assets/button/plus.svg"} alt="+" class="inline mr-3" />
 					Invite Team
 				</StyledButton> 

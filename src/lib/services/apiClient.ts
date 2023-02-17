@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { Role } from '$lib/stores';
+import type { Role } from '$lib/types';
 
 export function createApiClient(): ApiClient {
 	const baseUrl = import.meta.env.VITE_API_URL;
@@ -15,6 +15,11 @@ export function createApiClient(): ApiClient {
 	async function login(email: string, password: string) {
 		const { data } = await httpClient.post<Member>('/login', { email, password });
 		return data;
+	}
+
+	async function logout() {
+		await httpClient.post('/login/logout');
+		return;
 	}
 
 	/*********** MEMBERS ***********/
@@ -55,8 +60,8 @@ export function createApiClient(): ApiClient {
 
 	/*********** INVITATIONS ***********/
 
-	async function sendInvite(email: string, role: Role) {
-		const { data } = await httpClient.post<Invite>('/invites', { email, role });
+	async function sendInvite(email: string, name: string, role: Role) {
+		const { data } = await httpClient.post<Invite>('/invites', { email, name, role });
 		return data;
 	}
 
@@ -66,9 +71,8 @@ export function createApiClient(): ApiClient {
 		return data;
 	}
 
-	async function listInvites(filter: InviteStatus) {
-		const params = { filter }
-		const { data } = await httpClient.get<Invite[]>('/invites', { params });
+	async function listInvites() {
+		const { data } = await httpClient.get<Invite[]>('/invites');
 		return data;
 	}
 
@@ -83,13 +87,12 @@ export function createApiClient(): ApiClient {
 	}
 
 	async function changeInviteRole(inviteId: string, role: Role) {
-		await httpClient.put(`/invites/${inviteId}/role`, { role });
+		await httpClient.put(`/invites/${inviteId}`, { role });
 		return;	
 	}
 
 	async function revokeInvite(inviteId: string) {
-		const body = { status: 'revoked' };
-		await httpClient.put(`/invites/${inviteId}`, body);
+		await httpClient.put(`/invites/${inviteId}/deactivate`);
 		return;
 	}
 
@@ -149,6 +152,7 @@ export function createApiClient(): ApiClient {
 
 	return {
 		login,
+		logout,
 		getMembers,
 		getMember,
 		changeMemberRole,
@@ -177,6 +181,7 @@ export function createApiClient(): ApiClient {
 export interface ApiClient {
 	/* Login */
 	login(email: string, password: string) : Promise<Member>;
+	logout() : Promise<void>;
 	
 	/* Members */
 	getMembers() : Promise<Member[]>;
@@ -188,10 +193,10 @@ export interface ApiClient {
 	resetPassword(token: string, password: string) : Promise<void>;
 		
 	/* Invitations */
-	sendInvite(email: string, role: Role) : Promise<Invite>;
+	sendInvite(email: string, name: string, role: Role) : Promise<Invite>;
 	acceptInvite(inviteId: string, password: string) : Promise<Member>;
 	getInvite(inviteId: string) : Promise<Invite>;
-	listInvites(filter: InviteStatus) : Promise<Invite[]>;
+	listInvites() : Promise<Invite[]>;
 	resendInvite(inviteId: string) : Promise<Member>;
 	changeInviteRole(inviteId: string, role: Role) : Promise<void>;
 	revokeInvite(inviteId: string) : Promise<void>;
@@ -244,7 +249,7 @@ export type Member = {
 	role: Role;
 };
 
-export type InviteStatus = 'pending' | 'accepted' | 'revoked' | 'expired';
+export type InviteStatus = 'pending' | 'accepted' | 'revoked' | 'expired' | 'invalid';
 
 export type Invite = {
 	id: string;
@@ -252,4 +257,8 @@ export type Invite = {
 	email: string;
 	role: Role;
 	platformName: string;
+	status: InviteStatus;
+	acceptedAt?: string;
+	expiredAt?: string;
+	deactivatedAt?: string;
 }
