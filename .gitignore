@@ -12,3 +12,4 @@ node_modules
 yarn-error.log
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+.vscode
