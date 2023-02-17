@@ -224,7 +224,6 @@ export interface ApiKeyResponse {
 	description: string;
 	createdBy: string;
 	platformId: string;
-	showFullKey?: boolean; // For UI
 }
 
 export type Platform = {

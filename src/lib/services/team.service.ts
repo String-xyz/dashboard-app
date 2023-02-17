@@ -1,9 +1,7 @@
 import type { ApiClient, Invite, Member } from "./apiClient";
 import type { TeamItem } from "$lib/types";
 import { Filter } from "$lib/stores";
-
-const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' } as Intl.DateTimeFormatOptions;
-const formatLocaleDate = (date: string) => new Date(date).toLocaleDateString('en-US', dateOptions);
+import { formatDate } from "$lib/utils";
 
 export function createTeamService(apiClient: ApiClient) {
 	async function buildTeamItems(currentUser: Member): Promise<TeamItem[]> {
@@ -49,7 +47,7 @@ export function createTeamService(apiClient: ApiClient) {
 				name: member.name,
 				role: member.role,
 				email: member.email,
-				joinDate: formatLocaleDate(member.createdAt),
+				joinDate: formatDate(member.createdAt),
 				status: 'accepted', // if member, status is always accepted
 				deactivatedAt: member.deactivatedAt,
 			};

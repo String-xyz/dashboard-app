@@ -1,3 +1,5 @@
+import type { ApiKeyResponse } from "./services";
+
 export enum Role {
 	MEMBER = 'Member',
 	ADMIN = 'Admin',
@@ -14,4 +16,8 @@ export type TeamItem = {
 	self?: boolean; // is this the current user?
 	joinDate?: string; // member - invites don't have a join date
 	deactivatedAt?: string; // member
+}
+
+export interface ApiKey extends ApiKeyResponse {
+	showFullKey?: boolean; // For UI
 }

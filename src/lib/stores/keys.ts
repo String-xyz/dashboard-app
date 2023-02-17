@@ -1,8 +1,8 @@
 import { writable, type Writable } from 'svelte/store';
-import type { ApiKeyResponse } from '$lib/services';
+import type { ApiKey } from '$lib/types';
 
-export const apiKeyList: Writable<ApiKeyResponse[]> = writable();
+export const apiKeyList: Writable<ApiKey[]> = writable();
 
-export const createdApiKey: Writable<ApiKeyResponse | null> = writable();
+export const createdApiKey: Writable<ApiKey | null> = writable();
 
-export const editKey: Writable<ApiKeyResponse | null> = writable();
+export const editKey: Writable<ApiKey | null> = writable();

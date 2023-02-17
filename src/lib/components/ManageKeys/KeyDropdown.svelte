@@ -1,9 +1,10 @@
 <script lang='ts'>
-	import { keyService, type ApiKeyResponse } from "$lib/services";
+	import { keyService } from "$lib/services";
 	import { apiKeyList, editKey } from "$lib/stores";
 	import { copyText } from "$lib/utils";
+	import type { ApiKey } from "$lib/types";
 
-	export let key: ApiKeyResponse;
+	export let key: ApiKey;
 	export let keyIdx: number;
 	export let dropdownOpen = false;
 

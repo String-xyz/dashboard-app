@@ -1,8 +1,8 @@
 <script lang="ts">
-	import type { ApiKeyResponse } from "$lib/services";
+	import type { ApiKey } from "$lib/types";
 	import { isSandbox } from "$lib/utils";
 
-	export let key: ApiKeyResponse;
+	export let key: ApiKey;
 
 	const getStatus = () => {
 		if (key.deactivatedAt) return "deactivated";
