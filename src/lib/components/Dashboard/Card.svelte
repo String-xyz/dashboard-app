@@ -8,7 +8,7 @@
 	<img src={card.icon} alt={card.iconAlt} width="75px" height="75px" class="my-6" />
 	<h4 class="mb-6 text-xl font-bold">{card.title}</h4>
 	<p class="text-sm mb-7">{card.subtitle}</p>
-	<StyledButton className="btn-outline btn-wide" action={card.action}>{card.btnText}</StyledButton>
+	<StyledButton className="btn-outline btn-wide mb-6" action={card.action}>{card.btnText}</StyledButton>
 </div>
 
 <style>

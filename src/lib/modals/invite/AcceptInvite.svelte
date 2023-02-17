@@ -66,7 +66,7 @@
 		<p class="mb-9 text-sm mr-auto">Must be at least 8 characters</p>
 
 		<!-- Under password input put Must be at least 8 characters when it fails Zod -->
-		<StyledButton className="w-full" action={acceptInvite} {disabled}>Accept Invite</StyledButton>
+		<StyledButton className="w-full mb-6" action={acceptInvite} {disabled}>Accept Invite</StyledButton>
 	</div>
 </ModalBase>
 

@@ -1,13 +1,12 @@
 import type { ApiClient, Invite } from "./apiClient";
 import type { User } from "$lib/stores";
-
-const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' } as Intl.DateTimeFormatOptions;
+import { formatDate } from "$lib/utils";
 
 export function createAuthService(apiClient: ApiClient) {
 
 	async function login(email: string, pwd: string): Promise<User> {
 		const member = await apiClient.login(email, pwd);
-		const joinDate = new Date(member.createdAt).toLocaleDateString('en-US', dateOptions);
+		const joinDate = formatDate(member.createdAt);
 
 		return {...member, joinDate, self: true}
 	}
@@ -28,7 +27,7 @@ export function createAuthService(apiClient: ApiClient) {
 
 	async function acceptInvite(invite: Invite, password: string): Promise<User> {
 		const newMember = await apiClient.acceptInvite(invite.id, password);
-		const joinDate = new Date(newMember.createdAt).toLocaleDateString('en-US', dateOptions);
+		const joinDate = formatDate(newMember.createdAt);
 		// Because acceptInvite doesn't return Role
 		newMember.role = invite.role;
 

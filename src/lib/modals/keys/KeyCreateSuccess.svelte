@@ -2,56 +2,67 @@
 	import StyledInput from '$lib/components/StyledInput.svelte';
 	import StyledButton from '$lib/components/StyledButton.svelte';
 
-	import { keySuccessModalOpen } from '$lib/stores';
-	import { apiClient } from '$lib/services';
+	import { keySuccessModalOpen, createdApiKey } from '$lib/stores';
+	import { keyService } from '$lib/services';
 
-	const saveDescription = () => {
-		// editApiKey
+	let descInput: string;
+
+	let completeBtn: HTMLButtonElement;
+
+	const saveDescription = async () => {
+		if (!descInput) return;
+
+		// Update API Key and apiKeyList store
+		await keyService.editApiKey($createdApiKey.id, descInput);
 	}
 
-	const close = () => {
-		saveDescription();
+	const close = async () => {
+		await saveDescription();
 		$keySuccessModalOpen = !$keySuccessModalOpen;
 	}
 
-</script>
+	const copyText = async (text: string) => {
+		await navigator.clipboard.writeText(text);
+	}
 
+	const checkForEnter = (e: KeyboardEvent) => {
+		if (e.key === "Enter") {
+			e.preventDefault();
+			close();
+		}
+	}
+
+</script>
+<svelte:window on:keydown={checkForEnter} />
 <input type="checkbox" id="key-success-modal" class="modal-toggle" bind:checked={$keySuccessModalOpen} />
 
 <label for="key-success-modal" class="modal cursor-pointer">
 	<label class="modal-box relative" for="">
-		<div class="main flex flex-col items-center w-full">
-			<button class="ml-auto mb-1" on:click={close}><img src="/assets/close.svg" alt="Close" /></button>
-			<h3 class="text-3xl font-bold mb-12">Invite a teammate</h3>
+		<div class="flex flex-col">
+			<button class="ml-auto" on:click={close}><img src="/assets/close.svg" alt="Close" /></button>
+			<div class="main flex flex-col items-center w-full pr-6 pt-2">
+				<img src="/assets/indicator/success.svg" alt="success" class="mb-8" />
+				<h3 class="text-3xl font-bold mb-12">Success!</h3>
 
-			<StyledInput
-				className="mb-6 w-full"
-				type='email'
-				label="Email address"
-				placeholder="test@string.xyz"
-				bind:val={emailInput}
-				autofocus
-				required
-			/>
-			<div class="flex justify-between mb-20 w-full">
+				<p class="text-center">Your API key is ready for action. Time to start building and integrating!</p>
+				
+				<div class="flex items-center border border-[#E6E4DF] rounded-xl my-8 py-4 px-3">
+					<span>{$createdApiKey?.data}</span>
+					<button class="ml-6" on:click={() => copyText($createdApiKey?.data)}>
+						<img src="/assets/dropdown/copy.svg" alt="copy" />
+					</button>
+				</div>
+
 				<StyledInput
-					className="mb-2 w-full mr-6"
-					label="Full name"
-					placeholder="John Smith"
-					bind:val={nameInput}
-					required
+					className="mb-8 w-full"
+					label="Description"
+					placeholder="Optional"
+					bind:val={descInput}
 				/>
-				<StyledInput
-					label="Role"
-					className="flex justify-center w-48 h-[54px]"
-					wrapper={true}
-					focused={dropdownOpen}
-				>
-				</StyledInput>
+				<StyledButton className="w-full" action={close} bind:elem={completeBtn} autofocus>
+					Complete
+				</StyledButton>
 			</div>
-			<StyledButton className="w-full" action={close}>
-				Complete
-			</StyledButton>
 		</div>
 	</label>
 </label>
@@ -63,12 +74,13 @@
 	}
 
 	.modal-box {
-		padding-left: 36px;
+		padding-left: 60px;
 		padding-right: 36px;
 		padding-top: 36px;
 		border-radius: 8px;
 		width: 600px;
-		height: 450px;
+		max-width: 600px;
+		height: 600px;
 	}
 
 </style>

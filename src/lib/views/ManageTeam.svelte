@@ -16,7 +16,7 @@
 		<div class="flex justify-between items-center">
 			<h3 class="text-2xl font-bold">Manage Team</h3>
 			{#if $currentUser.role !== Role.MEMBER}
-				<StyledButton className="btn-outline !m-0 w-40" action={() => $inviteModalOpen = !$inviteModalOpen}>
+				<StyledButton className="btn-outline w-40" action={() => $inviteModalOpen = !$inviteModalOpen}>
 					<img src={"/assets/button/plus.svg"} alt="+" class="inline mr-3" />
 					Invite Team
 				</StyledButton> 

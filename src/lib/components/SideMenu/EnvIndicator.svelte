@@ -1,19 +1,17 @@
 <script lang="ts">
-	const ENV = import.meta.env.VITE_ENV;
+	import { isSandbox } from "$lib/utils";
 
 	const PROD_URL = import.meta.env.VITE_PROD_DASH_URL;
 
 	const TEST_URL = import.meta.env.VITE_TEST_DASH_URL;
 
-	const isLive = ENV === 'live';
+	const checkmark = isSandbox ? '/assets/test_check.svg' : '/assets/live_check.svg';
 
-	const checkmark = isLive ? '/assets/live_check.svg' : '/assets/test_check.svg';
+	const indicatorText = isSandbox ? 'You’re in sandbox mode.' : 'You’re in live mode.';
 
-	const indicatorText = isLive ? 'You’re in live mode.' : 'You’re in sandbox mode.';
+	const visitText = isSandbox ? 'Visit production mode' : 'Visit sandbox mode';
 
-	const visitText = isLive ? 'Visit sandbox mode' : 'Visit production mode';
-
-	const altLocation = isLive ? TEST_URL : PROD_URL;
+	const altLocation = isSandbox ? PROD_URL : TEST_URL;
 </script>
 
 <div class="env">

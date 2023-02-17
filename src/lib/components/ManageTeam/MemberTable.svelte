@@ -44,7 +44,7 @@
 							<RoleDropdown {member} />
 
 							{#if member.isInvite}
-								<StyledButton className="rounded-3xl w-32 h-8 mb-0 ml-4" action={handleResend}>
+								<StyledButton className="rounded-3xl w-32 h-8 ml-4" action={handleResend}>
 									Resend
 									<img src="/assets/button/resend.svg" alt="resend" class="ml-2" />
 								</StyledButton>

@@ -11,7 +11,16 @@
 		if (!settings) return;
 
 		$activeTab = settings;
-	};
+	}
+
+	const truncate = (text: string, toLength = 16) => {
+		if (text.length > toLength) {
+			return text.slice(0, toLength) + "...";
+		}
+
+		return text;
+	}
+
 </script>
 
 <div class="side-menu flex flex-col">
@@ -19,8 +28,8 @@
 	<div class="user my-6 flex justify-items-start">
 		<Avatar name={$currentUser.name} />
 		<div class="ml-2">
-			<p class="text-sm break-all">
-				{$currentUser.email}
+			<p class="text-sm">
+				<span aria-label={$currentUser.name}>{truncate($currentUser.name)}</span>
 				<button on:click={arrowAction}>
 					<img src="/assets/button/right_arrow.svg" alt=">" class="ml-2" />
 				</button>
