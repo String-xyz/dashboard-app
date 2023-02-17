@@ -26,7 +26,7 @@
 			<div class="row flex justify-between items-center p-6 ">
 				{#if member.self}
 					<div class="flex justify-items-start items-center">
-						<Avatar name={member.name} />
+						<Avatar user={member} />
 						<p class="ml-4 font-semibold">You</p>
 					</div>
 					<p class="text-sm font-bold">
@@ -34,7 +34,7 @@
 					</p>
 				{:else}
 					<div class="flex justify-items-start items-center">
-						<Avatar name={member.name} />
+						<Avatar user={member} />
 						<div class="ml-4">
 							{#if member.isInvite}
 								<p class="mb-1 text-sm greyed font-semibold">{member.email}</p>

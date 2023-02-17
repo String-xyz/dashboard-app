@@ -20,7 +20,7 @@
 <div class="side-menu flex flex-col">
 	<img src="/assets/string_logo.svg" alt="String" width="75px" height="18px" />
 	<div class="user my-6 flex justify-items-start">
-		<Avatar name={$currentUser.name} />
+		<Avatar user={$currentUser} />
 		<div class="ml-2">
 			<p class="text-sm break-all">
 				{$currentUser.email}
