@@ -91,9 +91,11 @@
 			</li>
 		{/each}
 		<li>
+		{#if member}
 			<button on:click={openDeactivateModal} class="text-warning text-sm">
 				{member?.isInvite ? "Revoke invite" : "Remove member"}
 			</button>
+		{/if}
 		</li>
 	</ul>
 </div>
