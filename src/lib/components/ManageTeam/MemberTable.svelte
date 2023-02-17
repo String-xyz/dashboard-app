@@ -5,7 +5,7 @@
 	import Avatar from '../Avatar.svelte';
 	import StyledButton from '../StyledButton.svelte';
 	import RoleDropdown from './RoleDropdown.svelte';
-	import { apiClient } from '$lib/services';
+	import { apiClient, authService } from '$lib/services';
 
 	const handleResend = async (id: string) => {
 		try {
@@ -46,7 +46,7 @@
 						</div>
 					</div>
 					<!-- If they are an admin or above, and it is not an admin trying to modify an admin -->
-					{#if $currentUser.role !== Role.MEMBER && $currentUser.role !== member.role}
+					{#if authService.isPermissioned($currentUser.role,  member.role)}
 						<div>
 							<RoleDropdown {member} isInvite={member.isInvite} />
 

@@ -58,6 +58,8 @@
 		
 	}
 
+	const getFilteredRoles = () => rolesList.filter(r => r != Role.OWNER || ($currentUser.role == Role.OWNER && !isInvite));
+
 	const openDeactivateModal = () => {
 		if (!member) return;
 
@@ -81,7 +83,7 @@
 	</button>
 	<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 	<ul tabindex="0" class="dropdown-content menu w-60">
-		{#each rolesList.filter(r => r != Role.OWNER || $currentUser.role == Role.OWNER) as role}
+		{#each getFilteredRoles() as role}
 			{@const active = isInvite ? inviteRole == role : (member?.role ?? Role.MEMBER) == role}
 			<li class:active={active}>
 				<button on:click={() => setMemberRole(role)} class="font-bold text-xs tracking-wider uppercase">
