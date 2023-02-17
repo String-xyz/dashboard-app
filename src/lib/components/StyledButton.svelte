@@ -1,11 +1,13 @@
 <script lang="ts">
 	export let action = () => {};
 	export let className = '';
+	export let elem: HTMLButtonElement | null = null;
 </script>
 
 <button
 	on:click={action}
-	class={'btn btn-primary rounded border-2 font-bold text-sm tracking-wider min-h-0 h-11 mb-6 ' + className}
+	class={'btn btn-primary rounded border-2 font-bold text-sm tracking-wider whitespace-nowrap min-h-0 h-11 ' + className}
+	bind:this={elem}
 	{...$$restProps}
 >
 	<slot />

@@ -46,7 +46,7 @@
 	}
 
 	const close = () => {
-		$inviteModalOpen = !$inviteModalOpen
+		$inviteModalOpen = false;
 	}
 
 </script>
@@ -85,7 +85,7 @@
 					<RoleDropdown isInvite={true} bind:dropdownOpen bind:inviteRole />
 				</StyledInput>
 			</div>
-			<StyledButton className="w-full mb-0" action={handleInvite}>
+			<StyledButton className="w-full" action={handleInvite}>
 				<img src="/assets/button/send_mail.svg" alt="send" class="mr-3">
 				Send Invite
 			</StyledButton>

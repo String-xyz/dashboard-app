@@ -33,8 +33,8 @@
 	{:else}
 		<input
 			class="pl-5 pr-2 mb-2"
-			on:focus={() => (focused = true)}
-			on:blur={() => (focused = false)}
+			on:focus={() => focused = true}
+			on:blur={() => focused = false}
 			bind:this={inputElm}
 			bind:value={val}
 			{...$$restProps}

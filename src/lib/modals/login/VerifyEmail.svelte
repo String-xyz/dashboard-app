@@ -23,7 +23,7 @@
 		<h3 class="text-2xl font-bold">Check your email...</h3>
 		<p class="my-8">We’ve sent a verification email to {$loginEmail}</p>
 		<div class="flex items-center mt-8">
-			<StyledButton className="btn-outline w-40" action={back}>
+			<StyledButton className="btn-outline w-40 mb-6" action={back}>
 				<img src="/assets/button/left_chevron.svg" alt="<" class="mr-3" />
 				Go Back
 			</StyledButton>

@@ -52,7 +52,7 @@
 </script>
 
 <ModalBase size="size-xl">
-	<div class="main flex flex-col items-center">
+	<form on:submit={handleReset} class="main flex flex-col items-center">
 		<img src="/assets/auth_key_icon.svg" alt="Key" class="mb-8" />
 		<h3 class="text-2xl font-bold mb-11">Set new password</h3>
 		<!-- <p class="text-center mb-8">Your new password must be different to previously used passwords</p> -->
@@ -61,6 +61,7 @@
 			className="mb-2 w-full"
 			type="password"
 			label="Password"
+			autocomplete="new-password"
 			placeholder="********"
 			bind:val={pwdInput}
 			autofocus
@@ -73,12 +74,13 @@
 			className="mb-8 w-full"
 			type="password"
 			label="Confirm Password"
+			autocomplete="new-password"
 			placeholder="********"
 			bind:val={confPwdInput}
 			required
 		/>
 
-		<StyledButton className="mb-8 w-full" action={handleReset} {disabled}
+		<StyledButton className="mb-8 w-full" type="submit" {disabled}
 			>Reset password</StyledButton
 		>
 
@@ -88,7 +90,7 @@
 				Back to log in
 			</span>
 		</button>
-	</div>
+	</form>
 </ModalBase>
 
 <style>

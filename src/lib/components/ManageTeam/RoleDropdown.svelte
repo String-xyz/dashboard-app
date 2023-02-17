@@ -64,7 +64,7 @@
 		if (!member) return;
 
 		$deactUser = member;
-		$deactModalOpen = !$deactModalOpen
+		$deactModalOpen = true;
 
 	}
 

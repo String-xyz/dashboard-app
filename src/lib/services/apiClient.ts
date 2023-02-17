@@ -117,7 +117,7 @@ export function createApiClient(): ApiClient {
 	/*********** API KEYS ***********/
 
 	async function createApiKey() {
-		const { data } = await httpClient.post<{ apiKey: ApiKeyResponse }>('/apikeys');
+		const { data } = await httpClient.post<ApiKeyResponse>('/apikeys');
 		return data;
 	}
 	
@@ -207,27 +207,30 @@ export interface ApiClient {
 	updatePlatform(name: string) : Promise<Platform>;
 	
 	/* Api keys */
-	createApiKey: () => Promise<{ apiKey: ApiKeyResponse }>;
-	listApiKeys: () => Promise<ApiKeyResponse[]>;
+	createApiKey: () => Promise<ApiKeyResponse>;
+	listApiKeys: (limit?: number) => Promise<ApiKeyResponse[]>;
 	getApiKey(keyId: string) : Promise<ApiKeyResponse>;
 	deactivateApiKey: (keyId: string) => Promise<ApiKeyResponse>;
 	editApiKey: (keyId: string, description: string) => Promise<ApiKeyResponse>;
 }
 
-interface ApiKeyResponse {
+export interface ApiKeyResponse {
 	id: string;
-	status: string;
-	authType: string;
-	data: string;
 	createdAt: string;
 	updatedAt: string;
+	deactivatedAt?: string;
+	type: string;
+	data: string;
+	description: string;
+	createdBy: string;
+	platformId: string;
 }
 
-type Platform = {
+export type Platform = {
 	id: string;
 	createdAt: string;
 	updatedAt: string;
-	deactivatedAt: string;
+	deactivatedAt?: string;
 	activatedAt: string;
 	name: string;
 	description: string;
@@ -245,7 +248,7 @@ export type Member = {
 	role: Role;
 };
 
-type InviteStatus = 'pending' | 'accepted' | 'revoked' | 'expired' | 'invalid';
+export type InviteStatus = 'pending' | 'accepted' | 'revoked' | 'expired' | 'invalid';
 
 export type Invite = {
 	id: string;

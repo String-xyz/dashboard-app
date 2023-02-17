@@ -1,9 +1,11 @@
 <script lang="ts">
 	import { onMount, SvelteComponent } from 'svelte';
+
 	import SideMenu from '$lib/components/SideMenu/SideMenu.svelte';
 	import InviteTeammate from '$lib/modals/team/InviteTeammate.svelte';
 	import RemoveTeammate from '$lib/modals/team/RemoveTeammate.svelte';
-	
+	import KeyCreateSuccess from '$lib/modals/keys/KeyCreateSuccess.svelte';
+
 	import Dashboard from '$lib/views/Dashboard.svelte';
 	import ManageTeam from '$lib/views/ManageTeam.svelte';
 	import ManageKeys from '$lib/views/ManageKeys.svelte';
@@ -48,7 +50,7 @@
 </svelte:head>
 
 {#if isLoggedIn}
-	<div class="root h-full">
+	<div class="root">
 		<SideMenu />
 
 		<div class="content">
@@ -58,6 +60,7 @@
 		<!-- In-page modals -->
 		<InviteTeammate />
 		<RemoveTeammate />
+		<KeyCreateSuccess />
 	</div>
 {/if}
 

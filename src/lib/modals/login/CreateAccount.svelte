@@ -76,7 +76,7 @@
 			required
 		/>
 
-		<StyledButton className="w-full" {disabled} action={createAccount}>Continue</StyledButton>
+		<StyledButton className="w-full mb-6" {disabled} action={createAccount}>Continue</StyledButton>
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<span>Have an account? 
 			<span on:click={() => ($activeModal = Login)} class="link link-primary mt-2">

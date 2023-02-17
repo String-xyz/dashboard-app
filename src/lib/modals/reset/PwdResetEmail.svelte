@@ -30,7 +30,7 @@
 		<p class="mb-10 font-semibold">{$currentUser.email}</p>
 
 		<div class="flex items-center">
-			<StyledButton className="btn-outline w-40 mr-6" action={back}>
+			<StyledButton className="btn-outline w-40 mr-6 mb-6" action={back}>
 				<img src="/assets/button/left_chevron.svg" alt="<" class="mr-3" />
 				Go Back
 			</StyledButton>

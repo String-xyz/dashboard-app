@@ -24,7 +24,6 @@ export function createAuthService(apiClient: ApiClient) {
 
 	async function acceptInvite(invite: Invite, password: string): Promise<Member> {
 		const newMember = await apiClient.acceptInvite(invite.id, password);
-
 		// Because acceptInvite doesn't return Role
 		newMember.role = invite.role;
 
