@@ -1,16 +1,19 @@
 <script lang="ts">
 	import { z } from 'zod';
-
+	import type { Role } from '$lib/types';
+	import { apiClient } from '$lib/services';
+	import { inviteModalOpen } from '$lib/stores';
+	
 	import StyledInput from '$lib/components/StyledInput.svelte';
 	import StyledButton from '$lib/components/StyledButton.svelte';
 	import RoleDropdown from '$lib/components/ManageTeam/RoleDropdown.svelte';
-
-	import { inviteModalOpen } from '$lib/stores';
+	
 
 	const emailSchema = z.string().trim().email();
 	const nameSchema = z.string().min(0);
 
 	let dropdownOpen: boolean;
+	let inviteRole: Role;
 
 	let emailInput: string;
 	let nameInput: string;
@@ -18,9 +21,27 @@
 	let isEmailValid = false;
 	let isNameValid = false;
 
-	const handleInvite = () => {
-		// Send invite
-		// then
+	const isValidInput = () => {
+		isEmailValid = emailSchema.safeParse(emailInput).success;
+		isNameValid = nameSchema.safeParse(nameInput).success;
+
+		return isEmailValid && isNameValid;
+	}
+
+	const handleInvite = async () => {
+		if (!isValidInput()) {
+			// TODO: show error notification
+			console.error('invalid email');
+			return;
+		}
+
+		try {
+			const invite = await apiClient.sendInvite(emailInput, nameInput, inviteRole);
+			console.debug("invite", invite);
+		} catch (e) {
+			console.error(e);
+		}
+
 		$inviteModalOpen = false;
 	}
 
@@ -61,7 +82,7 @@
 					wrapper={true}
 					focused={dropdownOpen}
 				>
-					<RoleDropdown isInvite={true} bind:dropdownOpen />
+					<RoleDropdown isInvite={true} bind:dropdownOpen bind:inviteRole />
 				</StyledInput>
 			</div>
 			<StyledButton className="w-full mb-0" action={handleInvite}>

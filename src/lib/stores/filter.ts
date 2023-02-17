@@ -1,5 +1,5 @@
 import { writable } from "svelte/store";
-import { Role } from "$lib/stores";
+import { Role } from "$lib/types";
 
 export enum Filter {
 	ALL_MEMBERS = 'all',
@@ -25,8 +25,7 @@ export const filterOptions: FilterOption[] = [
 	},
 	{
 		name: "Deleted",
-		filter: Filter.DELETED,
-		minPerms: Role.ADMIN
+		filter: Filter.DELETED
 	},
 	{
 		name: "Pending Invite",

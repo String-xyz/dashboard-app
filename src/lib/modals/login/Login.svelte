@@ -11,6 +11,7 @@
 
 	import { activeModal, currentUser, loginEmail } from '$lib/stores';
 	import { authService } from '$lib/services';
+	import { onMount } from 'svelte';
 
 	let emailInput = "";
 	let pwdInput = "";
@@ -29,6 +30,15 @@
 
 		return isEmailValid && isPassValid;
 	}
+
+	onMount(async () => {
+		
+		/* If user is already logged in, redirect to dashboard */
+		if (await authService.isUserLoggedIn()) {
+			window.location.href = '/';
+		}
+	});
+
 
 	const handleLogin = async () => {
 		if (!isValidInput()) return;

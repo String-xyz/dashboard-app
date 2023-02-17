@@ -1,15 +1,11 @@
-import type { ApiClient, Invite } from "./apiClient";
-import type { User } from "$lib/stores";
-
-const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' } as Intl.DateTimeFormatOptions;
+import type { ApiClient, Invite, Member } from "./apiClient";
+import { Role } from "$lib/types";
 
 export function createAuthService(apiClient: ApiClient) {
 
-	async function login(email: string, pwd: string): Promise<User> {
+	async function login(email: string, pwd: string): Promise<Member> {
 		const member = await apiClient.login(email, pwd);
-		const joinDate = new Date(member.createdAt).toLocaleDateString('en-US', dateOptions);
-
-		return {...member, joinDate, self: true}
+		return member;
 	}
 
 	async function isUserLoggedIn(): Promise<boolean> {
@@ -26,14 +22,40 @@ export function createAuthService(apiClient: ApiClient) {
 		return invite;
 	}
 
-	async function acceptInvite(invite: Invite, password: string): Promise<User> {
+	async function acceptInvite(invite: Invite, password: string): Promise<Member> {
 		const newMember = await apiClient.acceptInvite(invite.id, password);
-		const joinDate = new Date(newMember.createdAt).toLocaleDateString('en-US', dateOptions);
+
 		// Because acceptInvite doesn't return Role
 		newMember.role = invite.role;
 
-		return {...newMember, joinDate, self: true}
+		return newMember;
 	}
 
-	return { login, isUserLoggedIn, getInviteById, acceptInvite };
+	async function logout() {
+		try {
+			await apiClient.logout();
+			window.location.href = '/';
+			localStorage.removeItem('user');
+		} catch (e) {
+			console.error(e);
+		}
+			
+	}
+
+	const canModify = (userRole: Role, targetRole: Role) => {
+		if (userRole == Role.OWNER) return true;
+		if (userRole == Role.ADMIN && targetRole == Role.MEMBER) return true;
+	
+		return false;
+	}
+
+	const canView = (userRole: Role, minPerms: Role) => {
+		if (userRole == minPerms) return true;
+		if (userRole == Role.OWNER) return true;
+		if (userRole == Role.ADMIN && minPerms !== Role.OWNER) return true;
+	
+		return false;
+	}
+	
+	return { login, logout, isUserLoggedIn, getInviteById, acceptInvite, canModify, canView };
 }

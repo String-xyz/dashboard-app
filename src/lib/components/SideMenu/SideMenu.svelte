@@ -1,6 +1,9 @@
 <script lang="ts">
+	import { Role } from '$lib/types';
+	import { authService } from '$lib/services';
+	import { activeTab, menuItems, currentUser, getTabByName } from '$lib/stores';
+
 	import Avatar from '../Avatar.svelte';
-	import { activeTab, menuItems, currentUser, getTabByName, isPermissioned, Role } from '$lib/stores';
 	import EnvIndicator from './EnvIndicator.svelte';
 	import MenuItem from './MenuItem.svelte';
 	import Signout from './Signout.svelte';
@@ -17,7 +20,7 @@
 <div class="side-menu flex flex-col">
 	<img src="/assets/string_logo.svg" alt="String" width="75px" height="18px" />
 	<div class="user my-6 flex justify-items-start">
-		<Avatar name={$currentUser.name} />
+		<Avatar user={$currentUser} />
 		<div class="ml-2">
 			<p class="text-sm break-all">
 				{$currentUser.email}
@@ -36,7 +39,7 @@
 	<nav>
 		<ul class="menu bg-transparent">
 			{#if $menuItems}
-				{#each $menuItems.filter(t => isPermissioned($currentUser.role, t.minPerms ?? Role.MEMBER)) as tab}
+				{#each $menuItems.filter(t => authService.canView($currentUser.role, t.minPerms ?? Role.MEMBER)) as tab}
 					<MenuItem {tab} />
 				{/each}
 			{/if}
