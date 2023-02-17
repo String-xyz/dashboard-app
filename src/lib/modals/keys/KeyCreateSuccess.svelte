@@ -2,52 +2,44 @@
 	import StyledInput from '$lib/components/StyledInput.svelte';
 	import StyledButton from '$lib/components/StyledButton.svelte';
 
-	import { keySuccessModalOpen, createdApiKey } from '$lib/stores';
+	import { keySuccessModalOpen, createdApiKey, apiKeyList } from '$lib/stores';
 	import { keyService } from '$lib/services';
+	import { copyText } from '$lib/utils';
 
 	let descInput: string;
 
-	let completeBtn: HTMLButtonElement;
-
 	const saveDescription = async () => {
-		if (!descInput) return;
+		if (!descInput || !$createdApiKey) return;
 
 		// Update API Key and apiKeyList store
-		await keyService.editApiKey($createdApiKey.id, descInput);
+		const updatedKey = await keyService.editApiKey($createdApiKey.id, descInput);
+		
+		const keyIdx = $apiKeyList.indexOf($createdApiKey);
+		$apiKeyList[keyIdx] = updatedKey;
 	}
 
 	const close = async () => {
 		await saveDescription();
-		$keySuccessModalOpen = !$keySuccessModalOpen;
-	}
 
-	const copyText = async (text: string) => {
-		await navigator.clipboard.writeText(text);
-	}
-
-	const checkForEnter = (e: KeyboardEvent) => {
-		if (e.key === "Enter") {
-			e.preventDefault();
-			close();
-		}
+		$keySuccessModalOpen = false;
+		$createdApiKey = null;
 	}
 
 </script>
-<svelte:window on:keydown={checkForEnter} />
 <input type="checkbox" id="key-success-modal" class="modal-toggle" bind:checked={$keySuccessModalOpen} />
 
 <label for="key-success-modal" class="modal cursor-pointer">
 	<label class="modal-box relative" for="">
 		<div class="flex flex-col">
 			<button class="ml-auto" on:click={close}><img src="/assets/close.svg" alt="Close" /></button>
-			<div class="main flex flex-col items-center w-full pr-6 pt-2">
+			<form on:submit={close} class="main flex flex-col items-center w-full pr-6 pt-2">
 				<img src="/assets/indicator/success.svg" alt="success" class="mb-8" />
 				<h3 class="text-3xl font-bold mb-12">Success!</h3>
 
 				<p class="text-center">Your API key is ready for action. Time to start building and integrating!</p>
 				
 				<div class="flex items-center border border-[#E6E4DF] rounded-xl my-8 py-4 px-3">
-					<span>{$createdApiKey?.data}</span>
+					<span>{$createdApiKey?.data ?? ""}</span>
 					<button class="ml-6" on:click={() => copyText($createdApiKey?.data)}>
 						<img src="/assets/dropdown/copy.svg" alt="copy" />
 					</button>
@@ -59,10 +51,10 @@
 					placeholder="Optional"
 					bind:val={descInput}
 				/>
-				<StyledButton className="w-full" action={close} bind:elem={completeBtn} autofocus>
+				<StyledButton className="w-full" type="submit" autofocus>
 					Complete
 				</StyledButton>
-			</div>
+			</form>
 		</div>
 	</label>
 </label>

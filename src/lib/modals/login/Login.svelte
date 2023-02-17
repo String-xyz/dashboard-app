@@ -48,7 +48,7 @@
 </script>
 
 <ModalBase>
-	<div class="main flex flex-col items-center">
+	<form class="main flex flex-col items-center" on:submit={handleLogin}>
 		<img src="/assets/string_logo.svg" alt="String" width="76px" height="18px" class="mb-12" />
 		<h3 class="text-2xl font-bold">Login to String’s Developer dashboard</h3>
 		<p class="my-8">Unlock the magic of String’s API by entering your email below.</p>
@@ -56,6 +56,7 @@
 			className="w-full"
 			type='email'
 			label="Email"
+			autocomplete="username"
 			placeholder="Enter email"
 			bind:val={emailInput}
 			borderError={!isEmailValid && emailInput !== ""}
@@ -70,8 +71,9 @@
 
 		<StyledInput
 			className="mb-2 w-full"
-			type="password"
 			label="Password"
+			type="password"
+			autocomplete="current-password"
 			placeholder="********"
 			bind:val={pwdInput}
 			required
@@ -81,7 +83,7 @@
 		<p on:click={() => ($activeModal = ForgotPassword)} class="text-sm cursor-pointer mb-8 ml-auto">
 			Forgot password?
 		</p>
-		<StyledButton className="w-full mb-6" {disabled} action={handleLogin}>Login</StyledButton>
+		<StyledButton className="w-full mb-6" type="submit" {disabled}>Login</StyledButton>
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<span class="mt-4">New to String? 
 			<span
@@ -89,7 +91,7 @@
 				class="link link-primary">Create an account
 			</span>
 		</span>
-	</div>
+	</form>
 </ModalBase>
 
 <style>

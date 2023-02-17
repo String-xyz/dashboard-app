@@ -24,18 +24,24 @@ export function createKeysService(apiClient: ApiClient) {
 	}
 
 	async function getApiKey(keyId: string): Promise<ApiKeyResponse> {
-		const data = await apiClient.getApiKey(keyId);
-		return data;
+		const apiKey = await apiClient.getApiKey(keyId);
+		apiKey.createdAt = formatDate(apiKey.createdAt);
+
+		return apiKey;
 	}
 
 	async function deactivateApiKey(keyId: string): Promise<ApiKeyResponse> {
-		const data = await apiClient.deactivateApiKey(keyId);
-		return data;
+		const apiKey = await apiClient.deactivateApiKey(keyId);
+		apiKey.createdAt = formatDate(apiKey.createdAt);
+
+		return apiKey;
 	}
 
 	async function editApiKey(keyId: string, description: string): Promise<ApiKeyResponse> {
-		const data = await apiClient.editApiKey(keyId, description);
-		return data;
+		const apiKey = await apiClient.editApiKey(keyId, description);
+		apiKey.createdAt = formatDate(apiKey.createdAt);
+
+		return apiKey;
 	}
 
 	return { createApiKey, listApiKeys, getApiKey, deactivateApiKey, editApiKey };

@@ -14,7 +14,7 @@
 	
 </script>
 
-<div class={"slabel flex flex-shrink items-center px-4 py-2 " + status}>
+<div class={"slabel flex items-center px-4 py-2 " + status}>
 	<p class="capitalize text-sm font-semibold">{status}</p>
 </div>
 
@@ -22,7 +22,6 @@
 	.slabel {
 		border-width: 1px;
 		border-radius: 20px;
-		max-width: 5.75rem;
 		display: inline-block;
 	}
 

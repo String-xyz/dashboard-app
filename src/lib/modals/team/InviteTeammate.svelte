@@ -25,7 +25,7 @@
 	}
 
 	const close = () => {
-		$inviteModalOpen = !$inviteModalOpen
+		$inviteModalOpen = false;
 	}
 
 </script>

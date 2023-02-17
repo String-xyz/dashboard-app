@@ -12,7 +12,7 @@
 
 	const close = () => {
 		$deactUser = null;
-		$deactModalOpen = !$deactModalOpen
+		$deactModalOpen = false;
 	}
 
 </script>

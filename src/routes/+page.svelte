@@ -33,7 +33,7 @@
 </svelte:head>
 
 {#if isLoggedIn}
-	<div class="root h-full">
+	<div class="root">
 		<SideMenu />
 
 		<div class="content">

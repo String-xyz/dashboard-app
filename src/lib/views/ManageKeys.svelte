@@ -12,7 +12,7 @@
 
 		$createdApiKey = newApiKey;
 		$apiKeyList.push(newApiKey);
-		$keySuccessModalOpen = !$keySuccessModalOpen;
+		$keySuccessModalOpen = true;
 	}
 
 	onMount(async () => {

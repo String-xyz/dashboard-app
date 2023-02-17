@@ -44,7 +44,7 @@
 </script>
 
 <ModalBase size="size-md">
-	<div class="main flex flex-col items-center">
+	<form on:submit={acceptInvite} class="main flex flex-col items-center">
 		<img src="/assets/string_logo.svg" alt="String" width="76px" height="18px" class="mb-10" />
 		<h3 class="text-2xl font-bold mb-2">You’ve been invited to join</h3>
 		<h3 class="text-2xl font-bold mb-2">"{$_invite.platformName}"</h3>
@@ -58,6 +58,7 @@
 			className="mb-1 w-full"
 			type="password"
 			label="Set your password"
+			autocomplete="new-password"
 			placeholder="********"
 			bind:val={pwdInput}
 			autofocus
@@ -66,8 +67,8 @@
 		<p class="mb-9 text-sm mr-auto">Must be at least 8 characters</p>
 
 		<!-- Under password input put Must be at least 8 characters when it fails Zod -->
-		<StyledButton className="w-full mb-6" action={acceptInvite} {disabled}>Accept Invite</StyledButton>
-	</div>
+		<StyledButton className="w-full mb-6" type="submit" {disabled}>Accept Invite</StyledButton>
+	</form>
 </ModalBase>
 
 <style>
