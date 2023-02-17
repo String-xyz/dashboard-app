@@ -1,7 +1,9 @@
 <script lang="ts">
 	import { onMount } from "svelte";
 
-	export let user: any;
+	import type { TeamItem } from "$lib/types";
+	
+	export let user: TeamItem;
 	export let type: 'self' | 'other' = 'self';
 	export let className = '';
 
