@@ -42,10 +42,9 @@ export function createAuthService(apiClient: ApiClient) {
 			
 	}
 
-	const isPermissioned = (userRole: Role, minReqRole: Role) => {
-		if (userRole == minReqRole) return true;
+	const isPermissioned = (userRole: Role, targetRole: Role) => {
 		if (userRole == Role.OWNER) return true;
-		if (userRole == Role.ADMIN && minReqRole !== Role.OWNER) return true;
+		if (userRole == Role.ADMIN && targetRole == Role.MEMBER) return true;
 	
 		return false;
 	}
