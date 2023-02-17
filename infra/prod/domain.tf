@@ -3,7 +3,7 @@ data "aws_route53_zone" "default" {
 }
 
 resource "aws_route53_record" "web_app" {
-  name    = "dashboard"
+  name    = local.root_domain
   type    = "A"
   zone_id = data.aws_route53_zone.default.zone_id
 
@@ -15,7 +15,7 @@ resource "aws_route53_record" "web_app" {
 }
 
 resource "aws_route53_record" "www_web_app" {
-  name    = "www.dashboard"
+  name    = "www"
   type    = "A"
   zone_id = data.aws_route53_zone.default.zone_id
 
