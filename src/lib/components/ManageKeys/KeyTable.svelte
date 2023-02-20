@@ -56,7 +56,7 @@
 	<div class="keys w-full mb-7">
 		<div class="flex flex-nowrap py-4 pl-4 pr-9 gap-x-5 font-bold">
 			<p class="col">Key</p>
-			<p class="col">Description</p>
+			<p class="col mr-2">Description</p>
 			<p class="col">Status</p>
 			<p class="col"></p>
 		</div>
@@ -89,7 +89,7 @@
 								autofocus={true}
 							/>
 						{:else}
-							<p class="truncate" title={key.description ?? ""}>{key.description ?? ""}</p>
+							<p class="truncate text-sm font-medium" title={key.description ?? ""}>{key.description ?? ""}</p>
 						{/if}
 					</div>
 					<div class="col">
