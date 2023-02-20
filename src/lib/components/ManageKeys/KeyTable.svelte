@@ -54,15 +54,16 @@
 
 {#if $apiKeyList?.length > 0}
 	<div class="keys w-full mb-7">
-		<div class="flex py-4 pl-4 pr-9 font-bold flex-nowrap">
-			<p class="!w-1/4">Key</p>
-			<p class="w-1/4">Description</p>
-			<p class="w-1/4 ml-5">Status</p>
+		<div class="flex flex-nowrap py-4 pl-4 pr-9 gap-x-5 font-bold">
+			<p class="col">Key</p>
+			<p class="col">Description</p>
+			<p class="col">Status</p>
+			<p class="col"></p>
 		</div>
 		<div class="rows">
 			{#each $apiKeyList as key, i}
-				<div class="row flex flex-nowrap items-center py-6 pl-4 pr-9">
-					<div class="!w-1/4">
+				<div class="row flex flex-nowrap items-center gap-x-5 py-6 pl-4 pr-9">
+					<div class="col flex flex-col">
 						<p class="font-bold">{truncate(key.data)}</p>
 						<span class="text-sm whitespace-nowrap">
 							{#if key.showFullKey}
@@ -78,7 +79,7 @@
 							{/if}
 						</span>
 					</div>
-					<div class="w-1/4">
+					<div class="col">
 						{#if $editKey == key}
 							<StyledInput
 								className="mb-1"
@@ -91,12 +92,12 @@
 							<p class="truncate" title={key.description ?? ""}>{key.description ?? ""}</p>
 						{/if}
 					</div>
-					<div class="w-1/4 ml-5">
+					<div class="col">
 						{#if $editKey !== key}
 							<StatusLabel {key} />
 						{/if}
 					</div>
-					<div class="flex justify-items-start items-center ml-auto">
+					<div class="col flex items-center justify-end">
 						{#if $editKey == key}
 							<button
 								class="uppercase text-sm font-bold tracking-wider mr-6"
@@ -132,17 +133,19 @@
 {/if}
 
 <style>
-	.row {
-		border-top: 1px solid #F2F2F2;
+	.col {
+		width: 25%;
 	}
 
-	.rows:first-child {
-		border-top: 2px solid red !important;
+	.row {
+		border-top: 1px solid #F2F2F2;
 	}
 
 	.keys {
 		border: 2px solid #F2F2F2;
 		border-radius: 4px;
+		/* This will make the bottom row be too tall, but also solves right hand going off screen */
+		/* overflow-x: hidden; */
 	}
 
 </style>
