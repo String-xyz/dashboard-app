@@ -65,9 +65,9 @@
 				<div class="row flex flex-nowrap items-center gap-x-5 py-6 pl-4 pr-9">
 					<div class="col flex flex-col">
 						<p class="font-bold">{truncate(key.data)}</p>
-						<span class="text-sm whitespace-nowrap">
+						<span class="text-sm">
 							{#if key.showFullKey}
-								<span class="select-all">{key.data}</span>
+								<span class="select-all text-clip break-all">{key.data}</span>
 								<button on:click={() => key.showFullKey = !key.showFullKey}>
 									<img src="/assets/dropdown/eye_con_hide.svg" alt="view" class="inline mx-2" />
 								</button>
@@ -113,7 +113,7 @@
 								Save
 							</StyledButton>
 						{:else}
-							<p class="text-xs mr-4">Created on {key.createdAt}</p>
+							<p class="text-xs mr-4 font-medium tabular-nums">Created on {key.createdAt}</p>
 							<KeyDropdown {key} />
 						{/if}
 
