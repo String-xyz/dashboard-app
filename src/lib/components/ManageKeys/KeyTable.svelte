@@ -13,13 +13,14 @@
 	editKey.subscribe((key) => descInput = key?.description ?? "");
 
 	const createApiKey = async () => {
-		// Create API Key in keys service and add it to apiKeyList
-		const newApiKey = await keyService.createApiKey();
+		if (!$keySuccessModalOpen) {
+			const newApiKey = await keyService.createApiKey();
 
-		$createdApiKey = newApiKey;
-		$keySuccessModalOpen = true;
+			$createdApiKey = newApiKey;
+			$keySuccessModalOpen = true;
 
-		$apiKeyList = await keyService.listApiKeys();
+			$apiKeyList = await keyService.listApiKeys();
+		}
 	}
 
 	const updateDescription = async (keyid: string, keyIdx: number, description: string) => {
