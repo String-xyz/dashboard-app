@@ -14,6 +14,8 @@
 			$keySuccessModalOpen = true;
 
 			$apiKeyList = await keyService.listApiKeys();
+		} else {
+			$keySuccessModalOpen = false;
 		}
 	}
 
