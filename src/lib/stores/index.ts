@@ -5,3 +5,4 @@ export * from './modals';
 export * from './invite';
 export * from './filter';
 export * from './keys';
+export * from './settings';
