@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import { activeSettingsTab, SettingsTab } from '$lib/stores';
+	import { activeSettingsTab, SettingsTab, tabToViewMap } from '$lib/stores';
 
 	const switchTab = (tab: SettingsTab) => {
 		$activeSettingsTab = tab;
@@ -13,27 +12,28 @@
 </svelte:head>
 
 <div class="main">
-	<header>
+	<header class="mb-8">
 		<div class="tabs">
-			<button 
+			<button
 				on:click={() => switchTab(SettingsTab.MY_ACCOUNT)}
 				class="tab tab-bordered"
 				class:tab-active={$activeSettingsTab == SettingsTab.MY_ACCOUNT}
 			>My Account</button> 
-			<button 
-				on:click={() => switchTab(SettingsTab.MY_ACCOUNT)}
+			<button
+				on:click={() => switchTab(SettingsTab.PLATFORM_DETAILS)}
 				class="tab tab-bordered"
 				class:tab-active={$activeSettingsTab == SettingsTab.PLATFORM_DETAILS}
 			>Platform Details</button> 
-			<button 
-				on:click={() => switchTab(SettingsTab.MY_ACCOUNT)}
+			<button
+				on:click={() => switchTab(SettingsTab.CHANGE_PASSWORD)}
 				class="tab tab-bordered"
 				class:tab-active={$activeSettingsTab == SettingsTab.CHANGE_PASSWORD}
 			>Change Password</button>
 		</div>
+		<!-- <div class="divider mt-0 mb-7 h-0" /> -->
 	</header>
-	<div class="divider mt-0 mb-7" />
 
+	<svelte:component this={$tabToViewMap.get($activeSettingsTab)} />
 </div>
 
 <style lang='postcss'>
@@ -42,19 +42,35 @@
 		overflow: none;
 	}
 
+	/* .divider:after, .divider:before {
+		--tw-bg-opacity: 0.2;
+		background-color: #F2F2F2;
+	} */
+
 	.tab {
 		@apply text-neutral;
 		@apply font-medium;
+		@apply uppercase;
+		@apply tracking-wider;
+		padding-left: 36px;
+		padding-right: 36px;
+		border-color: #F2F2F2;
 	}
 
-	.tab-active {
+	.tabs:first-child {
+		padding-left: 0px;
+	}
+
+	.tab.tab-active {
 		@apply text-primary;
+		@apply border-primary;
 	}
 
-	/* @media (max-width: 800px) {
-		.header {
+
+	/* @media (max-width: 1015px) {
+		.tabs {
 			flex-direction: column;
-			row-gap: 20px;
+			row-gap: 8px;
 		}
 	} */
 
