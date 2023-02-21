@@ -114,9 +114,10 @@
 							</StyledButton>
 						{:else}
 							<p class="text-xs mr-4 font-medium tabular-nums">Created on {key.createdAt}</p>
-							<KeyDropdown {key} />
+							{#if !key.deactivatedAt}
+								<KeyDropdown {key} />
+							{/if}
 						{/if}
-
 					</div>
 				</div>
 			{/each} 
