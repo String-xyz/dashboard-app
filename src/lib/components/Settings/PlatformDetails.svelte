@@ -6,9 +6,22 @@
 	import StyledInput from "../StyledInput.svelte";
 
 
-	const showEdit = () => {
+	let companyNameInput: string;
+	let websiteURLInput: string;
 
+	const showEdit = () => {
+		isEditing = true;
 	}
+
+	const saveEdit = () => {
+		isEditing = false;
+	}
+
+	const cancelEdit = () => {
+		isEditing = false;
+	}
+
+	$: isEditing = false;
 
 </script>
 
@@ -21,31 +34,51 @@
 				<img src="/assets/label/email.svg" alt="email" class="mr-1 inline" />
 				Business Email
 			</span>
-			<p>mock@email.com</p>
+			<p class="select-all">mock@email.com</p>
 		</div>
 		<div class="pl-5 mr-6 w-1/3">
 			<span class="mb-2 font-medium text-sm">
 				<img src="/assets/label/name.svg" alt="name" class="mr-1 inline" />
 				Owner's Name
 			</span>
-			<p>Mock Name</p>
+			<p class="select-all">Mock Name</p>
 		</div>
 		<div class="pl-5 mr-6 w-1/3">
-			<span class="mb-2 font-medium text-sm">
-				<img src="/assets/label/company.svg" alt="company" class="mr-1 inline" />
-				Company
-			</span>
-			<p>Mock Inc</p>
+			{#if isEditing}
+				<StyledInput label="Company" bind:val={companyNameInput} autofocus />
+			{:else}
+				<span class="mb-2 font-medium text-sm">
+					<img src="/assets/label/company.svg" alt="company" class="mr-1 inline" />
+					Company
+				</span>
+				<p class="select-all">Mock Inc</p>
+			{/if}
 		</div>
 		<div class="pl-5 w-1/3">
-			<span class="mb-2 font-medium text-sm">
-				<img src="/assets/label/url.svg" alt="url" class="mr-1 inline" />
-				Website URL
-			</span>
-			<p>mock.com</p>
+			{#if isEditing}
+				<StyledInput label="Website URL" bind:val={websiteURLInput} />
+			{:else}
+				<span class="mb-2 font-medium text-sm">
+					<img src="/assets/label/url.svg" alt="url" class="mr-1 inline" />
+					Website URL
+				</span>
+				<p class="select-all">mock.com</p>
+			{/if}
 		</div>
 	</div>
 	{#if authService.canView($currentUser.role, Role.ADMIN)}
-		<StyledButton className="ml-auto mt-24 w-32" action={showEdit}>Edit</StyledButton>
+		{#if isEditing}
+			<div class="ml-auto mt-24">
+				<button
+					class="uppercase text-sm font-bold tracking-wider mr-6"
+					on:click={cancelEdit}
+				>
+				Cancel
+				</button>
+				<StyledButton className="w-32" action={saveEdit}>Save</StyledButton>
+			</div>
+		{:else}
+			<StyledButton className="ml-auto mt-24 w-32" action={showEdit}>Edit</StyledButton>
+		{/if}
 	{/if}
 </div>
