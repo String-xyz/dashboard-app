@@ -13,13 +13,16 @@
 	editKey.subscribe((key) => descInput = key?.description ?? "");
 
 	const createApiKey = async () => {
-		// Create API Key in keys service and add it to apiKeyList
-		const newApiKey = await keyService.createApiKey();
+		if (!$keySuccessModalOpen) {
+			const newApiKey = await keyService.createApiKey();
 
-		$createdApiKey = newApiKey;
-		$keySuccessModalOpen = true;
+			$createdApiKey = newApiKey;
+			$keySuccessModalOpen = true;
 
-		$apiKeyList = await keyService.listApiKeys();
+			$apiKeyList = await keyService.listApiKeys();
+		} else {
+			$keySuccessModalOpen = false;
+		}
 	}
 
 	const updateDescription = async (keyid: string, keyIdx: number, description: string) => {
@@ -114,9 +117,10 @@
 							</StyledButton>
 						{:else}
 							<p class="text-xs mr-4 font-medium tabular-nums">Created on {key.createdAt}</p>
-							<KeyDropdown {key} />
+							{#if !key.deactivatedAt}
+								<KeyDropdown {key} />
+							{/if}
 						{/if}
-
 					</div>
 				</div>
 			{/each} 

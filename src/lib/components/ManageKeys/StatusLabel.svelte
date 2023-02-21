@@ -4,13 +4,15 @@
 
 	export let key: ApiKey;
 
-	const getStatus = () => {
-		if (key.deactivatedAt) return "deactivated";
-		
-		return isSandbox ? "test" : "live"
-	}
+	let status: string;
 
-	let status = getStatus();
+	$: {
+		if (key.deactivatedAt) {
+			status = "deactivated";
+		} else {
+			status = isSandbox ? "test" : "live";
+		}
+	}
 	
 </script>
 

@@ -20,7 +20,6 @@
 		descInput = "";
 
 		$apiKeyList = await keyService.listApiKeys();
-
 		$keySuccessModalOpen = false;
 		$createdApiKey = null;
 	}
@@ -29,8 +28,8 @@
 
 <input type="checkbox" id="key-success-modal" class="modal-toggle" bind:checked={$keySuccessModalOpen} />
 
-<label for="key-success-modal" class="modal cursor-pointer">
-	<label class="modal-box relative" for="">
+<div class="modal">
+	<div class="modal-box relative">
 		<div class="flex flex-col">
 			<button class="ml-auto" on:click={close}><img src="/assets/close.svg" alt="Close" /></button>
 			<form on:submit={close} class="main flex flex-col items-center w-full pr-6 pt-2">
@@ -41,7 +40,7 @@
 				
 				<div class="flex items-center border border-[#E6E4DF] rounded-xl my-8 py-4 px-3">
 					<span>{$createdApiKey?.data ?? ""}</span>
-					<button class="ml-6" on:click={() => copyText($createdApiKey?.data)}>
+					<button class="ml-6" on:click|preventDefault={() => copyText($createdApiKey?.data)}>
 						<img src="/assets/dropdown/copy.svg" alt="copy" />
 					</button>
 				</div>
@@ -57,8 +56,8 @@
 				</StyledButton>
 			</form>
 		</div>
-	</label>
-</label>
+	</div>
+</div>
 
 <style>
 	.modal {
