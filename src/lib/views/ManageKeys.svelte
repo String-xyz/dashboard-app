@@ -1,18 +1,22 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import KeyTable from '$lib/components/ManageKeys/KeyTable.svelte';
 	import StyledButton from '$lib/components/StyledButton.svelte';
-	import { keyService } from '$lib/services';
 
+	import { keyService } from '$lib/services';
 	import { apiKeyList, createdApiKey, keySuccessModalOpen } from '$lib/stores';
-	import { onMount } from 'svelte';
 
 	const createApiKey = async () => {
-		// Create API Key in keys service and add it to apiKeyList
-		const newApiKey = await keyService.createApiKey();
+		if (!$keySuccessModalOpen) {
+			const newApiKey = await keyService.createApiKey();
 
-		$createdApiKey = newApiKey;
-		$apiKeyList.push(newApiKey);
-		$keySuccessModalOpen = true;
+			$createdApiKey = newApiKey;
+			$keySuccessModalOpen = true;
+
+			$apiKeyList = await keyService.listApiKeys();
+		} else {
+			$keySuccessModalOpen = false;
+		}
 	}
 
 	onMount(async () => {
@@ -27,7 +31,7 @@
 
 <div class="main h-full">
 	<header>
-		<div class="flex justify-between items-center">
+		<div class="header flex justify-between items-center">
 			<h3 class="text-2xl font-bold">Manage API Keys</h3>
 			<StyledButton className="btn-outline" action={createApiKey}>
 				<img src={"/assets/button/plus.svg"} alt="+" class="inline mr-3" />
@@ -44,6 +48,13 @@
 	.main {
 		padding: 70px;
 		overflow: none;
+	}
+
+	@media (max-width: 800px) {
+		.header {
+			flex-direction: column;
+			row-gap: 20px;
+		}
 	}
 
 </style>

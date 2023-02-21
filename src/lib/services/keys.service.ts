@@ -17,12 +17,22 @@ export function createKeysService(apiClient: ApiClient) {
 		const apiKeys = await apiClient.listApiKeys(limit) as ApiKey[];
 		if (!apiKeys) throw "Could not list API keys";
 
+		const activeKeys = [];
+		const deactivatedKeys = [];
+
 		for (const apiKey of apiKeys) {
 			apiKey.createdAt = formatDate(apiKey.createdAt);
 			apiKey.showFullKey = false;
+
+			// Put Deactivated keys at the bottom of the list
+			if (apiKey.deactivatedAt) {
+				deactivatedKeys.push(apiKey);
+			} else {
+				activeKeys.push(apiKey);
+			}
 		}
 
-		return apiKeys;
+		return [...activeKeys, ...deactivatedKeys];
 	}
 
 	async function getApiKey(keyId: string): Promise<ApiKey> {
