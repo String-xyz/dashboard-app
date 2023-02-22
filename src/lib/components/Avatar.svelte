@@ -2,8 +2,9 @@
 	import { onMount } from "svelte";
 
 	import type { TeamItem } from "$lib/types";
-	
-	export let user: TeamItem;
+	import type { Member } from "$lib/services";
+
+	export let user: Member | TeamItem;
 	export let type: 'self' | 'other' = 'self';
 	export let className = '';
 

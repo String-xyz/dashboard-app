@@ -1,28 +1,12 @@
 <script lang="ts">
 	import { Role } from '$lib/types';
 	import { authService } from '$lib/services';
-	import { activeTab, menuItems, currentUser, getTabByName } from '$lib/stores';
+	import { menuItems, currentUser } from '$lib/stores';
 
 	import Avatar from '../Avatar.svelte';
 	import EnvIndicator from './EnvIndicator.svelte';
 	import MenuItem from './MenuItem.svelte';
 	import Signout from './Signout.svelte';
-
-	const settings = getTabByName('Settings');
-
-	const arrowAction = () => {
-		if (!settings) return;
-
-		$activeTab = settings;
-	}
-
-	const truncate = (text: string, toLength = 16) => {
-		if (text.length > toLength) {
-			return text.slice(0, toLength) + "...";
-		}
-
-		return text;
-	}
 
 </script>
 
@@ -30,13 +14,8 @@
 	<img src="/assets/string_logo.svg" alt="String" width="75px" height="18px" />
 	<div class="user my-6 flex justify-items-start">
 		<Avatar user={$currentUser} />
-		<div class="ml-2">
-			<p class="text-sm">
-				<span aria-label={$currentUser.name}>{truncate($currentUser.name)}</span>
-				<button on:click={arrowAction}>
-					<img src="/assets/button/right_arrow.svg" alt=">" class="ml-2" />
-				</button>
-			</p>
+		<div class="ml-2 w-40">
+			<p class="text-sm truncate" title={$currentUser.name}>{$currentUser.name}</p>
 			<p class="text-xs">{$currentUser.role}</p>
 		</div>
 	</div>
