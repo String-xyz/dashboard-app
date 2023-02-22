@@ -8,7 +8,7 @@
 	let newPasswordInput: string;
 
 	const changePassword = () => {
-		console.log("hello", newPasswordInput)
+		// console.log("password: ", newPasswordInput)
 	}
 
 </script>
@@ -17,8 +17,8 @@
 	<h6 class="font-bold mr-auto mb-6 text-lg">Change Password</h6>
 
 	<div class="flex w-3/4 items-start">
-		<!-- For a11y warning -->
-		<input autocomplete="username" type="hidden" class="hidden" />
+		<!-- Silence a11y warning -->
+		<input autocomplete="username" hidden class="hidden" />
 		<StyledInput
 			label="Old Password"
 			type="password"
