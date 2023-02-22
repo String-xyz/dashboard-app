@@ -3,7 +3,6 @@ import { writable, type Writable } from "svelte/store";
 
 export enum SettingsTab {
 	MY_ACCOUNT,
-	PLATFORM_DETAILS,
 	CHANGE_PASSWORD,
 }
 

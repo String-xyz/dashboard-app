@@ -6,15 +6,6 @@ export enum Role {
 	OWNER = 'Owner'
 }
 
-export interface PlatformDetails {
-	id: string;
-	name: string;
-	ownerName: string;
-	ownerEmail: string;
-	domain: string;
-	isVerified: boolean;
-}
-
 export type TeamItem = {
 	id: string;
 	name: string;

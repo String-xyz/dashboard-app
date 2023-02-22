@@ -18,12 +18,7 @@
 				on:click={() => switchTab(SettingsTab.MY_ACCOUNT)}
 				class="tab tab-bordered"
 				class:tab-active={$activeSettingsTab == SettingsTab.MY_ACCOUNT}
-			>My Account</button> 
-			<button
-				on:click={() => switchTab(SettingsTab.PLATFORM_DETAILS)}
-				class="tab tab-bordered"
-				class:tab-active={$activeSettingsTab == SettingsTab.PLATFORM_DETAILS}
-			>Platform Details</button> 
+			>My Account</button>
 			<button
 				on:click={() => switchTab(SettingsTab.CHANGE_PASSWORD)}
 				class="tab tab-bordered"

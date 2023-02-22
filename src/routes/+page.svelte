@@ -12,7 +12,6 @@
 	import Settings from '$lib/views/Settings.svelte';
 
 	import MyAccount from '$lib/components/Settings/MyAccount.svelte';
-	import PlatformDetails from '$lib/components/Settings/PlatformDetails.svelte';
 	import ChangePassword from '$lib/components/Settings/ChangePassword.svelte';
 
 	import { MenuItems, activeTab, menuItems, SettingsTab, tabToViewMap } from '$lib/stores';
@@ -35,7 +34,6 @@
 		// Settings tabs
 		$tabToViewMap = new Map<SettingsTab, typeof SvelteComponent>()
 		$tabToViewMap.set(SettingsTab.MY_ACCOUNT, MyAccount);
-		$tabToViewMap.set(SettingsTab.PLATFORM_DETAILS, PlatformDetails);
 		$tabToViewMap.set(SettingsTab.CHANGE_PASSWORD, ChangePassword);
 
 		isLoggedIn = false;
