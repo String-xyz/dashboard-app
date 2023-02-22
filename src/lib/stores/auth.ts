@@ -1,13 +1,21 @@
 import { writable, type Writable } from "svelte/store";
 import { browser } from '$app/environment';
 import type { Member } from "$lib/services";
-import { Role } from "$lib/types";
+import { Role, type PlatformDetails } from "$lib/types";
 
 
 export const loginEmail = writable("");
 export const resetToken = writable("");
 export const rolesList = Object.values(Role);
 export const currentUser: Writable<Member> = writable();
+export const platform: Writable<PlatformDetails> = writable({
+	id: "",
+	name: "Mock Inc",
+	ownerName: "Mock Jones",
+	ownerEmail: "mock@email.com",
+	domain: "mock.com",
+	isVerified: false
+});
 
 /* Local storage */
 if (browser) {

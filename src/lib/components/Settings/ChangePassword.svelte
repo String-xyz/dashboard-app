@@ -3,38 +3,44 @@
 	import StyledButton from "../StyledButton.svelte";
 	import StyledInput from "../StyledInput.svelte";
 
+	let oldPasswordInput: string;
+	let newPasswordInput: string;
 
-	const showEdit = () => {
-
+	const changePassword = () => {
+		console.log("hello", newPasswordInput)
 	}
 
 </script>
 
-<div class="flex flex-col rounded-xl border-2 border-[#F2F2F2] p-8">
-	<h6 class="font-bold mr-auto mb-6">Change Password</h6>
+<form on:submit={changePassword} class="flex flex-col rounded-xl border-2 border-[#F2F2F2] p-8">
+	<h6 class="font-bold mr-auto mb-6 text-lg">Change Password</h6>
 
-	<div class="flex flex-row items-center ">
-		<div class="pl-5 mr-6 w-1/3">
-			<span class="mb-2 font-medium text-sm">
-				<img src="/assets/label/name.svg" alt="name" class="mr-1 inline" />
-				Your Name
+	<div class="flex w-3/4 items-start">
+		<StyledInput
+			label="Old Password"
+			type="password"
+			autocomplete="current-password"
+			placeholder="********"
+			className="w-full mr-6"
+			bind:val={oldPasswordInput}
+			autofocus
+			required
+		/>
+		<div class="w-full">
+			<StyledInput
+				label="New Password"
+				type="password" 
+				autocomplete="new-password"
+				placeholder="********"
+				className="w-full"
+				bind:val={newPasswordInput}
+				required
+			/>
+			<span class="mt-2 whitespace-nowrap text-sm flex items-center">
+				<img src="/assets/info.svg" alt="info" class="mr-1 inline" />
+				Must be at least 8 characters
 			</span>
-			<p>{$currentUser.name}</p>
-		</div>
-		<div class="pl-5 mr-6 w-1/3">
-			<span class="mb-2 font-medium text-sm">
-				<img src="/assets/label/email.svg" alt="email" class="mr-1 inline" />
-				Account Email
-			</span>
-			<p>{$currentUser.email}</p>
-		</div>
-		<div class="pl-5 w-1/3">
-			<span class="mb-2 font-medium text-sm">
-				<img src="/assets/label/permissions.svg" alt="permissions" class="mr-1 inline" />
-				Your Permissions
-			</span>
-			<p>{$currentUser.role}</p>
 		</div>
 	</div>
-	<StyledButton className="ml-auto mt-24 w-32" action={showEdit}>Edit</StyledButton>
-</div>
+	<StyledButton className="ml-auto mt-24" type="submit">Change Password</StyledButton>
+</form>

@@ -22,9 +22,9 @@
 </script>
 
 <div class="flex flex-col rounded-xl border-2 border-[#F2F2F2] p-8">
-	<h6 class="font-bold mr-auto mb-6">Account Details</h6>
+	<h6 class="font-bold mr-auto mb-6 text-lg">Account Details</h6>
 
-	<div class="flex flex-row items-center ">
+	<div class="flex items-center ">
 		<div class="pl-5 mr-6 w-1/3">
 			{#if isEditingName}
 				<StyledInput label="Your Name" bind:val={nameInput} autofocus />
