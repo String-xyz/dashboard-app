@@ -6,7 +6,9 @@ import { Role, type PlatformDetails } from "$lib/types";
 
 export const loginEmail = writable("");
 export const resetToken = writable("");
+
 export const rolesList = Object.values(Role);
+
 export const currentUser: Writable<Member> = writable();
 export const platform: Writable<PlatformDetails> = writable({
 	id: "",

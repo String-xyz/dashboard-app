@@ -1,7 +1,8 @@
 <script lang="ts">
-	import { currentUser } from "$lib/stores";
 	import StyledButton from "../StyledButton.svelte";
 	import StyledInput from "../StyledInput.svelte";
+
+	import { currentUser } from "$lib/stores";
 
 	let nameInput = $currentUser.name;
 

@@ -2,13 +2,10 @@
 	import StyledButton from "../StyledButton.svelte";
 	import StyledInput from "../StyledInput.svelte";
 	
-	import { authService } from "$lib/services";
 	import { currentUser, platform } from "$lib/stores";
 	import { Role } from "$lib/types";
 	import { KYB_URL } from "$lib/config";
 	import { openLink } from "$lib/utils";
-
-
 
 	let companyNameInput: string;
 	let websiteURLInput: string;

@@ -30,7 +30,6 @@
 				class:tab-active={$activeSettingsTab == SettingsTab.CHANGE_PASSWORD}
 			>Change Password</button>
 		</div>
-		<!-- <div class="divider mt-0 mb-7 h-0" /> -->
 	</header>
 
 	<svelte:component this={$tabToViewMap.get($activeSettingsTab)} />
@@ -41,11 +40,6 @@
 		padding: 70px;
 		overflow: none;
 	}
-
-	/* .divider:after, .divider:before {
-		--tw-bg-opacity: 0.2;
-		background-color: #F2F2F2;
-	} */
 
 	.tab {
 		@apply text-neutral;
@@ -65,13 +59,5 @@
 		@apply text-primary;
 		@apply border-primary;
 	}
-
-
-	/* @media (max-width: 1015px) {
-		.tabs {
-			flex-direction: column;
-			row-gap: 8px;
-		}
-	} */
 
 </style>
