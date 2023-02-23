@@ -22,7 +22,6 @@ export function createTeamService(apiClient: ApiClient) {
 
 	function filterTeamItems(_teamItems: TeamItem[], filter: Filter) {
 		if (filter === Filter.ALL_MEMBERS) {
-
 			// sort by [...active, ...invites, ...deactivated]
 			const sortedItems = [
 				..._teamItems.filter((item) => !item.isInvite && !item.deactivatedAt), // not deactivated members
@@ -33,7 +32,7 @@ export function createTeamService(apiClient: ApiClient) {
 			return sortedItems;
 		}
 
-		if (filter === Filter.PENDING_INVITE) return _teamItems.filter((teamItem) => teamItem.isInvite && teamItem.status === 'pending');
+		if (filter === Filter.PENDING_INVITE) return _teamItems.filter((teamItem) => teamItem.isInvite && teamItem.status === "pending");
 		if (filter === Filter.DELETED) return _teamItems.filter((teamItem) => teamItem.deactivatedAt || false);
 		if (filter === Filter.ACTIVE) return _teamItems.filter((teamItem) => teamItem.deactivatedAt === undefined && !teamItem.isInvite);
 
@@ -48,10 +47,10 @@ export function createTeamService(apiClient: ApiClient) {
 				role: member.role,
 				email: member.email,
 				joinDate: formatDate(member.createdAt),
-				status: 'accepted', // if member, status is always accepted
-				deactivatedAt: member.deactivatedAt,
+				status: "accepted", // if member, status is always accepted
+				deactivatedAt: member.deactivatedAt
 			};
-			
+
 			if (teamItem.email === currentUser.email) teamItem.self = true; // add self flag to current user so we can style it differently
 
 			return teamItem;
@@ -59,7 +58,7 @@ export function createTeamService(apiClient: ApiClient) {
 
 		_invites.forEach((invite) => {
 			// when invite status is accepted, it is already in the members list
-			if (invite.status === 'accepted') return;
+			if (invite.status === "accepted") return;
 
 			_teamItems.push({
 				id: invite.id,
@@ -68,7 +67,7 @@ export function createTeamService(apiClient: ApiClient) {
 				email: invite.email,
 				status: invite.status,
 				isInvite: true, // pending invites do not have a joined date
-				deactivatedAt: invite.deactivatedAt,
+				deactivatedAt: invite.deactivatedAt
 			});
 		});
 
