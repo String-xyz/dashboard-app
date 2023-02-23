@@ -11,42 +11,109 @@ export function createApiClient(): ApiClient {
 	});
 
 	/*********** LOGIN ***********/
-	const login = async (email: string, password: string) => (await httpClient.post<Member>("/login", { email, password })).data;
-	const logout = async () => (await httpClient.post<void>("/login/logout")).data;
-	const refreshToken = async () => (await httpClient.post(`/login/refresh`)).data;
+	async function login(email: string, password: string) {
+		return (await httpClient.post<Member>("/login", { email, password })).data;
+	}
+
+	async function logout() {
+		return (await httpClient.post<void>("/login/logout")).data;
+	}
+
+	async function refreshToken() {
+		return (await httpClient.post(`/login/refresh`)).data;
+	}
 
 	/*********** MEMBERS ***********/
-	const getMembers = async () => (await httpClient.get<Member[]>("/members")).data;
-	const getMember = async (memberId: string) => (await httpClient.get<Member>(`/members/${memberId}`)).data;
-	const changeMemberRole = async (memberId: string, role: Role) => (await httpClient.put(`/members/${memberId}`, { role })).data;
-	const setPassword = async (memberId: string, password: string) => (await httpClient.put<void>(`/members/${memberId}`, { password })).data;
-	const deactivateMember = async (memberId: string) => (await httpClient.put<void>(`/members/${memberId}/deactivate`)).data;
-	const sendResetPasswordToken = async (email: string) => (await httpClient.get("/members/password-reset", { params: { email } })).data;
-	const resetPassword = async (token: string, password: string) =>
-		(await httpClient.post<void>("/members/password-reset", { resetToken: token, password })).data;
+	async function getMembers() {
+		return (await httpClient.get<Member[]>("/members")).data;
+	}
+
+	async function getMember(memberId: string) {
+		return (await httpClient.get<Member>(`/members/${memberId}`)).data;
+	}
+
+	async function changeMemberRole(memberId: string, role: Role) {
+		return (await httpClient.put(`/members/${memberId}`, { role })).data;
+	}
+
+	async function setPassword(memberId: string, password: string) {
+		return (await httpClient.put<void>(`/members/${memberId}`, { password })).data;
+	}
+
+	async function deactivateMember(memberId: string) {
+		return (await httpClient.put<void>(`/members/${memberId}/deactivate`)).data;
+	}
+
+	async function sendResetPasswordToken(email: string) {
+		return (await httpClient.get("/members/password-reset", { params: { email } })).data;
+	}
+
+	async function resetPassword(token: string, password: string) {
+		return (await httpClient.post<void>("/members/password-reset", { resetToken: token, password })).data;
+	}
 
 	/*********** INVITATIONS ***********/
-	const sendInvite = async (email: string, name: string, role: Role) => (await httpClient.post<Invite>("/invites", { email, name, role })).data;
-	const acceptInvite = async (inviteId: string, password: string) => (await httpClient.post<Member>(`/invites/${inviteId}`, { password })).data;
-	const listInvites = async () => (await httpClient.get<Invite[]>("/invites")).data;
-	const getInvite = async (inviteId: string) => (await httpClient.get<Invite>(`/invites/${inviteId}`)).data;
-	const resendInvite = async (inviteId: string) => (await httpClient.post<Member>(`/invites/${inviteId}/resend`)).data;
-	const changeInviteRole = async (inviteId: string, role: Role) => (await httpClient.put<void>(`/invites/${inviteId}`, { role })).data;
-	const revokeInvite = async (inviteId: string) => (await httpClient.put<void>(`/invites/${inviteId}/deactivate`)).data;
+	async function sendInvite(email: string, name: string, role: Role) {
+		return (await httpClient.post<Invite>("/invites", { email, name, role })).data;
+	}
+
+	async function acceptInvite(inviteId: string, password: string) {
+		return (await httpClient.post<Member>(`/invites/${inviteId}`, { password })).data;
+	}
+
+	async function listInvites() {
+		return (await httpClient.get<Invite[]>("/invites")).data;
+	}
+
+	async function getInvite(inviteId: string) {
+		return (await httpClient.get<Invite>(`/invites/${inviteId}`)).data;
+	}
+
+	async function resendInvite(inviteId: string) {
+		return (await httpClient.post<Member>(`/invites/${inviteId}/resend`)).data;
+	}
+
+	async function changeInviteRole(inviteId: string, role: Role) {
+		return (await httpClient.put<void>(`/invites/${inviteId}`, { role })).data;
+	}
+
+	async function revokeInvite(inviteId: string) {
+		return (await httpClient.put<void>(`/invites/${inviteId}/deactivate`)).data;
+	}
 
 	/*********** PLATFORM ***********/
-	const createPlatform = async (platformName: string, ownerEmail: string, ownerName: string) =>
-		(await httpClient.post<Platform>("/platforms", { platformName, email: ownerEmail, name: ownerName })).data;
+	async function createPlatform(platformName: string, ownerEmail: string, ownerName: string) {
+		return (await httpClient.post<Platform>("/platforms", { platformName, email: ownerEmail, name: ownerName })).data;
+	}
 
-	const getPlatform = async () => (await httpClient.get<Platform>(`/platforms`)).data;
-	const updatePlatform = async (name: string) => (await httpClient.put<Platform>(`/platforms`, { name })).data;
+	async function getPlatform() {
+		return (await httpClient.get<Platform>(`/platforms`)).data;
+	}
+
+	async function updatePlatform(name: string) {
+		return (await httpClient.put<Platform>(`/platforms`, { name })).data;
+	}
 
 	/*********** API KEYS ***********/
-	const createApiKey = async () => (await httpClient.post<ApiKeyResponse>("/apikeys")).data;
-	const listApiKeys = async (limit = 10) => (await httpClient.get<ApiKeyResponse[]>("/apikeys", { params: { limit } })).data;
-	const getApiKey = async (keyId: string) => (await httpClient.get<ApiKeyResponse>(`/apikeys/${keyId}`)).data;
-	const deactivateApiKey = async (keyId: string) => (await httpClient.put<ApiKeyResponse>(`/apikeys/${keyId}/deactivate`)).data;
-	const editApiKey = async (keyId: string, description: string) => (await httpClient.put<ApiKeyResponse>(`/apikeys/${keyId}`, { description })).data;
+	async function createApiKey() {
+		return (await httpClient.post<ApiKeyResponse>("/apikeys")).data;
+	}
+
+	async function listApiKeys(limit = 10) {
+		return (await httpClient.get<ApiKeyResponse[]>("/apikeys", { params: { limit } })).data;
+	}
+
+	async function getApiKey(keyId: string) {
+		return (await httpClient.get<ApiKeyResponse>(`/apikeys/${keyId}`)).data;
+	}
+
+	async function deactivateApiKey(keyId: string) {
+		return (await httpClient.put<ApiKeyResponse>(`/apikeys/${keyId}/deactivate`)).data;
+	}
+
+	async function editApiKey(keyId: string, description: string) {
+		return (await httpClient.put<ApiKeyResponse>(`/apikeys/${keyId}`, { description })).data;
+	}
 
 	/*---------- INTERCEPTORS ----------*/
 
