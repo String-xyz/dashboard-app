@@ -11,7 +11,10 @@
 	import ManageKeys from '$lib/views/ManageKeys.svelte';
 	import Settings from '$lib/views/Settings.svelte';
 
-	import { MenuItems, activeTab, menuItems } from '$lib/stores';
+	import MyAccount from '$lib/components/Settings/MyAccount.svelte';
+	import ChangePassword from '$lib/components/Settings/ChangePassword.svelte';
+
+	import { MenuItems, activeTab, menuItems, SettingsTab, tabToViewMap } from '$lib/stores';
 	import { authService } from '$lib/services';
 
 	let isLoggedIn = false;
@@ -27,6 +30,11 @@
 		
 		$menuItems.forEach((item) => item.view = mapViewsToMenuItems.get(item.name));
 		/* End Set the view for each menu item */
+
+		// Settings tabs
+		$tabToViewMap = new Map<SettingsTab, typeof SvelteComponent>()
+		$tabToViewMap.set(SettingsTab.MY_ACCOUNT, MyAccount);
+		$tabToViewMap.set(SettingsTab.CHANGE_PASSWORD, ChangePassword);
 
 		isLoggedIn = false;
 		try {

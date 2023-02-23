@@ -5,7 +5,6 @@
 
 	import { activeTab, getTabByName, MenuItems } from '$lib/stores';
 	import StyledButton from '../StyledButton.svelte';
-	import { apiClient } from '$lib/services';
 	
 	export let card: CardItem;
 

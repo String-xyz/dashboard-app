@@ -1,5 +1,5 @@
 import { writable } from "svelte/store";
-import { Role } from "$lib/types";
+import type { Role } from "$lib/types";
 
 export enum Filter {
 	ALL_MEMBERS = 'all',

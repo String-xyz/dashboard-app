@@ -146,7 +146,7 @@
 	}
 
 	.keys {
-		border: 2px solid #F2F2F2;
+		border: 1px solid #F2F2F2;
 		border-radius: 4px;
 		/* This will make the bottom row be too tall, but also solves right hand going off screen */
 		/* overflow-x: hidden; */
