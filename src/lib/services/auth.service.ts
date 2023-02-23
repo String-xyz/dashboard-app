@@ -2,21 +2,26 @@ import type { ApiClient, Invite, Member } from "./apiClient";
 import { Role } from "$lib/types";
 
 export function createAuthService(apiClient: ApiClient) {
-
 	async function login(email: string, pwd: string): Promise<Member> {
 		const member = await apiClient.login(email, pwd);
 		return member;
 	}
 
 	async function isUserLoggedIn(): Promise<boolean> {
-		// user is logged in when there is a StringJWT cookie set. In the future, we will use a refresh token
-		return window.document.cookie.includes('StringJWT');
+		try {
+			await apiClient.refreshToken();
+			console.debug("User is logged in");
+			return true;
+		} catch (e) {
+			console.debug("User is not logged in");
+			return false;
+		}
 	}
 
 	async function getInviteById(inviteId: string): Promise<Invite> {
 		const invite = await apiClient.getInvite(inviteId);
 		if (!invite) {
-			throw new Error('Invalid invite');
+			throw new Error("Invalid invite");
 		}
 
 		return invite;
@@ -33,28 +38,27 @@ export function createAuthService(apiClient: ApiClient) {
 	async function logout() {
 		try {
 			await apiClient.logout();
-			window.location.href = '/';
-			localStorage.removeItem('user');
+			window.location.href = "/login";
+			localStorage.removeItem("user");
 		} catch (e) {
 			console.error(e);
 		}
-			
 	}
 
 	const canModify = (userRole: Role, targetRole: Role) => {
 		if (userRole == Role.OWNER) return true;
 		if (userRole == Role.ADMIN && targetRole == Role.MEMBER) return true;
-	
+
 		return false;
-	}
+	};
 
 	const canView = (userRole: Role, minPerms: Role) => {
 		if (userRole == minPerms) return true;
 		if (userRole == Role.OWNER) return true;
 		if (userRole == Role.ADMIN && minPerms !== Role.OWNER) return true;
-	
+
 		return false;
-	}
-	
+	};
+
 	return { login, logout, isUserLoggedIn, getInviteById, acceptInvite, canModify, canView };
 }

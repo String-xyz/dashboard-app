@@ -1,158 +1,166 @@
-import axios from 'axios';
-import type { Role } from '$lib/types';
+import axios from "axios";
+import type { Role } from "$lib/types";
 
 export function createApiClient(): ApiClient {
 	const baseUrl = import.meta.env.VITE_API_URL;
-	const commonHeaders = { 'Content-Type': 'application/json' };
+	const commonHeaders = { "Content-Type": "application/json" };
 	const httpClient = axios.create({
 		baseURL: baseUrl,
 		headers: commonHeaders,
-		withCredentials: true, // send cookies
+		withCredentials: true // send cookies
 	});
 
 	/*********** LOGIN ***********/
-
 	async function login(email: string, password: string) {
-		const { data } = await httpClient.post<Member>('/login', { email, password });
-		return data;
+		return (await httpClient.post<Member>("/login", { email, password })).data;
 	}
 
 	async function logout() {
-		await httpClient.post('/login/logout');
-		return;
+		return (await httpClient.post<void>("/login/logout")).data;
+	}
+
+	async function refreshToken() {
+		return (await httpClient.post(`/login/refresh`)).data;
 	}
 
 	/*********** MEMBERS ***********/
-
 	async function getMembers() {
-		const { data } = await httpClient.get<Member[]>('/members');
-		return data;
+		return (await httpClient.get<Member[]>("/members")).data;
 	}
 
 	async function getMember(memberId: string) {
-		const { data } = await httpClient.get<Member>(`/members/${memberId}`);
-		return data;
+		return (await httpClient.get<Member>(`/members/${memberId}`)).data;
 	}
 
 	async function changeMemberRole(memberId: string, role: Role) {
-		// TODO: do we need to await this? 
-		await httpClient.put(`/members/${memberId}`, { role });
+		return (await httpClient.put(`/members/${memberId}`, { role })).data;
 	}
 
 	async function setPassword(memberId: string, password: string) {
-		await httpClient.put(`/members/${memberId}`, { password });
-		return;
+		return (await httpClient.put<void>(`/members/${memberId}`, { password })).data;
 	}
 
 	async function deactivateMember(memberId: string) {
-		await httpClient.put(`/members/${memberId}/deactivate`);
-		return;
+		return (await httpClient.put<void>(`/members/${memberId}/deactivate`)).data;
 	}
-	
+
 	async function sendResetPasswordToken(email: string) {
-		await httpClient.get('/members/password-reset', { params: { email } });
+		return (await httpClient.get("/members/password-reset", { params: { email } })).data;
 	}
 
 	async function resetPassword(token: string, password: string) {
-		await httpClient.post('/members/password-reset', { resetToken: token, password });
-		return;
+		return (await httpClient.post<void>("/members/password-reset", { resetToken: token, password })).data;
 	}
 
 	/*********** INVITATIONS ***********/
-
 	async function sendInvite(email: string, name: string, role: Role) {
-		const { data } = await httpClient.post<Invite>('/invites', { email, name, role });
-		return data;
+		return (await httpClient.post<Invite>("/invites", { email, name, role })).data;
 	}
 
 	async function acceptInvite(inviteId: string, password: string) {
-		const body = { password };
-		const { data } = await httpClient.post<Member>(`/invites/${inviteId}`, body);
-		return data;
+		return (await httpClient.post<Member>(`/invites/${inviteId}`, { password })).data;
 	}
 
 	async function listInvites() {
-		const { data } = await httpClient.get<Invite[]>('/invites');
-		return data;
+		return (await httpClient.get<Invite[]>("/invites")).data;
 	}
 
 	async function getInvite(inviteId: string) {
-		const { data } = await httpClient.get<Invite>(`/invites/${inviteId}`);
-		return data;
+		return (await httpClient.get<Invite>(`/invites/${inviteId}`)).data;
 	}
 
 	async function resendInvite(inviteId: string) {
-		const { data } = await httpClient.post<Member>(`/invites/${inviteId}/resend`);
-		return data;
+		return (await httpClient.post<Member>(`/invites/${inviteId}/resend`)).data;
 	}
 
 	async function changeInviteRole(inviteId: string, role: Role) {
-		await httpClient.put(`/invites/${inviteId}`, { role });
-		return;	
+		return (await httpClient.put<void>(`/invites/${inviteId}`, { role })).data;
 	}
 
 	async function revokeInvite(inviteId: string) {
-		await httpClient.put(`/invites/${inviteId}/deactivate`);
-		return;
+		return (await httpClient.put<void>(`/invites/${inviteId}/deactivate`)).data;
 	}
 
-		
 	/*********** PLATFORM ***********/
-
 	async function createPlatform(platformName: string, ownerEmail: string, ownerName: string) {
-		const { data } = await httpClient.post('/platforms', { platformName, email: ownerEmail, name: ownerName });
-		return data;
+		return (await httpClient.post<Platform>("/platforms", { platformName, email: ownerEmail, name: ownerName })).data;
 	}
 
 	async function getPlatform() {
-		const { data } = await httpClient.get<Platform>(`/platforms`);
-		return data;
+		return (await httpClient.get<Platform>(`/platforms`)).data;
 	}
 
 	async function updatePlatform(name: string) {
-		const { data } = await httpClient.put<Platform>(`/platforms`, { name });
-		return data;
+		return (await httpClient.put<Platform>(`/platforms`, { name })).data;
 	}
 
 	/*********** API KEYS ***********/
-
 	async function createApiKey() {
-		const { data } = await httpClient.post<ApiKeyResponse>('/apikeys');
-		return data;
+		return (await httpClient.post<ApiKeyResponse>("/apikeys")).data;
 	}
-	
+
 	async function listApiKeys(limit = 10) {
-		const { data } = await httpClient.get<ApiKeyResponse[]>('/apikeys', { params: { limit } });
-		return data;
+		return (await httpClient.get<ApiKeyResponse[]>("/apikeys", { params: { limit } })).data;
 	}
 
 	async function getApiKey(keyId: string) {
-		const { data } = await httpClient.get<ApiKeyResponse>(`/apikeys/${keyId}`);
-		return data;
+		return (await httpClient.get<ApiKeyResponse>(`/apikeys/${keyId}`)).data;
 	}
-	
+
 	async function deactivateApiKey(keyId: string) {
-		const { data } = await httpClient.put<ApiKeyResponse>(`/apikeys/${keyId}/deactivate`);
-		return data;
+		return (await httpClient.put<ApiKeyResponse>(`/apikeys/${keyId}/deactivate`)).data;
 	}
 
 	async function editApiKey(keyId: string, description: string) {
-		const { data } = await httpClient.put<ApiKeyResponse>(`/apikeys/${keyId}`, { description });
-		return data;
+		return (await httpClient.put<ApiKeyResponse>(`/apikeys/${keyId}`, { description })).data;
 	}
 
+	/*---------- INTERCEPTORS ----------*/
+
+	httpClient.interceptors.response.use(
+		(response) => response,
+		async (error) => {
+			if (!error.response || !error.response.data) return Promise.reject(_getErrorFromAxiosError(error));
+
+			const originalRequest = error.config;
+
+			if (error.response.status === 401 && !_isRefreshTokenRequest(originalRequest)) {
+				try {
+					const data = await refreshToken();
+
+					// retry the original request with the new access token
+					originalRequest.headers["Authorization"] = `Bearer ${data.token}`;
+					return httpClient(originalRequest);
+				} catch (e: any) {
+					console.error("refresh token error:", _getErrorFromAxiosError(e));
+
+					// if the refresh token is expired, redirect to login
+					window.location.href = "/login";
+
+					return Promise.reject(_getErrorFromAxiosError(e));
+				}
+			}
+
+			return Promise.reject(_getErrorFromAxiosError(error));
+		}
+	);
 
 	/*---------- HELPERS ----------*/
 
-	function _getErrorFromAxiosError(e: any) {	
+	function _getErrorFromAxiosError(e: any) {
 		if (e.response) return e.response.data;
 		else if (e.request) return e.request;
 		else return e.message;
 	}
 
+	function _isRefreshTokenRequest(request: any) {
+		return request.url === "/login/refresh";
+	}
+
 	return {
 		login,
 		logout,
+		refreshToken,
 		getMembers,
 		getMember,
 		changeMemberRole,
@@ -174,42 +182,43 @@ export function createApiClient(): ApiClient {
 		listApiKeys,
 		getApiKey,
 		deactivateApiKey,
-		editApiKey,
+		editApiKey
 	};
 }
 
 export interface ApiClient {
 	/* Login */
-	login(email: string, password: string) : Promise<Member>;
-	logout() : Promise<void>;
-	
+	login(email: string, password: string): Promise<Member>;
+	logout(): Promise<void>;
+	refreshToken(): Promise<void>;
+
 	/* Members */
-	getMembers() : Promise<Member[]>;
-	getMember(memberId: string) : Promise<Member>;
-	changeMemberRole(memberId: string, role: Role) : Promise<void>;
-	setPassword(memberId: string, password: string) : Promise<void>;
-	deactivateMember(memberId: string) : Promise<void>;
-	sendResetPasswordToken(email: string) : Promise<void>;
-	resetPassword(token: string, password: string) : Promise<void>;
-		
+	getMembers(): Promise<Member[]>;
+	getMember(memberId: string): Promise<Member>;
+	changeMemberRole(memberId: string, role: Role): Promise<void>;
+	setPassword(memberId: string, password: string): Promise<void>;
+	deactivateMember(memberId: string): Promise<void>;
+	sendResetPasswordToken(email: string): Promise<void>;
+	resetPassword(token: string, password: string): Promise<void>;
+
 	/* Invitations */
-	sendInvite(email: string, name: string, role: Role) : Promise<Invite>;
-	acceptInvite(inviteId: string, password: string) : Promise<Member>;
-	getInvite(inviteId: string) : Promise<Invite>;
-	listInvites() : Promise<Invite[]>;
-	resendInvite(inviteId: string) : Promise<Member>;
-	changeInviteRole(inviteId: string, role: Role) : Promise<void>;
-	revokeInvite(inviteId: string) : Promise<void>;
+	sendInvite(email: string, name: string, role: Role): Promise<Invite>;
+	acceptInvite(inviteId: string, password: string): Promise<Member>;
+	getInvite(inviteId: string): Promise<Invite>;
+	listInvites(): Promise<Invite[]>;
+	resendInvite(inviteId: string): Promise<Member>;
+	changeInviteRole(inviteId: string, role: Role): Promise<void>;
+	revokeInvite(inviteId: string): Promise<void>;
 
 	/* Platform */
-	createPlatform(platformName: string, ownerEmail: string, ownerName: string) : Promise<Platform>;
-	getPlatform() : Promise<Platform>;
-	updatePlatform(name: string) : Promise<Platform>;
-	
+	createPlatform(platformName: string, ownerEmail: string, ownerName: string): Promise<Platform>;
+	getPlatform(): Promise<Platform>;
+	updatePlatform(name: string): Promise<Platform>;
+
 	/* Api keys */
 	createApiKey: () => Promise<ApiKeyResponse>;
 	listApiKeys: (limit?: number) => Promise<ApiKeyResponse[]>;
-	getApiKey(keyId: string) : Promise<ApiKeyResponse>;
+	getApiKey(keyId: string): Promise<ApiKeyResponse>;
 	deactivateApiKey: (keyId: string) => Promise<ApiKeyResponse>;
 	editApiKey: (keyId: string, description: string) => Promise<ApiKeyResponse>;
 }
@@ -248,7 +257,7 @@ export type Member = {
 	role: Role;
 };
 
-export type InviteStatus = 'pending' | 'accepted' | 'revoked' | 'expired' | 'invalid';
+export type InviteStatus = "pending" | "accepted" | "revoked" | "expired" | "invalid";
 
 export type Invite = {
 	id: string;
@@ -260,4 +269,4 @@ export type Invite = {
 	acceptedAt?: string;
 	expiredAt?: string;
 	deactivatedAt?: string;
-}
+};
