@@ -38,7 +38,7 @@ export function createAuthService(apiClient: ApiClient) {
 	async function logout() {
 		try {
 			await apiClient.logout();
-			window.location.href = "/";
+			window.location.href = "/login";
 			localStorage.removeItem("user");
 		} catch (e) {
 			console.error(e);
