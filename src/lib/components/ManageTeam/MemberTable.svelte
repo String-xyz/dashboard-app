@@ -27,7 +27,7 @@
 		<p class="ml-6">Team</p>
 		<p class="mr-6">Access Level</p>
 	</div>
-	<div>
+	<div class="rows">
 		{#each $teamItems as member}
 			<div class="row flex justify-between items-center p-6 ">
 				{#if member.self}
@@ -47,14 +47,14 @@
 								<p class="text-xs">Invitation sent!</p>
 							{:else}
 								{#if member.deactivatedAt}
-									<p class="text-sm font-semibold text-warning select-all">{member.name}</p>
+									<p class="text-sm text-warning font-semibold inline-block select-all">{member.name}</p>
 									<span class="text-xs greyed flex items-center mt-1 ">
 										<span class="select-all">{member.email}</span>
 										<span class="dot mx-2"></span>
 										<span class="select-all">Deactivated {formatDate(member.deactivatedAt)}</span>
 									</span>
 								{:else}
-									<p class="text-sm font-semibold select-all">{member.name}</p>
+									<p class="text-sm font-semibold inline-block select-all">{member.name}</p>
 									<span class="text-xs greyed flex items-center mt-1 ">
 										<span class="select-all">{member.email}</span>
 										<span class="dot mx-2"></span>
@@ -91,6 +91,10 @@
 						{/if}
 					{/if}
 				{/if}
+			</div>
+		{:else}
+			<div class="row flex justify-center items-center p-6">
+				<p class="font-bold">No Entries Found</p>
 			</div>
 		{/each}
 	</div>
