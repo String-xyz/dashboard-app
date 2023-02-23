@@ -122,8 +122,9 @@ export function createApiClient(): ApiClient {
 		async (error) => {
 			if (!error.response || !error.response.data) return Promise.reject(_getErrorFromAxiosError(error));
 
-			if ((error.response.status === 401 && error.response.data?.code === "TOKEN_EXPIRED") || error.response.data?.code === "MISSING_TOKEN") {
-				const originalRequest = error.config;
+			const originalRequest = error.config;
+
+			if (error.response.status === 401 && !_isRefreshTokenRequest(originalRequest)) {
 				try {
 					const data = await refreshToken();
 
@@ -150,6 +151,10 @@ export function createApiClient(): ApiClient {
 		if (e.response) return e.response.data;
 		else if (e.request) return e.request;
 		else return e.message;
+	}
+
+	function _isRefreshTokenRequest(request: any) {
+		return request.url === "/login/refresh";
 	}
 
 	return {
