@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Role, type TeamItem } from "$lib/types";
 	import { apiClient } from "$lib/services";
-	import { rolesList, currentUser, deactModalOpen, deactUser } from "$lib/stores";
+	import { rolesList, currentUser, deactModalOpen, deactUser, transferOwnerModalOpen, ownershipTransferee } from "$lib/stores";
 	import { onMount } from "svelte";
 
 	export let member: TeamItem | null = null;
@@ -14,7 +14,7 @@
 
 	const assetPath = "/assets/dropdown/"
 
-	//src, alt text
+	//[src, alt text]
 	const radioActive = [assetPath + "radio_checked.svg", "radio-checked"]
 	const radioInactive = [assetPath + "radio_inactive.svg", "radio-inactive"]
 
@@ -44,12 +44,19 @@
 		
 		if (!member) return;
 		
-		// executes when a member is injected as property
 		try {
-			let res;
-			if (isInvite) res = await apiClient.changeInviteRole(member.id, toRole);
-			else res = await apiClient.changeMemberRole(member.id, toRole);
-			
+			if (toRole === Role.OWNER) {
+				$ownershipTransferee = member;
+				$transferOwnerModalOpen = true;
+				return;
+			}
+
+			if (isInvite) {
+				await apiClient.changeInviteRole(member.id, toRole);
+			} else {
+				await apiClient.changeMemberRole(member.id, toRole);
+			}
+
 			member.role = toRole;
 		} catch (error) {
 			// TODO: Show error notification
