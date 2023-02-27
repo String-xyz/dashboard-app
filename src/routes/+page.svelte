@@ -2,14 +2,16 @@
 	import { onMount, SvelteComponent } from 'svelte';
 
 	import SideMenu from '$lib/components/SideMenu/SideMenu.svelte';
-	import InviteTeammate from '$lib/modals/team/InviteTeammate.svelte';
-	import RemoveTeammate from '$lib/modals/team/RemoveTeammate.svelte';
-	import KeyCreateSuccess from '$lib/modals/keys/KeyCreateSuccess.svelte';
-
+	
 	import Dashboard from '$lib/views/Dashboard.svelte';
 	import ManageTeam from '$lib/views/ManageTeam.svelte';
 	import ManageKeys from '$lib/views/ManageKeys.svelte';
 	import Settings from '$lib/views/Settings.svelte';
+
+	import InviteTeammate from '$lib/modals/team/InviteTeammate.svelte';
+	import RemoveTeammate from '$lib/modals/team/RemoveTeammate.svelte';
+	import KeyCreateSuccess from '$lib/modals/keys/KeyCreateSuccess.svelte';
+	import TransferOwnership from '$lib/modals/team/TransferOwnership.svelte';
 
 	import MyAccount from '$lib/components/Settings/MyAccount.svelte';
 	import ChangePassword from '$lib/components/Settings/ChangePassword.svelte';
@@ -69,6 +71,7 @@
 		<InviteTeammate />
 		<RemoveTeammate />
 		<KeyCreateSuccess />
+		<TransferOwnership />
 	</div>
 {/if}
 

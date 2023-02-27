@@ -8,4 +8,7 @@ export const activeModal: Writable<typeof SvelteComponent | null> = writable();
 export const inviteModalOpen = writable(false);
 export const deactModalOpen = writable(false);
 export const keySuccessModalOpen = writable(false);
+export const transferOwnerModalOpen = writable(false);
+
 export const deactUser: Writable<TeamItem | null> = writable();
+export const ownershipTransferee: Writable<TeamItem | null> = writable();
