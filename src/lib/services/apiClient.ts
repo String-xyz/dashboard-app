@@ -32,12 +32,16 @@ export function createApiClient(): ApiClient {
 		return (await httpClient.get<Member>(`/members/${memberId}`)).data;
 	}
 
-	async function changeMemberRole(memberId: string, role: Role) {
-		return (await httpClient.put(`/members/${memberId}`, { role })).data;
+	async function changeSelfName(name: string) {
+		return (await httpClient.put<Member>(`/members`, { name })).data;
 	}
 
-	async function setPassword(memberId: string, password: string) {
-		return (await httpClient.put<void>(`/members/${memberId}`, { password })).data;
+	async function changeMemberRole(memberId: string, role: Role) {
+		return (await httpClient.put<Member>(`/members/${memberId}`, { role })).data;
+	}
+
+	async function changeSelfPassword(oldPassword: string, newPassword: string) {
+		return (await httpClient.put<Member>(`/members`, { oldPassword, newPassword })).data;
 	}
 
 	async function deactivateMember(memberId: string) {
@@ -170,8 +174,9 @@ export function createApiClient(): ApiClient {
 		/* Members */
 		getMembers,
 		getMember,
+		changeSelfName,
 		changeMemberRole,
-		setPassword,
+		changeSelfPassword,
 		deactivateMember,
 		reactivateMember,
 		sendResetPasswordToken,
@@ -209,8 +214,9 @@ export interface ApiClient {
 	/* Members */
 	getMembers(): Promise<Member[]>;
 	getMember(memberId: string): Promise<Member>;
-	changeMemberRole(memberId: string, role: Role): Promise<void>;
-	setPassword(memberId: string, password: string): Promise<void>;
+	changeSelfName(name: string): Promise<Member>;
+	changeMemberRole(memberId: string, role: Role): Promise<Member>;
+	changeSelfPassword(oldPassword: string, newPassword: string): Promise<Member>;
 	deactivateMember(memberId: string): Promise<void>;
 	reactivateMember(memberId: string): Promise<void>;
 	sendResetPasswordToken(email: string): Promise<void>;
