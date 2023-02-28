@@ -14,7 +14,7 @@
 
 	const assetPath = "/assets/dropdown/"
 
-	//[src, alt text]
+	// [src, alt text]
 	const radioActive = [assetPath + "radio_checked.svg", "radio-checked"]
 	const radioInactive = [assetPath + "radio_inactive.svg", "radio-inactive"]
 
