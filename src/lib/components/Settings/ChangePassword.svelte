@@ -26,6 +26,11 @@
 	const changePassword = async () => {
 		try {
 			await apiClient.changeSelfPassword(oldPasswordInput, newPasswordInput);
+
+			// clear inputs
+			oldPasswordInput = "";
+			newPasswordInput = "";
+
 			// TODO: Show success message
 		} catch (error) {
 			console.log(error);
