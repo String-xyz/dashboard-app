@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { Role } from '$lib/types'
+	import { Role, type TeamItem } from '$lib/types'
 	import { teamItems, currentUser } from '$lib/stores'
 
 	import Avatar from '../Avatar.svelte';
 	import StyledButton from '../StyledButton.svelte';
 	import RoleDropdown from './RoleDropdown.svelte';
-	import { apiClient, authService } from '$lib/services';
+	import { apiClient, authService, type Member } from '$lib/services';
 	import { formatDate } from '$lib/utils';
 
 	const handleResend = async (id: string) => {
@@ -17,8 +17,12 @@
 		}
 	}
 
-	const reactivateMember = () => {
-
+	const reactivateMember = async (member: TeamItem) => {
+		try {
+			await apiClient.reactivateMember(member.id);
+		} catch (e) {
+			console.error('reactivate member error', e);
+		}
 	}
 
 </script>
@@ -64,11 +68,11 @@
 							{/if}
 						</div>
 					</div>
-					{#if member.deactivatedAt}
+					{#if member.deactivatedAt && !member.isInvite}
 						<div class="flex justify-items-start items-center">
 							<p class="text-warning text-sm">Deactivated</p>
 							{#if authService.canView($currentUser.role, Role.ADMIN)}
-								<StyledButton className="btn-warning rounded-lg ml-8" action={reactivateMember}>Reactivate</StyledButton>
+								<StyledButton className="btn-warning rounded-lg ml-8" action={() => reactivateMember(member)}>Reactivate</StyledButton>
 							{/if}
 						</div>
 					{:else}
