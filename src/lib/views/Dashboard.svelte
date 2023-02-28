@@ -1,6 +1,14 @@
 <script lang="ts">
 	import { cards } from '$lib/constants/cards';
 	import Card from '$lib/components/Dashboard/Card.svelte';
+	import Toast from '$lib/components/Toast.svelte';
+	import { onMount } from 'svelte';
+
+	let showSuccessToast: () => void;
+
+	onMount(() => {
+		showSuccessToast();
+	})
 </script>
 
 <svelte:head>
@@ -18,6 +26,8 @@
 			{/each}
 		</div>
 	</div>
+
+	<Toast type="success" size="sm" bind:show={showSuccessToast}>This is a test </Toast>
 </div>
 
 <style>
