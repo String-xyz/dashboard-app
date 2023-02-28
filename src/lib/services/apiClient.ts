@@ -44,6 +44,10 @@ export function createApiClient(): ApiClient {
 		return (await httpClient.put<void>(`/members/${memberId}/deactivate`)).data;
 	}
 
+	async function reactivateMember(memberId: string) {
+		return (await httpClient.put<void>(`/members/${memberId}/reactivate`)).data;
+	}
+
 	async function sendResetPasswordToken(email: string) {
 		return (await httpClient.get("/members/password-reset", { params: { email } })).data;
 	}
@@ -158,16 +162,22 @@ export function createApiClient(): ApiClient {
 	}
 
 	return {
+		/* Login */
 		login,
 		logout,
 		refreshToken,
+
+		/* Members */
 		getMembers,
 		getMember,
 		changeMemberRole,
 		setPassword,
 		deactivateMember,
+		reactivateMember,
 		sendResetPasswordToken,
 		resetPassword,
+
+		/* Invites */
 		sendInvite,
 		acceptInvite,
 		getInvite,
@@ -175,9 +185,13 @@ export function createApiClient(): ApiClient {
 		resendInvite,
 		changeInviteRole,
 		revokeInvite,
+
+		/* Platform */
 		createPlatform,
 		getPlatform,
 		updatePlatform,
+
+		/* API Keys */
 		createApiKey,
 		listApiKeys,
 		getApiKey,
@@ -198,6 +212,7 @@ export interface ApiClient {
 	changeMemberRole(memberId: string, role: Role): Promise<void>;
 	setPassword(memberId: string, password: string): Promise<void>;
 	deactivateMember(memberId: string): Promise<void>;
+	reactivateMember(memberId: string): Promise<void>;
 	sendResetPasswordToken(email: string): Promise<void>;
 	resetPassword(token: string, password: string): Promise<void>;
 
