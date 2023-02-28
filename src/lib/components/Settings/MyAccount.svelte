@@ -3,6 +3,7 @@
 	import StyledInput from "../StyledInput.svelte";
 
 	import { currentUser } from "$lib/stores";
+	import { apiClient } from "$lib/services";
 
 	let nameInput = $currentUser.name;
 
@@ -10,8 +11,16 @@
 		isEditingName = true;
 	}
 
-	const saveEdit = () => {
+	const saveEdit = async () => {
 		isEditingName = false;
+		try {
+			const member = await apiClient.changeSelfName(nameInput);
+			$currentUser.name = member.name;
+			// TODO: Show success message
+		} catch (error) {
+			console.log(error);
+			// TODO: show error message
+		}
 	}
 
 	const cancelEdit = () => {
