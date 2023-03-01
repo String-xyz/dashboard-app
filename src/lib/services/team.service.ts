@@ -40,7 +40,9 @@ export function createTeamService(apiClient: ApiClient) {
 	}
 
 	function mergeMemberAndInvites(_members: Member[], _invites: Invite[], currentUser: Member) {
-		const _teamItems = _members.map((member): TeamItem => {
+		const _teamItems: TeamItem[] = [];
+
+		_members.forEach((member) => {
 			const teamItem: TeamItem = {
 				id: member.id,
 				name: member.name,
@@ -49,16 +51,23 @@ export function createTeamService(apiClient: ApiClient) {
 				joinDate: formatDate(member.createdAt),
 				status: "accepted", // if member, status is always accepted
 				deactivatedAt: member.deactivatedAt
-			};
+			}
 
-			if (teamItem.email === currentUser.email) teamItem.self = true; // add self flag to current user so we can style it differently
+			if (teamItem.email === currentUser.email) {
+				teamItem.self = true;
+				// If it is the current user, put them to the top of the list only
+				_teamItems.unshift(teamItem);
+				return;
+			}
 
-			return teamItem;
+			_teamItems.push(teamItem);
 		});
 
 		_invites.forEach((invite) => {
 			// when invite status is accepted, it is already in the members list
 			if (invite.status === "accepted") return;
+			// Don't show revoked invites
+			if (invite.deactivatedAt) return;
 
 			_teamItems.push({
 				id: invite.id,
@@ -67,7 +76,6 @@ export function createTeamService(apiClient: ApiClient) {
 				email: invite.email,
 				status: invite.status,
 				isInvite: true, // pending invites do not have a joined date
-				deactivatedAt: invite.deactivatedAt
 			});
 		});
 
