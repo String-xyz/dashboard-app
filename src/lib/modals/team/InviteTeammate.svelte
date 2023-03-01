@@ -10,7 +10,7 @@
 	
 
 	const emailSchema = z.string().trim().email();
-	const nameSchema = z.string().min(0);
+	const nameSchema = z.string().min(1);
 
 	let dropdownOpen: boolean;
 	let inviteRole: Role;

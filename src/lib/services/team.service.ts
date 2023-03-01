@@ -1,6 +1,9 @@
+import { get as getStore } from "svelte/store";
+
+import { authService } from ".";
 import type { ApiClient, Invite, Member } from "./apiClient";
-import type { TeamItem } from "$lib/types";
-import { Filter } from "$lib/stores";
+import { type TeamItem, Role } from "$lib/types";
+import { Filter, currentUser } from "$lib/stores";
 import { formatDate } from "$lib/utils";
 
 export function createTeamService(apiClient: ApiClient) {
@@ -22,11 +25,12 @@ export function createTeamService(apiClient: ApiClient) {
 
 	function filterTeamItems(_teamItems: TeamItem[], filter: Filter) {
 		if (filter === Filter.ALL_MEMBERS) {
+			const canViewDeactivated = authService.canView(getStore(currentUser).role, Role.ADMIN);
 			// sort by [...active, ...invites, ...deactivated]
 			const sortedItems = [
 				..._teamItems.filter((item) => !item.isInvite && !item.deactivatedAt), // not deactivated members
 				..._teamItems.filter((item) => item.isInvite && !item.deactivatedAt), // not revoked invites
-				..._teamItems.filter((item) => item.deactivatedAt || false) // anything deactivated
+				..._teamItems.filter((item) => (item.deactivatedAt || false) && canViewDeactivated) // anything deactivated if they can see it
 			];
 
 			return sortedItems;
