@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { z } from 'zod';
-	import type { Role } from '$lib/types';
+	import { Role } from '$lib/types';
 	import { apiClient } from '$lib/services';
 	import { inviteModalOpen } from '$lib/stores';
 	
@@ -37,6 +37,11 @@
 
 		try {
 			const invite = await apiClient.sendInvite(emailInput, nameInput, inviteRole);
+
+			emailInput = "";
+			nameInput = "";
+			inviteRole = Role.MEMBER;
+
 			console.debug("invite", invite);
 		} catch (e) {
 			console.error(e);

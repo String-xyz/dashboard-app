@@ -65,6 +65,14 @@
 		
 	}
 
+	const isActiveRole = (role: Role) => {
+		if (isInvite) {
+			return role === inviteRole;
+		}
+
+		return role === (member?.role ?? Role.MEMBER);
+	}
+
 	const getFilteredRoles = () => rolesList.filter(r => r != Role.OWNER || ($currentUser.role == Role.OWNER && !isInvite));
 
 	const openDeactivateModal = () => {
@@ -85,13 +93,13 @@
 		tabindex="0"
 		class="font-bold tracking-wider text-sm "
 	>
-		{isInvite ? inviteRole: (member?.role ?? Role.MEMBER)}
+		{isInvite ? inviteRole : (member?.role ?? Role.MEMBER)}
 		<img src="/assets/button/dropdown_arrow.svg" alt="dropdown" width="12px" height="12px" class="ml-2 inline" />	
 	</button>
 	<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 	<ul tabindex="0" class="dropdown-content menu w-60">
 		{#each getFilteredRoles() as role}
-			{@const active = isInvite ? inviteRole == role : (member?.role ?? Role.MEMBER) == role}
+			{@const active = isActiveRole(role)}
 			<li class:active={active}>
 				<button on:click={() => setMemberRole(role)} class="font-bold text-xs tracking-wider uppercase">
 					<img src={ active ? radioActive[0] : radioInactive[0] } alt={ active ? radioActive[1] : radioInactive[1] }/>
@@ -99,13 +107,13 @@
 				</button>
 			</li>
 		{/each}
-		<li>
 		{#if member}
-			<button on:click={openDeactivateModal} class="text-warning text-sm">
-				{member?.isInvite ? "Revoke invite" : "Remove member"}
-			</button>
+			<li>
+				<button on:click={openDeactivateModal} class="text-warning text-sm">
+					{member?.isInvite ? "Revoke invite" : "Remove member"}
+				</button>
+			</li>
 		{/if}
-		</li>
 	</ul>
 </div>
 

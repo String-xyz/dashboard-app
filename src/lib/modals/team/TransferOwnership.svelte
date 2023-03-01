@@ -32,6 +32,9 @@
 				<UserCard user={$ownershipTransferee} className="my-8"/>
 			{/if}
 
+			<!-- Silence a11y warning -->
+			<input autocomplete="username" hidden class="hidden" />
+
 			<StyledInput
 				className="mb-12 w-full"
 				label="Enter Password"
