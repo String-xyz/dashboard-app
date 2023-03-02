@@ -81,6 +81,7 @@
 				type='email'
 				label="Email address"
 				placeholder="test@string.xyz"
+				borderError={!isEmailValid && emailInput !== ""}
 				bind:val={emailInput}
 				autofocus
 				required

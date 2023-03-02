@@ -54,13 +54,6 @@
 			}
 
 			member.role = toRole;
-
-			// const memberIdx = $teamItems.findIndex((t) => t.id === member?.id);
-			
-			// if (memberIdx > 0) {
-			// 	$teamItems[memberIdx] = member;
-			// }
-
 		} catch (error) {
 			activeRole = prevActiveRole;
 			// TODO: Show error notification

@@ -5,7 +5,6 @@
 	import StyledButton from '$lib/components/StyledButton.svelte';
 
 	import { deactModalOpen, deactUser, teamItems } from '$lib/stores';
-	import type { TeamItem } from '$lib/types';
 
 	const handleDeactivate = async () => {
 		// Deactivate user
@@ -84,8 +83,8 @@
 		padding-right: 36px;
 		padding-top: 36px;
 		border-radius: 8px;
-		width: 600px;
-		height: 480px;
+		width: 500px;
+		height: 500px;
 	}
 
 </style>

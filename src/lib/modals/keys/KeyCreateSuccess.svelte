@@ -11,7 +11,6 @@
 	const saveDescription = async () => {
 		if (!descInput || !$createdApiKey) return;
 
-		// Update API Key and apiKeyList store
 		await keyService.editApiKey($createdApiKey.id, descInput);	
 	}
 
