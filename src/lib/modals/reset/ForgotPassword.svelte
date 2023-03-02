@@ -43,7 +43,7 @@
 </script>
 
 <ModalBase size="size-md">
-	<div class="main flex flex-col items-center">
+	<form on:submit={reset} class="main flex flex-col items-center">
 		<img src="/assets/auth_key_icon.svg" alt="Key" class="mb-8" />
 		<h3 class="text-2xl font-bold mb-2">Forgot password?</h3>
 		<p class="mb-8">No worries, we’ll send you reset instructions</p>
@@ -58,7 +58,7 @@
 			required
 		/>
 
-		<StyledButton className="mb-8 w-full" action={reset} {disabled}>Reset password</StyledButton>
+		<StyledButton className="mb-8 w-full" type="submit" {disabled}>Reset password</StyledButton>
 
 		<button on:click={backToLogin}>
 			<span>
@@ -66,7 +66,7 @@
 				Back to log in
 			</span>
 		</button>
-	</div>
+	</form>
 </ModalBase>
 
 <style>
