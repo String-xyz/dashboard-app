@@ -28,11 +28,7 @@
 	}
 
 	const handleInvite = async () => {
-		if (!isValidInput()) {
-			// TODO: show error notification
-			console.error('invalid email');
-			return;
-		}
+		if (!isValidInput()) return;
 
 		try {
 			await apiClient.sendInvite(emailInput, nameInput, inviteRole);

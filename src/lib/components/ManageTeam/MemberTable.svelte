@@ -45,7 +45,9 @@
 					</p>
 				{:else}
 					<div class="flex justify-items-start items-center">
-						<Avatar user={member} />
+						{#key member}
+							<Avatar user={member} />
+						{/key}
 						<div class="ml-4">
 							{#if member.isInvite}
 								<p class="text-sm greyed font-semibold inline-block select-all">{member.name}</p>
