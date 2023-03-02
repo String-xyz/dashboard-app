@@ -1,10 +1,11 @@
 <script lang="ts">
-	import { activeSettingsTab, SettingsTab, tabToViewMap } from '$lib/stores';
+	import Toast from "$lib/components/Toast.svelte";
+
+	import { activeSettingsTab, SettingsTab, tabToViewMap, toast } from "$lib/stores";
 
 	const switchTab = (tab: SettingsTab) => {
 		$activeSettingsTab = tab;
-	}
-
+	};
 </script>
 
 <svelte:head>
@@ -14,23 +15,23 @@
 <div class="main">
 	<header class="mb-8">
 		<div class="tabs">
-			<button
-				on:click={() => switchTab(SettingsTab.MY_ACCOUNT)}
-				class="tab tab-bordered"
-				class:tab-active={$activeSettingsTab == SettingsTab.MY_ACCOUNT}
-			>My Account</button>
+			<button on:click={() => switchTab(SettingsTab.MY_ACCOUNT)} class="tab tab-bordered" class:tab-active={$activeSettingsTab == SettingsTab.MY_ACCOUNT}
+				>My Account</button
+			>
 			<button
 				on:click={() => switchTab(SettingsTab.CHANGE_PASSWORD)}
 				class="tab tab-bordered"
-				class:tab-active={$activeSettingsTab == SettingsTab.CHANGE_PASSWORD}
-			>Change Password</button>
+				class:tab-active={$activeSettingsTab == SettingsTab.CHANGE_PASSWORD}>Change Password</button
+			>
 		</div>
 	</header>
 
 	<svelte:component this={$tabToViewMap.get($activeSettingsTab)} />
+
+	<!-- <Toast type={$toast.type} size="sm" bind:show={$toast._show}>{$toast.message}</Toast> -->
 </div>
 
-<style lang='postcss'>
+<style lang="postcss">
 	.main {
 		padding: 70px;
 		overflow: none;
@@ -43,7 +44,7 @@
 		@apply tracking-wider;
 		padding-left: 36px;
 		padding-right: 36px;
-		border-color: #F2F2F2;
+		border-color: #f2f2f2;
 	}
 
 	.tabs:first-child {
@@ -54,5 +55,4 @@
 		@apply text-primary;
 		@apply border-primary;
 	}
-
 </style>
