@@ -8,8 +8,18 @@
 	let pwdInput: string;
 
 	const handleTransferOwnership = () => {
-		console.log("[Mock] Transferring ownership of platform to " + $ownershipTransferee?.name)
-		// Call transferOwnership
+		if ($ownershipTransferee) {
+			console.log("[Mock] Transferring ownership of platform to " + $ownershipTransferee?.name)
+			// Call transferOwnership
+		}
+	}
+
+	const handleKeyboard = (e: KeyboardEvent) => {
+		if ($transferOwnerModalOpen) {
+			if (e.key == "Escape") {
+				close();
+			}
+		}
 	}
 
 	const close = () => {
@@ -18,6 +28,8 @@
 	}
 
 </script>
+
+<svelte:window on:keydown={(e) => handleKeyboard(e)} />
 
 <input type="checkbox" id="transfer-modal" class="modal-toggle" bind:checked={$transferOwnerModalOpen} />
 
@@ -31,6 +43,9 @@
 			{#if $ownershipTransferee}
 				<UserCard user={$ownershipTransferee} className="my-8"/>
 			{/if}
+
+			<!-- Silence a11y warning -->
+			<input autocomplete="username" hidden class="hidden" />
 
 			<StyledInput
 				className="mb-12 w-full"

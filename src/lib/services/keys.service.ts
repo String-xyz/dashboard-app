@@ -32,7 +32,7 @@ export function createKeysService(apiClient: ApiClient) {
 			}
 		}
 
-		return [...activeKeys, ...deactivatedKeys];
+		return [...activeKeys.reverse(), ...deactivatedKeys];
 	}
 
 	async function getApiKey(keyId: string): Promise<ApiKey> {

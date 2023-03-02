@@ -5,7 +5,7 @@
 	import Avatar from '../Avatar.svelte';
 	import StyledButton from '../StyledButton.svelte';
 	import RoleDropdown from './RoleDropdown.svelte';
-	import { apiClient, authService, type Member } from '$lib/services';
+	import { apiClient, authService, teamService } from '$lib/services';
 	import { formatDate } from '$lib/utils';
 
 	const handleResend = async (id: string) => {
@@ -20,6 +20,7 @@
 	const reactivateMember = async (member: TeamItem) => {
 		try {
 			await apiClient.reactivateMember(member.id);
+			$teamItems = await teamService.rebuildTeamList();
 		} catch (e) {
 			console.error('reactivate member error', e);
 		}
@@ -44,11 +45,15 @@
 					</p>
 				{:else}
 					<div class="flex justify-items-start items-center">
-						<Avatar user={member} />
+						{#key member}
+							<Avatar user={member} />
+						{/key}
 						<div class="ml-4">
 							{#if member.isInvite}
-								<p class="mb-1 text-sm greyed font-semibold">{member.email}</p>
-								<p class="text-xs">Invitation sent!</p>
+								<p class="text-sm greyed font-semibold inline-block select-all">{member.name}</p>
+								<span class="text-xs flex items-center mt-1 greyed">
+									<span>Invitation sent to <span class="select-all">{member.email}</span></span>
+								</span>
 							{:else}
 								{#if member.deactivatedAt}
 									<p class="text-sm text-warning font-semibold inline-block select-all">{member.name}</p>
@@ -72,17 +77,17 @@
 						<div class="flex justify-items-start items-center">
 							<p class="text-warning text-sm">Deactivated</p>
 							{#if authService.canView($currentUser.role, Role.ADMIN)}
-								<StyledButton className="btn-warning rounded-lg ml-8" action={() => reactivateMember(member)}>Reactivate</StyledButton>
+								<StyledButton className="btn-warning rounded-3xl ml-8" action={() => reactivateMember(member)}>Reactivate</StyledButton>
 							{/if}
 						</div>
 					{:else}
 						<!-- If they are an admin or above, and it is not an admin trying to modify an admin -->
 						{#if authService.canModify($currentUser.role, member.role)}
 							<div>
-								<RoleDropdown {member} isInvite={member.isInvite} />
+								<RoleDropdown {member} isForInvite={member.isInvite || false} />
 
 								{#if member.isInvite}
-									<StyledButton className="rounded-3xl w-32 h-8 ml-4" action={() => handleResend(member.id)}>
+									<StyledButton className="rounded-3xl ml-4" action={() => handleResend(member.id)}>
 										Resend
 										<img src="/assets/button/resend.svg" alt="resend" class="ml-2" />
 									</StyledButton>
@@ -126,4 +131,10 @@
 		display: inline-block;
 	}
 
+	@media (max-width: 1050px) {
+		.row {
+			flex-direction: column;
+			row-gap: 20px;
+		}
+	}
 </style>

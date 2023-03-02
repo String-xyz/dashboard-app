@@ -1,18 +1,23 @@
 <script lang="ts">
-	import { apiClient } from '$lib/services';
+	import { apiClient, teamService } from '$lib/services';
 
 	import UserCard from '$lib/components/ManageTeam/UserCard.svelte';
 	import StyledButton from '$lib/components/StyledButton.svelte';
 
-	import { deactModalOpen, deactUser } from '$lib/stores';
+	import { deactModalOpen, deactUser, teamItems } from '$lib/stores';
 
 	const handleDeactivate = async () => {
 		// Deactivate user
 		try {
 			if (!$deactUser) return;
 
-			if ($deactUser.isInvite) await apiClient.revokeInvite($deactUser?.id);
-			else await apiClient.deactivateMember($deactUser?.id);
+			if ($deactUser.isInvite) {
+				await apiClient.revokeInvite($deactUser?.id);
+			} else {
+				await apiClient.deactivateMember($deactUser.id);
+			}
+
+			$teamItems = await teamService.rebuildTeamList();
 
 			$deactModalOpen = false;
 			// TODO: Show success notification
@@ -22,6 +27,14 @@
 		}
 		
 	}
+	
+	const handleKeyboard = (e: KeyboardEvent) => {
+		if ($deactModalOpen) {
+			if (e.key == "Escape") {
+				close();
+			}
+		}
+	}
 
 	const close = () => {
 		$deactUser = null;
@@ -29,6 +42,8 @@
 	}
 
 </script>
+
+<svelte:window on:keydown={(e) => handleKeyboard(e)} />
 
 <input type="checkbox" id="deact-modal" class="modal-toggle" bind:checked={$deactModalOpen} />
 
@@ -68,8 +83,8 @@
 		padding-right: 36px;
 		padding-top: 36px;
 		border-radius: 8px;
-		width: 600px;
-		height: 480px;
+		width: 500px;
+		height: 500px;
 	}
 
 </style>

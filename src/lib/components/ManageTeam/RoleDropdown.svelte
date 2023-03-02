@@ -1,14 +1,17 @@
 <script lang="ts">
 	import { Role, type TeamItem } from "$lib/types";
 	import { apiClient } from "$lib/services";
-	import { rolesList, currentUser, deactModalOpen, deactUser, transferOwnerModalOpen, ownershipTransferee } from "$lib/stores";
+	import { rolesList, currentUser, deactModalOpen, deactUser, transferOwnerModalOpen, ownershipTransferee, teamItems } from "$lib/stores";
 	import { onMount } from "svelte";
 
 	export let member: TeamItem | null = null;
-	export let isInvite = true;
-	export let inviteRole: Role = Role.MEMBER;
+	export let activeRole: Role = Role.MEMBER;
+	export let isForInvite = false;
 	export let dropdownOpen = false;
 
+	onMount(() => {
+		activeRole = member?.role ?? activeRole;
+	});
 
 	let dropdownElem: HTMLButtonElement;
 
@@ -17,13 +20,6 @@
 	// [src, alt text]
 	const radioActive = [assetPath + "radio_checked.svg", "radio-checked"]
 	const radioInactive = [assetPath + "radio_inactive.svg", "radio-inactive"]
-
-	onMount(() => {
-		if (member) {
-			inviteRole = member.role;
-			isInvite = member.isInvite || false;
-		}
-	});
 
 	const toggleDropdown = () => {
 		if (dropdownOpen) {
@@ -35,9 +31,8 @@
 	}
 
 	const setMemberRole = async (toRole: Role) => {
-		if (isInvite) {
-			inviteRole = toRole;
-		}
+		const prevActiveRole = activeRole;
+		activeRole = toRole;
 
 		const btn = document.activeElement as HTMLButtonElement
 		btn.blur();
@@ -46,26 +41,40 @@
 		
 		try {
 			if (toRole === Role.OWNER) {
+				activeRole = prevActiveRole;
 				$ownershipTransferee = member;
 				$transferOwnerModalOpen = true;
 				return;
 			}
 
-			if (isInvite) {
+			if (isForInvite) {
 				await apiClient.changeInviteRole(member.id, toRole);
 			} else {
 				await apiClient.changeMemberRole(member.id, toRole);
 			}
 
-			member.role = toRole;
+			const memberIdx = $teamItems.findIndex((t) => t.id === member?.id);
+
+			if (memberIdx > 0) {
+				$teamItems[memberIdx].role = activeRole;
+			}
 		} catch (error) {
+			activeRole = prevActiveRole;
 			// TODO: Show error notification
 			console.log(error);
 		}
 		
 	}
 
-	const getFilteredRoles = () => rolesList.filter(r => r != Role.OWNER || ($currentUser.role == Role.OWNER && !isInvite));
+	const getFilteredRoles = () => {
+		return rolesList.filter(r => {
+			if (r === Role.OWNER) {
+				return $currentUser.role === Role.OWNER && !isForInvite;
+			} else {
+				return true;
+			}
+		});
+	}
 
 	const openDeactivateModal = () => {
 		if (!member) return;
@@ -77,35 +86,37 @@
 
 </script>
 
-<div class="dropdown dropdown-bottom dropdown-end overflow-visible">
+<div class="dropdown dropdown-bottom dropdown-end">
 	<button 
 		on:click={toggleDropdown}
 		on:blur={toggleDropdown}
 		bind:this={dropdownElem}
 		tabindex="0"
-		class="font-bold tracking-wider text-sm "
+		class="font-bold tracking-wider text-sm"
 	>
-		{isInvite ? inviteRole: (member?.role ?? Role.MEMBER)}
+		{activeRole}
 		<img src="/assets/button/dropdown_arrow.svg" alt="dropdown" width="12px" height="12px" class="ml-2 inline" />	
 	</button>
 	<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 	<ul tabindex="0" class="dropdown-content menu w-60">
-		{#each getFilteredRoles() as role}
-			{@const active = isInvite ? inviteRole == role : (member?.role ?? Role.MEMBER) == role}
-			<li class:active={active}>
-				<button on:click={() => setMemberRole(role)} class="font-bold text-xs tracking-wider uppercase">
-					<img src={ active ? radioActive[0] : radioInactive[0] } alt={ active ? radioActive[1] : radioInactive[1] }/>
-					<p class="my-1">{role}</p>
-				</button>
-			</li>
-		{/each}
-		<li>
-		{#if member}
-			<button on:click={openDeactivateModal} class="text-warning text-sm">
-				{member?.isInvite ? "Revoke invite" : "Remove member"}
-			</button>
-		{/if}
-		</li>
+		{#key activeRole}
+			{#each getFilteredRoles() as role}
+				{@const active = role === activeRole}
+				<li class:active={active}>
+					<button on:click={() => setMemberRole(role)} class="font-bold text-xs tracking-wider uppercase">
+						<img src={ active ? radioActive[0] : radioInactive[0] } alt={ active ? radioActive[1] : radioInactive[1] }/>
+						<p class="my-1">{role}</p>
+					</button>
+				</li>
+			{/each}
+			{#if member}
+				<li>
+					<button on:click={openDeactivateModal} class="text-warning text-sm">
+						{member?.isInvite ? "Revoke invite" : "Remove member"}
+					</button>
+				</li>
+			{/if}
+		{/key}
 	</ul>
 </div>
 

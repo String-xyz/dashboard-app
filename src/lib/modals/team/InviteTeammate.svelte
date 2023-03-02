@@ -1,16 +1,15 @@
 <script lang="ts">
 	import { z } from 'zod';
-	import type { Role } from '$lib/types';
-	import { apiClient } from '$lib/services';
-	import { inviteModalOpen } from '$lib/stores';
+	import { Role } from '$lib/types';
+	import { apiClient, teamService } from '$lib/services';
+	import { inviteModalOpen, teamItems } from '$lib/stores';
 	
 	import StyledInput from '$lib/components/StyledInput.svelte';
 	import StyledButton from '$lib/components/StyledButton.svelte';
-	import RoleDropdown from '$lib/components/ManageTeam/RoleDropdown.svelte';
-	
+	import RoleDropdown from '$lib/components/ManageTeam/RoleDropdown.svelte';	
 
 	const emailSchema = z.string().trim().email();
-	const nameSchema = z.string().min(0);
+	const nameSchema = z.string().min(1);
 
 	let dropdownOpen: boolean;
 	let inviteRole: Role;
@@ -29,20 +28,32 @@
 	}
 
 	const handleInvite = async () => {
-		if (!isValidInput()) {
-			// TODO: show error notification
-			console.error('invalid email');
-			return;
-		}
+		if (!isValidInput()) return;
 
 		try {
-			const invite = await apiClient.sendInvite(emailInput, nameInput, inviteRole);
-			console.debug("invite", invite);
+			await apiClient.sendInvite(emailInput, nameInput, inviteRole);
+
+			$teamItems = await teamService.rebuildTeamList();
+
+			emailInput = "";
+			nameInput = "";
+			inviteRole = Role.MEMBER;
 		} catch (e) {
 			console.error(e);
 		}
 
 		$inviteModalOpen = false;
+	}
+
+	const handleKeyboard = (e: KeyboardEvent) => {
+		if ($inviteModalOpen) {
+			if (e.key == "Escape") {
+				close();
+			}
+			if (e.key == "Enter") {
+				handleInvite();
+			}
+		}
 	}
 
 	const close = () => {
@@ -51,10 +62,12 @@
 
 </script>
 
+<svelte:window on:keydown={(e) => handleKeyboard(e)} />
+
 <input type="checkbox" id="invite-modal" class="modal-toggle" bind:checked={$inviteModalOpen} />
 
-<label for="invite-modal" class="modal cursor-pointer">
-	<label class="modal-box relative" for="">
+<div class="modal">
+	<div class="modal-box relative">
 		<div class="main flex flex-col items-center w-full">
 			<button class="ml-auto mb-1" on:click={close}><img src="/assets/close.svg" alt="Close" /></button>
 			<h3 class="text-3xl font-bold mb-12">Invite a teammate</h3>
@@ -64,6 +77,7 @@
 				type='email'
 				label="Email address"
 				placeholder="test@string.xyz"
+				borderError={!isEmailValid && emailInput !== ""}
 				bind:val={emailInput}
 				autofocus
 				required
@@ -82,7 +96,7 @@
 					wrapper={true}
 					focused={dropdownOpen}
 				>
-					<RoleDropdown isInvite={true} bind:dropdownOpen bind:inviteRole />
+					<RoleDropdown isForInvite={true} bind:dropdownOpen bind:activeRole={inviteRole} />
 				</StyledInput>
 			</div>
 			<StyledButton className="w-full" action={handleInvite}>
@@ -90,8 +104,8 @@
 				Send Invite
 			</StyledButton>
 		</div>
-	</label>
-</label>
+	</div>
+</div>
 
 <style>
 	.modal {
@@ -104,7 +118,7 @@
 		padding-right: 36px;
 		padding-top: 36px;
 		border-radius: 8px;
-		width: 600px;
+		width: 500px;
 		height: 450px;
 	}
 

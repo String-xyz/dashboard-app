@@ -7,6 +7,8 @@
 
 	let nameInput = $currentUser.name;
 
+	$: isEditingName = false;
+
 	const showEdit = () => {
 		isEditingName = true;
 	}
@@ -27,9 +29,19 @@
 		isEditingName = false;
 	}
 
-	$: isEditingName = false;
+	const handleKeyboard = (e: KeyboardEvent) => {
+		if (isEditingName) {
+			if (e.key == "Enter") {
+				saveEdit();
+			} else if (e.key == "Escape") {
+				cancelEdit();
+			}
+		}
+	}
 
 </script>
+
+<svelte:window on:keydown={(e) => handleKeyboard(e)} />
 
 <div class="flex flex-col rounded-xl border-2 border-[#F2F2F2] p-8">
 	<h6 class="font-bold mr-auto mb-6 text-lg">Account Details</h6>

@@ -11,7 +11,6 @@
 	const saveDescription = async () => {
 		if (!descInput || !$createdApiKey) return;
 
-		// Update API Key and apiKeyList store
 		await keyService.editApiKey($createdApiKey.id, descInput);	
 	}
 
@@ -24,7 +23,17 @@
 		$createdApiKey = null;
 	}
 
+	const handleKeyboard = (e: KeyboardEvent) => {
+		if ($keySuccessModalOpen) {
+			if (e.key == "Escape" || e.key == "Enter") {
+				close();
+			}
+		}
+	}
+
 </script>
+
+<svelte:window on:keydown={(e) => handleKeyboard(e)} />
 
 <input type="checkbox" id="key-success-modal" class="modal-toggle" bind:checked={$keySuccessModalOpen} />
 

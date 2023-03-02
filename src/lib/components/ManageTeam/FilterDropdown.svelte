@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Role } from "$lib/types";
 	import { authService } from "$lib/services";
-	import { activeFilter, filterOptions, currentUser } from "$lib/stores";
+	import { activeFilter, filterOptions, currentUser, type FilterOption } from "$lib/stores";
 
 	let dropdownElem: HTMLButtonElement;
 
@@ -21,6 +21,16 @@
 			dropdownOpen = true;
 		}
 	}
+
+	const setActiveFilter = (filter: FilterOption) => {
+		$activeFilter = filter;
+
+		const btn = document.activeElement as HTMLButtonElement
+		btn.blur();
+	}
+
+	const getFilters = () => filterOptions.filter(f => authService.canView($currentUser.role, f.minPerms ?? Role.MEMBER));
+
 </script>
 
 <div class="dropdown dropdown-bottom dropdown-end">
@@ -36,10 +46,10 @@
 	</button>
 	<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 	<ul tabindex="0" class="dropdown-content menu w-60">
-		{#each filterOptions.filter(f => authService.canView($currentUser.role, f.minPerms ?? Role.MEMBER)) as filter}
-			{@const active = $activeFilter == filter}
+		{#each getFilters() as filter}
+			{@const active = $activeFilter === filter}
 			<li class:active={active}>
-				<button on:click={() => {$activeFilter = filter}} class="font-bold text-xs tracking-wider uppercase">
+				<button on:click={() => setActiveFilter(filter)} class="font-bold text-xs tracking-wider uppercase">
 					<img src={ active ? radioActive[0] : radioInactive[0] } alt={ active ? radioActive[1] : radioInactive[1] }/>
 					{filter.name}
 				</button>

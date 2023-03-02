@@ -1,10 +1,13 @@
+import { get as getStore } from "svelte/store";
+
+import { authService } from ".";
 import type { ApiClient, Invite, Member } from "./apiClient";
-import type { TeamItem } from "$lib/types";
-import { Filter } from "$lib/stores";
+import { type TeamItem, Role } from "$lib/types";
+import { Filter, currentUser, activeFilter } from "$lib/stores";
 import { formatDate } from "$lib/utils";
 
 export function createTeamService(apiClient: ApiClient) {
-	async function buildTeamItems(currentUser: Member): Promise<TeamItem[]> {
+	async function buildTeamItems(): Promise<TeamItem[]> {
 		try {
 			// get members and invites
 			const membersP = apiClient.getMembers();
@@ -12,7 +15,7 @@ export function createTeamService(apiClient: ApiClient) {
 			const [_members, _invites] = await Promise.all([membersP, invitesP]);
 
 			// merge members and invites
-			const mergedItems = mergeMemberAndInvites(_members, _invites, currentUser);
+			const mergedItems = mergeMemberAndInvites(_members, _invites);
 			return mergedItems;
 		} catch (e) {
 			console.error(e);
@@ -22,11 +25,12 @@ export function createTeamService(apiClient: ApiClient) {
 
 	function filterTeamItems(_teamItems: TeamItem[], filter: Filter) {
 		if (filter === Filter.ALL_MEMBERS) {
+			const canViewDeactivated = authService.canView(getStore(currentUser).role, Role.ADMIN);
 			// sort by [...active, ...invites, ...deactivated]
 			const sortedItems = [
 				..._teamItems.filter((item) => !item.isInvite && !item.deactivatedAt), // not deactivated members
 				..._teamItems.filter((item) => item.isInvite && !item.deactivatedAt), // not revoked invites
-				..._teamItems.filter((item) => item.deactivatedAt || false) // anything deactivated
+				..._teamItems.filter((item) => (item.deactivatedAt || false) && canViewDeactivated) // anything deactivated if they can see it
 			];
 
 			return sortedItems;
@@ -39,8 +43,10 @@ export function createTeamService(apiClient: ApiClient) {
 		return _teamItems;
 	}
 
-	function mergeMemberAndInvites(_members: Member[], _invites: Invite[], currentUser: Member) {
-		const _teamItems = _members.map((member): TeamItem => {
+	function mergeMemberAndInvites(_members: Member[], _invites: Invite[]) {
+		const _teamItems: TeamItem[] = [];
+
+		_members.forEach((member) => {
 			const teamItem: TeamItem = {
 				id: member.id,
 				name: member.name,
@@ -49,16 +55,23 @@ export function createTeamService(apiClient: ApiClient) {
 				joinDate: formatDate(member.createdAt),
 				status: "accepted", // if member, status is always accepted
 				deactivatedAt: member.deactivatedAt
-			};
+			}
 
-			if (teamItem.email === currentUser.email) teamItem.self = true; // add self flag to current user so we can style it differently
+			if (teamItem.email === getStore(currentUser).email) {
+				teamItem.self = true;
+				// If it is the current user, put them to the top of the list only
+				_teamItems.unshift(teamItem);
+				return;
+			}
 
-			return teamItem;
+			_teamItems.push(teamItem);
 		});
 
 		_invites.forEach((invite) => {
 			// when invite status is accepted, it is already in the members list
 			if (invite.status === "accepted") return;
+			// Don't show revoked invites
+			if (invite.deactivatedAt) return;
 
 			_teamItems.push({
 				id: invite.id,
@@ -67,12 +80,16 @@ export function createTeamService(apiClient: ApiClient) {
 				email: invite.email,
 				status: invite.status,
 				isInvite: true, // pending invites do not have a joined date
-				deactivatedAt: invite.deactivatedAt
 			});
 		});
 
 		return _teamItems;
 	}
 
-	return { buildTeamItems, filterTeamItems, mergeMemberAndInvites };
+	async function rebuildTeamList() {
+		const _teamItems = await buildTeamItems();
+		return filterTeamItems(_teamItems, getStore(activeFilter).filter);
+	}
+
+	return { buildTeamItems, filterTeamItems, mergeMemberAndInvites, rebuildTeamList };
 }
