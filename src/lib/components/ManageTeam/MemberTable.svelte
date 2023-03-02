@@ -49,10 +49,8 @@
 						<div class="ml-4">
 							{#if member.isInvite}
 								<p class="text-sm greyed font-semibold inline-block select-all">{member.name}</p>
-								<span class="text-xs flex items-center mt-1 ">
-									<span class="select-all greyed">{member.email}</span>
-									<span class="dot mx-2"></span>
-									<span class="text-xs">Invitation sent!</span>
+								<span class="text-xs flex items-center mt-1 greyed">
+									<span>Invitation sent to <span class="select-all">{member.email}</span></span>
 								</span>
 							{:else}
 								{#if member.deactivatedAt}
