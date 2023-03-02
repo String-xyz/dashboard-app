@@ -47,7 +47,7 @@
 						<Avatar user={member} />
 						<div class="ml-4">
 							{#if member.isInvite}
-								<p class="mb-1 text-sm greyed font-semibold">{member.email}</p>
+								<p class="mb-1 text-sm greyed font-semibold inline-block select-all">{member.email}</p>
 								<p class="text-xs">Invitation sent!</p>
 							{:else}
 								{#if member.deactivatedAt}
@@ -79,7 +79,7 @@
 						<!-- If they are an admin or above, and it is not an admin trying to modify an admin -->
 						{#if authService.canModify($currentUser.role, member.role)}
 							<div>
-								<RoleDropdown {member} isForInvite={member.isInvite} />
+								<RoleDropdown {member} isForInvite={member.isInvite || false} />
 
 								{#if member.isInvite}
 									<StyledButton className="rounded-3xl ml-4" action={() => handleResend(member.id)}>

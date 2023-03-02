@@ -70,8 +70,8 @@
 
 <input type="checkbox" id="invite-modal" class="modal-toggle" bind:checked={$inviteModalOpen} />
 
-<label for="invite-modal" class="modal cursor-pointer">
-	<label class="modal-box relative" for="">
+<div class="modal">
+	<div class="modal-box relative">
 		<div class="main flex flex-col items-center w-full">
 			<button class="ml-auto mb-1" on:click={close}><img src="/assets/close.svg" alt="Close" /></button>
 			<h3 class="text-3xl font-bold mb-12">Invite a teammate</h3>
@@ -107,8 +107,8 @@
 				Send Invite
 			</StyledButton>
 		</div>
-	</label>
-</label>
+	</div>
+</div>
 
 <style>
 	.modal {
@@ -121,7 +121,7 @@
 		padding-right: 36px;
 		padding-top: 36px;
 		border-radius: 8px;
-		width: 600px;
+		width: 500px;
 		height: 450px;
 	}
 

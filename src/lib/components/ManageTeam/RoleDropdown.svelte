@@ -5,8 +5,8 @@
 	import { onMount } from "svelte";
 
 	export let member: TeamItem | null = null;
-	export let isForInvite = true;
 	export let activeRole: Role = Role.MEMBER;
+	export let isForInvite = false;
 	export let dropdownOpen = false;
 
 	onMount(() => {
@@ -69,15 +69,15 @@
 		
 	}
 
-	// const isActiveRole = (role: Role) => {
-	// 	if (isForInvite) {
-	// 		return role === inviteRole;
-	// 	}
-
-	// 	return role === (member?.role ?? Role.MEMBER);
-	// }
-
-	const getFilteredRoles = () => rolesList.filter(r => r !== Role.OWNER || ($currentUser.role === Role.OWNER && !isForInvite));
+	const getFilteredRoles = () => {
+		return rolesList.filter(r => {
+			if (r === Role.OWNER) {
+				return $currentUser.role === Role.OWNER && !isForInvite;
+			} else {
+				return true;
+			}
+		});
+	}
 
 	const openDeactivateModal = () => {
 		if (!member) return;
