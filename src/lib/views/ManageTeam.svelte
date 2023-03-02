@@ -33,7 +33,7 @@
 
 <div class="main h-full">
 	<header>
-		<div class="flex justify-between items-center">
+		<div class="header flex justify-between items-center">
 			<h3 class="text-2xl font-bold">Manage Team</h3>
 			{#if canEdit}
 				<StyledButton className="btn-outline w-40" action={() => $inviteModalOpen = true}>
@@ -63,6 +63,13 @@
 	.main {
 		padding: 70px;
 		overflow: none;
+	}
+
+	@media (max-width: 800px) {
+		.header {
+			flex-direction: column;
+			row-gap: 20px;
+		}
 	}
 
 </style>

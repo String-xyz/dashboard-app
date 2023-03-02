@@ -122,4 +122,10 @@
 		display: inline-block;
 	}
 
+	@media (max-width: 1050px) {
+		.row {
+			flex-direction: column;
+			row-gap: 20px;
+		}
+	}
 </style>
