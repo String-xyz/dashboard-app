@@ -32,6 +32,7 @@
 
 	const setMemberRole = async (toRole: Role) => {
 		const prevActiveRole = activeRole;
+		activeRole = toRole;
 
 		const btn = document.activeElement as HTMLButtonElement
 		btn.blur();
@@ -40,6 +41,7 @@
 		
 		try {
 			if (toRole === Role.OWNER) {
+				activeRole = prevActiveRole;
 				$ownershipTransferee = member;
 				$transferOwnerModalOpen = true;
 				return;
@@ -50,8 +52,6 @@
 			} else {
 				await apiClient.changeMemberRole(member.id, toRole);
 			}
-
-			activeRole = toRole;
 
 			member.role = toRole;
 
