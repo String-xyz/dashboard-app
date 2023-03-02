@@ -33,8 +33,6 @@
 	const setMemberRole = async (toRole: Role) => {
 		const prevActiveRole = activeRole;
 
-		activeRole = toRole;
-
 		const btn = document.activeElement as HTMLButtonElement
 		btn.blur();
 		
@@ -52,7 +50,9 @@
 			} else {
 				await apiClient.changeMemberRole(member.id, toRole);
 			}
-			
+
+			activeRole = toRole;
+
 			member.role = toRole;
 
 			// const memberIdx = $teamItems.findIndex((t) => t.id === member?.id);

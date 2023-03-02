@@ -8,8 +8,10 @@
 	let pwdInput: string;
 
 	const handleTransferOwnership = () => {
-		console.log("[Mock] Transferring ownership of platform to " + $ownershipTransferee?.name)
-		// Call transferOwnership
+		if ($ownershipTransferee) {
+			console.log("[Mock] Transferring ownership of platform to " + $ownershipTransferee?.name)
+			// Call transferOwnership
+		}
 	}
 
 	const handleKeyboard = (e: KeyboardEvent) => {

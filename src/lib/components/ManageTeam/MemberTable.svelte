@@ -5,7 +5,7 @@
 	import Avatar from '../Avatar.svelte';
 	import StyledButton from '../StyledButton.svelte';
 	import RoleDropdown from './RoleDropdown.svelte';
-	import { apiClient, authService } from '$lib/services';
+	import { apiClient, authService, teamService } from '$lib/services';
 	import { formatDate } from '$lib/utils';
 
 	const handleResend = async (id: string) => {
@@ -20,6 +20,7 @@
 	const reactivateMember = async (member: TeamItem) => {
 		try {
 			await apiClient.reactivateMember(member.id);
+			$teamItems = await teamService.rebuildTeamList();
 		} catch (e) {
 			console.error('reactivate member error', e);
 		}
@@ -47,8 +48,12 @@
 						<Avatar user={member} />
 						<div class="ml-4">
 							{#if member.isInvite}
-								<p class="mb-1 text-sm greyed font-semibold inline-block select-all">{member.email}</p>
-								<p class="text-xs">Invitation sent!</p>
+								<p class="text-sm greyed font-semibold inline-block select-all">{member.name}</p>
+								<span class="text-xs flex items-center mt-1 ">
+									<span class="select-all greyed">{member.email}</span>
+									<span class="dot mx-2"></span>
+									<span class="text-xs">Invitation sent!</span>
+								</span>
 							{:else}
 								{#if member.deactivatedAt}
 									<p class="text-sm text-warning font-semibold inline-block select-all">{member.name}</p>
