@@ -5,7 +5,7 @@
 	export let size: "lg" | "sm" = "lg";
 	export let action: (() => void) | null = null;
 	export let actionText = "Action";
-	export let durationMs = 50000; // This is for testing, normally should be ~2000
+	export let durationMs = 5000; // This is for testing, normally should be ~2000
 	export let visible = false;
 
 	let timeout: NodeJS.Timeout;
@@ -16,7 +16,7 @@
 		timeout = setTimeout(() => {
 			visible = false;
 		}, durationMs);
-	}
+	};
 
 	const assetPath = "/assets/toast/";
 
@@ -30,20 +30,20 @@
 	const close = () => {
 		clearTimeout(timeout);
 		visible = false;
-	}
-
+	};
 </script>
 
 {#if visible}
-	<div class="toast toast-end justify-between items-center flex-row p-4 mr-4"
+	<div
+		class="toast toast-end justify-between items-center flex-row p-4 mr-4"
 		class:toast-error={type === "error"}
 		class:toast-success={type === "success"}
 		class:toast-lg={size === "lg"}
 		class:toast-sm={size === "sm"}
 	>
 		<div class="flex items-center">
-			<img src={icon} alt={iconAlt} class="mr-2 inline"/>
-			<slot class="text-black text-sm break-words" />	
+			<img src={icon} alt={iconAlt} class="mr-2 inline" />
+			<slot class="text-black text-sm break-words" />
 		</div>
 		<div class="flex items-center">
 			{#if action}
@@ -56,27 +56,26 @@
 	</div>
 {/if}
 
-
 <style>
 	.toast-lg {
 		width: 33%;
 		max-width: 33%;
 	}
-	
+
 	.toast-sm {
 		width: 15%;
 		max-width: 15%;
 	}
 
 	.toast-error {
-		background-color: #FFF6F8;
-		border: 1px solid #FFA7A0;
-		border-left: 4px solid #F44336;
+		background-color: #fff6f8;
+		border: 1px solid #ffa7a0;
+		border-left: 4px solid #f44336;
 	}
 
 	.toast-success {
-		background-color: #EEFFF3;
-		border: 1px solid #B1E4BF;
-		border-left: 4px solid #23A047;
+		background-color: #eefff3;
+		border: 1px solid #b1e4bf;
+		border-left: 4px solid #23a047;
 	}
 </style>
