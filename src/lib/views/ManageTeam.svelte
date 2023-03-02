@@ -14,10 +14,9 @@
 	
 	onMount(async () => {
 		// subscribe to filter changes so we can update the member table
-		activeFilter.subscribe((filter) => $teamItems = teamService.filterTeamItems(_teamItems, filter.filter));
+		activeFilter.subscribe(async (filter) => $teamItems = await teamService.rebuildTeamList());
 
 		try {
-			_teamItems = await teamService.buildTeamItems($currentUser);
 			$activeFilter.filter = Filter.ALL_MEMBERS;
 		} catch (error) {
 			console.log(error);

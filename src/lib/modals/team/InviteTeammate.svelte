@@ -1,13 +1,12 @@
 <script lang="ts">
 	import { z } from 'zod';
 	import { Role } from '$lib/types';
-	import { apiClient } from '$lib/services';
-	import { inviteModalOpen } from '$lib/stores';
+	import { apiClient, teamService } from '$lib/services';
+	import { inviteModalOpen, teamItems } from '$lib/stores';
 	
 	import StyledInput from '$lib/components/StyledInput.svelte';
 	import StyledButton from '$lib/components/StyledButton.svelte';
-	import RoleDropdown from '$lib/components/ManageTeam/RoleDropdown.svelte';
-	
+	import RoleDropdown from '$lib/components/ManageTeam/RoleDropdown.svelte';	
 
 	const emailSchema = z.string().trim().email();
 	const nameSchema = z.string().min(1);
@@ -36,13 +35,13 @@
 		}
 
 		try {
-			const invite = await apiClient.sendInvite(emailInput, nameInput, inviteRole);
+			await apiClient.sendInvite(emailInput, nameInput, inviteRole);
+
+			$teamItems = await teamService.rebuildTeamList();
 
 			emailInput = "";
 			nameInput = "";
 			inviteRole = Role.MEMBER;
-
-			console.debug("invite", invite);
 		} catch (e) {
 			console.error(e);
 		}
@@ -50,11 +49,24 @@
 		$inviteModalOpen = false;
 	}
 
+	const handleKeyboard = (e: KeyboardEvent) => {
+		if ($inviteModalOpen) {
+			if (e.key == "Escape") {
+				close();
+			}
+			if (e.key == "Enter") {
+				handleInvite();
+			}
+		}
+	}
+
 	const close = () => {
 		$inviteModalOpen = false;
 	}
 
 </script>
+
+<svelte:window on:keydown={(e) => handleKeyboard(e)} />
 
 <input type="checkbox" id="invite-modal" class="modal-toggle" bind:checked={$inviteModalOpen} />
 
@@ -87,7 +99,7 @@
 					wrapper={true}
 					focused={dropdownOpen}
 				>
-					<RoleDropdown isInvite={true} bind:dropdownOpen bind:inviteRole />
+					<RoleDropdown isForInvite={true} bind:dropdownOpen bind:inviteRole />
 				</StyledInput>
 			</div>
 			<StyledButton className="w-full" action={handleInvite}>

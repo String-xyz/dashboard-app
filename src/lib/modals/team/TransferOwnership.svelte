@@ -12,12 +12,22 @@
 		// Call transferOwnership
 	}
 
+	const handleKeyboard = (e: KeyboardEvent) => {
+		if ($transferOwnerModalOpen) {
+			if (e.key == "Escape") {
+				close();
+			}
+		}
+	}
+
 	const close = () => {
 		$ownershipTransferee = null;
 		$transferOwnerModalOpen = false;
 	}
 
 </script>
+
+<svelte:window on:keydown={(e) => handleKeyboard(e)} />
 
 <input type="checkbox" id="transfer-modal" class="modal-toggle" bind:checked={$transferOwnerModalOpen} />
 

@@ -68,17 +68,17 @@
 						<div class="flex justify-items-start items-center">
 							<p class="text-warning text-sm">Deactivated</p>
 							{#if authService.canView($currentUser.role, Role.ADMIN)}
-								<StyledButton className="btn-warning rounded-lg ml-8" action={reactivateMember}>Reactivate</StyledButton>
+								<StyledButton className="btn-warning rounded-3xl ml-8" action={reactivateMember}>Reactivate</StyledButton>
 							{/if}
 						</div>
 					{:else}
 						<!-- If they are an admin or above, and it is not an admin trying to modify an admin -->
 						{#if authService.canModify($currentUser.role, member.role)}
 							<div>
-								<RoleDropdown {member} isInvite={member.isInvite} />
+								<RoleDropdown {member} isForInvite={member.isInvite} />
 
 								{#if member.isInvite}
-									<StyledButton className="rounded-3xl w-32 h-8 ml-4" action={() => handleResend(member.id)}>
+									<StyledButton className="rounded-3xl ml-4" action={() => handleResend(member.id)}>
 										Resend
 										<img src="/assets/button/resend.svg" alt="resend" class="ml-2" />
 									</StyledButton>

@@ -3,11 +3,11 @@ import { get as getStore } from "svelte/store";
 import { authService } from ".";
 import type { ApiClient, Invite, Member } from "./apiClient";
 import { type TeamItem, Role } from "$lib/types";
-import { Filter, currentUser } from "$lib/stores";
+import { Filter, currentUser, activeFilter } from "$lib/stores";
 import { formatDate } from "$lib/utils";
 
 export function createTeamService(apiClient: ApiClient) {
-	async function buildTeamItems(currentUser: Member): Promise<TeamItem[]> {
+	async function buildTeamItems(): Promise<TeamItem[]> {
 		try {
 			// get members and invites
 			const membersP = apiClient.getMembers();
@@ -15,7 +15,7 @@ export function createTeamService(apiClient: ApiClient) {
 			const [_members, _invites] = await Promise.all([membersP, invitesP]);
 
 			// merge members and invites
-			const mergedItems = mergeMemberAndInvites(_members, _invites, currentUser);
+			const mergedItems = mergeMemberAndInvites(_members, _invites);
 			return mergedItems;
 		} catch (e) {
 			console.error(e);
@@ -43,7 +43,7 @@ export function createTeamService(apiClient: ApiClient) {
 		return _teamItems;
 	}
 
-	function mergeMemberAndInvites(_members: Member[], _invites: Invite[], currentUser: Member) {
+	function mergeMemberAndInvites(_members: Member[], _invites: Invite[]) {
 		const _teamItems: TeamItem[] = [];
 
 		_members.forEach((member) => {
@@ -57,7 +57,7 @@ export function createTeamService(apiClient: ApiClient) {
 				deactivatedAt: member.deactivatedAt
 			}
 
-			if (teamItem.email === currentUser.email) {
+			if (teamItem.email === getStore(currentUser).email) {
 				teamItem.self = true;
 				// If it is the current user, put them to the top of the list only
 				_teamItems.unshift(teamItem);
@@ -86,5 +86,10 @@ export function createTeamService(apiClient: ApiClient) {
 		return _teamItems;
 	}
 
-	return { buildTeamItems, filterTeamItems, mergeMemberAndInvites };
+	async function rebuildTeamList() {
+		const _teamItems = await buildTeamItems();
+		return filterTeamItems(_teamItems, getStore(activeFilter).filter);
+	}
+
+	return { buildTeamItems, filterTeamItems, mergeMemberAndInvites, rebuildTeamList };
 }
