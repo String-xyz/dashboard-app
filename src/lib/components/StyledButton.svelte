@@ -1,5 +1,5 @@
 <script lang="ts">
-	export let action = () => {};
+	export let action: (() => void) = () => {};
 	export let className = '';
 	export let elem: HTMLButtonElement | null = null;
 </script>
@@ -20,6 +20,11 @@
 
 	.btn-outline {
 		color: #006ab7;
+	}
+
+	.btn-black {
+		border-color: #181818;
+		color: #181818;
 	}
 
 	.btn[disabled] {

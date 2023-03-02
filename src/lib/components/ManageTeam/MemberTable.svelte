@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Role } from '$lib/types'
+	import { Role, type TeamItem } from '$lib/types'
 	import { teamItems, currentUser } from '$lib/stores'
 
 	import Avatar from '../Avatar.svelte';
@@ -17,8 +17,12 @@
 		}
 	}
 
-	const reactivateMember = () => {
-
+	const reactivateMember = async (member: TeamItem) => {
+		try {
+			await apiClient.reactivateMember(member.id);
+		} catch (e) {
+			console.error('reactivate member error', e);
+		}
 	}
 
 </script>
@@ -64,11 +68,11 @@
 							{/if}
 						</div>
 					</div>
-					{#if member.deactivatedAt}
+					{#if member.deactivatedAt && !member.isInvite}
 						<div class="flex justify-items-start items-center">
 							<p class="text-warning text-sm">Deactivated</p>
 							{#if authService.canView($currentUser.role, Role.ADMIN)}
-								<StyledButton className="btn-warning rounded-3xl ml-8" action={reactivateMember}>Reactivate</StyledButton>
+								<StyledButton className="btn-warning rounded-3xl ml-8" action={() => reactivateMember(member)}>Reactivate</StyledButton>
 							{/if}
 						</div>
 					{:else}

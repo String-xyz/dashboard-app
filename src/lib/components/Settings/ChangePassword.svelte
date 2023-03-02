@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { z } from 'zod';
+	import { apiClient } from "$lib/services";
 	import StyledButton from "../StyledButton.svelte";
 	import StyledInput from "../StyledInput.svelte";
 
@@ -6,9 +8,34 @@
 
 	let oldPasswordInput: string;
 	let newPasswordInput: string;
+	const passwordSchema = z.string().min(8);
 
-	const changePassword = () => {
-		// console.log("password: ", newPasswordInput)
+	let isPwdValid = true;
+
+	$: disabled = !isPwdValid;
+	$: {
+		try {
+			passwordSchema.parse(newPasswordInput);
+			isPwdValid = true;
+		} catch (error) {
+			isPwdValid = false;
+		}
+	}
+
+
+	const changePassword = async () => {
+		try {
+			await apiClient.changeSelfPassword(oldPasswordInput, newPasswordInput);
+
+			// clear inputs
+			oldPasswordInput = "";
+			newPasswordInput = "";
+
+			// TODO: Show success message
+		} catch (error) {
+			console.log(error);
+			// TODO: show error message
+		}
 	}
 
 </script>
@@ -45,5 +72,5 @@
 			</span>
 		</div>
 	</div>
-	<StyledButton className="ml-auto mt-24" type="submit">Change Password</StyledButton>
+	<StyledButton className="ml-auto mt-24" type="submit" {disabled}>Change Password</StyledButton>
 </form>
