@@ -89,13 +89,13 @@
 
 </script>
 
-<div class="dropdown dropdown-bottom dropdown-end overflow-visible">
+<div class="dropdown dropdown-bottom dropdown-end">
 	<button 
 		on:click={toggleDropdown}
 		on:blur={toggleDropdown}
 		bind:this={dropdownElem}
 		tabindex="0"
-		class="font-bold tracking-wider text-sm "
+		class="font-bold tracking-wider text-sm"
 	>
 		{activeRole}
 		<img src="/assets/button/dropdown_arrow.svg" alt="dropdown" width="12px" height="12px" class="ml-2 inline" />	
