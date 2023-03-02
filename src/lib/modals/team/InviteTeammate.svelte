@@ -99,7 +99,7 @@
 					wrapper={true}
 					focused={dropdownOpen}
 				>
-					<RoleDropdown isForInvite={true} bind:dropdownOpen bind:inviteRole />
+					<RoleDropdown isForInvite={true} bind:dropdownOpen bind:activeRole={inviteRole} />
 				</StyledInput>
 			</div>
 			<StyledButton className="w-full" action={handleInvite}>

@@ -6,9 +6,12 @@
 
 	export let member: TeamItem | null = null;
 	export let isForInvite = true;
-	export let inviteRole: Role = Role.MEMBER;
+	export let activeRole: Role = Role.MEMBER;
 	export let dropdownOpen = false;
 
+	onMount(() => {
+		activeRole = member?.role ?? activeRole;
+	});
 
 	let dropdownElem: HTMLButtonElement;
 
@@ -17,12 +20,6 @@
 	//[src, alt text]
 	const radioActive = [assetPath + "radio_checked.svg", "radio-checked"]
 	const radioInactive = [assetPath + "radio_inactive.svg", "radio-inactive"]
-
-	onMount(() => {
-		if (member) {
-			inviteRole = member.role;
-		}
-	});
 
 	const toggleDropdown = () => {
 		if (dropdownOpen) {
@@ -34,9 +31,9 @@
 	}
 
 	const setMemberRole = async (toRole: Role) => {
-		if (isForInvite) {
-			inviteRole = toRole;
-		}
+		const prevActiveRole = activeRole;
+
+		activeRole = toRole;
 
 		const btn = document.activeElement as HTMLButtonElement
 		btn.blur();
@@ -56,27 +53,29 @@
 				await apiClient.changeMemberRole(member.id, toRole);
 			}
 			
-			const memberIdx = $teamItems.findIndex((t) => t.id === member?.id);
+			member.role = toRole;
+
+			// const memberIdx = $teamItems.findIndex((t) => t.id === member?.id);
 			
-			if (memberIdx > 0) {
-				member.role = toRole;
-				$teamItems[memberIdx] = member;
-			}
+			// if (memberIdx > 0) {
+			// 	$teamItems[memberIdx] = member;
+			// }
 
 		} catch (error) {
+			activeRole = prevActiveRole;
 			// TODO: Show error notification
 			console.log(error);
 		}
 		
 	}
 
-	const isActiveRole = (role: Role) => {
-		if (isForInvite) {
-			return role === inviteRole;
-		}
+	// const isActiveRole = (role: Role) => {
+	// 	if (isForInvite) {
+	// 		return role === inviteRole;
+	// 	}
 
-		return role === (member?.role ?? Role.MEMBER);
-	}
+	// 	return role === (member?.role ?? Role.MEMBER);
+	// }
 
 	const getFilteredRoles = () => rolesList.filter(r => r !== Role.OWNER || ($currentUser.role === Role.OWNER && !isForInvite));
 
@@ -98,30 +97,28 @@
 		tabindex="0"
 		class="font-bold tracking-wider text-sm "
 	>
-		{isForInvite ? inviteRole : (member?.role ?? Role.MEMBER)}
+		{activeRole}
 		<img src="/assets/button/dropdown_arrow.svg" alt="dropdown" width="12px" height="12px" class="ml-2 inline" />	
 	</button>
 	<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 	<ul tabindex="0" class="dropdown-content menu w-60">
-		{#key inviteRole}
-			{#key member?.role}
-				{#each getFilteredRoles() as role}
-					{@const active = isActiveRole(role)}
-					<li class:active={active}>
-						<button on:click={() => setMemberRole(role)} class="font-bold text-xs tracking-wider uppercase">
-							<img src={ active ? radioActive[0] : radioInactive[0] } alt={ active ? radioActive[1] : radioInactive[1] }/>
-							<p class="my-1">{role}</p>
-						</button>
-					</li>
-				{/each}
-				{#if member}
-					<li>
-						<button on:click={openDeactivateModal} class="text-warning text-sm">
-							{member?.isInvite ? "Revoke invite" : "Remove member"}
-						</button>
-					</li>
-				{/if}
-			{/key}
+		{#key activeRole}
+			{#each getFilteredRoles() as role}
+				{@const active = role === activeRole}
+				<li class:active={active}>
+					<button on:click={() => setMemberRole(role)} class="font-bold text-xs tracking-wider uppercase">
+						<img src={ active ? radioActive[0] : radioInactive[0] } alt={ active ? radioActive[1] : radioInactive[1] }/>
+						<p class="my-1">{role}</p>
+					</button>
+				</li>
+			{/each}
+			{#if member}
+				<li>
+					<button on:click={openDeactivateModal} class="text-warning text-sm">
+						{member?.isInvite ? "Revoke invite" : "Remove member"}
+					</button>
+				</li>
+			{/if}
 		{/key}
 	</ul>
 </div>
