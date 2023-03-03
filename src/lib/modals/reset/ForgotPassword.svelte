@@ -8,7 +8,7 @@
 	import PwdResetEmail from './PwdResetEmail.svelte';
 	import Login from '../login/Login.svelte';
 
-	import { activeModal, currentUser } from '$lib/stores';
+	import { activeModal, loginEmail } from '$lib/stores';
 	import { apiClient } from '$lib/services';
 
 	let isEmailValid = false;
@@ -29,7 +29,7 @@
 	const reset = async () => {
 		try {
 			await apiClient.sendResetPasswordToken(emailInput);
-			$currentUser.email = emailInput;
+			$loginEmail = emailInput;
 			$activeModal = PwdResetEmail;
 		} catch (e) {
 			console.error(e);
