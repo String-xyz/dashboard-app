@@ -75,7 +75,7 @@
 	</div>
 	{#if isEditingName}
 		<div class="ml-auto mt-24">
-			<button class="uppercase text-sm font-bold tracking-wider mr-6" on:click={cancelEdit}> Cancel </button>
+			<button class="uppercase text-sm font-bold tracking-wider mr-6" on:click={cancelEdit}>Cancel</button>
 			<StyledButton className="w-32" action={saveEdit}>Save</StyledButton>
 		</div>
 	{:else}
