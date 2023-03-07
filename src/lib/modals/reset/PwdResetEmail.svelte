@@ -29,8 +29,8 @@
 		<p class="">We sent a password reset link to</p>
 		<p class="mb-10 font-semibold">{$loginEmail}</p>
 
-		<div class="flex items-center">
-			<StyledButton className="btn-outline w-40 mr-6 mb-6" action={back}>
+		<div class="flex items-center mb-6">
+			<StyledButton className="btn-outline w-40 mr-6" action={back}>
 				<img src="/assets/button/left_chevron.svg" alt="<" class="mr-3" />
 				Go Back
 			</StyledButton>

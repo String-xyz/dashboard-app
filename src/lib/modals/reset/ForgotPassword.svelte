@@ -53,6 +53,7 @@
 			type='email'
 			label="Email"
 			placeholder="Enter your email"
+			autocomplete="username"
 			bind:val={emailInput}
 			autofocus
 			required

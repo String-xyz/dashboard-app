@@ -11,32 +11,30 @@
 	import { activeModal, loginEmail } from '$lib/stores';
 	import { apiClient } from '$lib/services';
 
-	let fullNameInput: string;
+	let ownerNameInput: string;
 	let companyNameInput: string;
 	let emailInput: string;
 
 	const emailSchema = z.string().trim().email();
 	const nameSchema = z.string().min(1);
-	let isEmailValid = false;
 
-	// Bind a verification function to the email input. This will be called every time the input changes
-	$: {
-		try {
-			emailSchema.parse(emailInput);
-			isEmailValid = true;
-		} catch (error) {
-			isEmailValid = false;
-		}
+	let isOwnerNameValid = true;
+	let isCompanyNameValid = true;
+	let isEmailValid = true;
+
+	const isValidInput = () => {
+		isOwnerNameValid = nameSchema.safeParse(ownerNameInput).success;
+		isCompanyNameValid = nameSchema.safeParse(companyNameInput).success;
+		isEmailValid = emailSchema.safeParse(emailInput).success;
+
+		return isOwnerNameValid && isCompanyNameValid && isEmailValid;
 	}
 
-
-	$: disabled = false;
-
 	const createAccount = async () => {
-		if (!isEmailValid) return console.error("Invalid email or password");
+		if (!isValidInput()) return console.error("Invalid email or password");
 
 		try {
-			const platform = await apiClient.createPlatform(companyNameInput, emailInput, fullNameInput);
+			const platform = await apiClient.createPlatform(companyNameInput, emailInput, ownerNameInput);
 			console.debug(platform);
 			$loginEmail = emailInput;
 			$activeModal = VerifyEmail;
@@ -55,28 +53,28 @@
 
 		<StyledInput
 			className="mb-6 w-full"
-			label="Your Full Name"
-			placeholder="Ex. John Doe"
-			bind:val={fullNameInput}
+			label="Your full name"
+			placeholder="Enter owner name"
+			bind:val={ownerNameInput}
 			required
 		/>
 		<StyledInput
 			className="mb-6 w-full"
-			label="Company Name"
-			placeholder="Enter Company name"
+			label="Company name"
+			placeholder="Enter company name"
 			bind:val={companyNameInput}
 			required
 		/>
 		<StyledInput
 			className="mb-8 w-full"
 			type="email"
-			label="Email"
+			label="Email address"
 			placeholder="Enter email"
 			bind:val={emailInput}
 			required
 		/>
 
-		<StyledButton className="w-full mb-6" {disabled} type="submit">Continue</StyledButton>
+		<StyledButton className="w-full mb-6" type="submit">Continue</StyledButton>
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<span>Have an account? 
 			<span on:click={() => ($activeModal = Login)} class="link link-primary mt-2">
