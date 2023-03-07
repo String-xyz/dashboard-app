@@ -21,7 +21,7 @@
 		.email()
 		.transform((email) => email.toLowerCase());
 	const nameSchema = z.string().min(1);
-	let inputsValid = false;
+	let isValidInput = false;
 
 	// Bind a verification function to the email input. This will be called every time the input changes
 	$: {
@@ -29,16 +29,16 @@
 			emailSchema.parse(emailInput);
 			nameSchema.parse(companyNameInput);
 
-			inputsValid = true;
+			isValidInput = true;
 		} catch (error) {
-			inputsValid = false;
+			isValidInput = false;
 		}
 	}
 
 	$: disabled = false;
 
 	const createAccount = async () => {
-		if (!inputsValid) return $toast.show("error", "Please fill out all fields");
+		if (!isValidInput) return $toast.show("error", "Please fill out all fields");
 
 		try {
 			const platform = await apiClient.createPlatform(companyNameInput, emailInput.toLowerCase(), fullNameInput);

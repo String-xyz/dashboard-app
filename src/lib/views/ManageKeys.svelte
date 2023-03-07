@@ -9,7 +9,7 @@
 
 	const createApiKey = async () => {
 		if ($keySuccessModalOpen) {
-			$keySuccessModalOpen = false;
+			return ($keySuccessModalOpen = false);
 		}
 
 		try {
