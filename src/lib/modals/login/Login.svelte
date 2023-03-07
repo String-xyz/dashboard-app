@@ -39,7 +39,6 @@
 	});
 
 	const handleLogin = async (e: any) => {
-		e.preventDefault(); // TODO this is not working for some reason, ask Dante
 
 		if (!isValidInput()) return;
 
