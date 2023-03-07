@@ -4,8 +4,8 @@
 
 	import ForgotPassword from "./ForgotPassword.svelte";
 
-	import { activeModal, loginEmail, toast } from "$lib/stores";
 	import { apiClient, ErrorCodes } from "$lib/services";
+	import { activeModal, loginEmail, toast } from "$lib/stores";
 
 	const back = () => {
 		$activeModal = ForgotPassword;

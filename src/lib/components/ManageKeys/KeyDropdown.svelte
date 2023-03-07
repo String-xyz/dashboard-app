@@ -22,7 +22,10 @@
 		{
 			name: "Copy Key",
 			icon: assetPath + "copy.svg",
-			handler: () => copyText(key.data)
+			handler: () => {
+				copyText(key.data);
+				$toast.show("success", "Key copied to clipboard");
+			}
 		},
 		{
 			name: "Edit",

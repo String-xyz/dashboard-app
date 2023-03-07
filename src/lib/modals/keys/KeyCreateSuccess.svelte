@@ -9,6 +9,8 @@
 	let descInput: string;
 
 	const saveDescription = async () => {
+		$toast.show("success", "Key created");
+
 		if (!descInput || !$createdApiKey) return;
 
 		try {
