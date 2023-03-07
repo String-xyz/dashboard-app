@@ -104,7 +104,7 @@
 					</div>
 					<div class="col flex items-center justify-end">
 						{#if $editKey == key}
-							<button class="uppercase text-sm font-bold tracking-wider mr-6" on:click={cancelEdit}> Cancel </button>
+							<button class="uppercase text-sm font-bold tracking-wider mr-6" on:click={cancelEdit}>Cancel</button>
 
 							<StyledButton className="rounded-3xl px-6" action={() => updateDescription(key.id, i, descInput)}>Save</StyledButton>
 						{:else}
