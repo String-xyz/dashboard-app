@@ -12,14 +12,14 @@
 	import { activeModal, resetToken } from '$lib/stores';
 	import { apiClient } from '$lib/services';
 
-	let pwdInput: string;
-	let confPwdInput: string;
 	const passwordSchema = z.string().min(8);
 
-	// Set to true for testing, will be behind Zod parsing
+	let pwdInput: string;
+	let confPwdInput: string;
+
 	let isPwdValid = true;
 
-	$: disabled = !isPwdValid;
+	$: disabled = !isPwdValid || pwdInput !== confPwdInput;
 	$: {
 		try {
 			passwordSchema.parse(pwdInput);
@@ -71,10 +71,9 @@
 		<p class="mb-8 text-sm mr-auto">Must be at least 8 characters</p>
 
 		<StyledInput
-			className="mb-8 w-full"
+			className="mb-12 w-full"
 			type="password"
 			label="Confirm Password"
-			autocomplete="new-password"
 			placeholder="********"
 			bind:val={confPwdInput}
 			required

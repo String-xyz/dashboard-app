@@ -69,7 +69,7 @@
 			className="mb-8 w-full"
 			type="email"
 			label="Email address"
-			placeholder="Enter email"
+			placeholder="Enter email address"
 			bind:val={emailInput}
 			required
 		/>
