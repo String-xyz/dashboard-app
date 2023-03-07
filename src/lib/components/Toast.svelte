@@ -5,7 +5,7 @@
 	export let size: "lg" | "sm" = "lg";
 	export let action: (() => void) | null = null;
 	export let actionText = "Action";
-	export let durationMs = 5000; // This is for testing, normally should be ~2000
+	export let durationMs = 3000; // This is for testing, normally should be ~2000
 	export let visible = false;
 
 	let timeout: NodeJS.Timeout;

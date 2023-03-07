@@ -1,8 +1,7 @@
 import { writable, type Writable } from "svelte/store";
-import { browser } from '$app/environment';
+import { browser } from "$app/environment";
 import type { Member } from "$lib/services";
 import { Role } from "$lib/types";
-
 
 export const loginEmail = writable("");
 export const resetToken = writable("");
@@ -14,7 +13,7 @@ export const currentUser: Writable<Member> = writable();
 /* Local storage */
 if (browser) {
 	// get from local storage
-	const stored = localStorage.getItem('user');
+	const stored = localStorage.getItem("user");
 	if (stored) {
 		try {
 			currentUser.set(JSON.parse(stored));
@@ -24,7 +23,11 @@ if (browser) {
 	}
 
 	// set in local storage
-	currentUser.subscribe(value => {
-		localStorage.setItem('user', JSON.stringify(value));
+	currentUser.subscribe((value) => {
+		if (!value) {
+			return localStorage.removeItem("user");
+		}
+
+		localStorage.setItem("user", JSON.stringify(value));
 	});
 }

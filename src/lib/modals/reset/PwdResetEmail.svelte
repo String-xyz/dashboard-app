@@ -1,24 +1,27 @@
 <script lang="ts">
-	import ModalBase from '../ModalBase.svelte';
-	import StyledButton from '$lib/components/StyledButton.svelte';
+	import ModalBase from "../ModalBase.svelte";
+	import StyledButton from "$lib/components/StyledButton.svelte";
 
-	import ForgotPassword from './ForgotPassword.svelte';
+	import ForgotPassword from "./ForgotPassword.svelte";
 
-	import { activeModal, currentUser } from '$lib/stores';
-	import { apiClient } from '$lib/services';
+	import { activeModal, currentUser, toast } from "$lib/stores";
+	import { apiClient, ErrorCodes } from "$lib/services";
 
 	const back = () => {
 		$activeModal = ForgotPassword;
-	}
+	};
 
 	const handleResend = async () => {
 		try {
 			await apiClient.sendResetPasswordToken($currentUser.email);
-		} catch (e) {
+		} catch (e: any) {
 			console.error(e);
+
+			if (e.code === ErrorCodes.NOT_FOUND) return $toast.show("error", "User not found");
+
+			$toast.show("error", "Something went wrong");
 		}
-	}
-	
+	};
 </script>
 
 <ModalBase size="size-md">

@@ -1,18 +1,27 @@
 <script lang="ts">
-	import StyledInput from '$lib/components/StyledInput.svelte';
-	import StyledButton from '$lib/components/StyledButton.svelte';
+	import StyledInput from "$lib/components/StyledInput.svelte";
+	import StyledButton from "$lib/components/StyledButton.svelte";
 
-	import { keySuccessModalOpen, createdApiKey, apiKeyList } from '$lib/stores';
-	import { keyService } from '$lib/services';
-	import { copyText } from '$lib/utils';
+	import { keySuccessModalOpen, createdApiKey, apiKeyList, toast } from "$lib/stores";
+	import { ErrorCodes, keyService } from "$lib/services";
+	import { copyText } from "$lib/utils";
 
 	let descInput: string;
 
 	const saveDescription = async () => {
 		if (!descInput || !$createdApiKey) return;
 
-		await keyService.editApiKey($createdApiKey.id, descInput);	
-	}
+		try {
+			await keyService.editApiKey($createdApiKey.id, descInput);
+			$toast.show("success", "Description updated");
+		} catch (e: any) {
+			console.error(e);
+
+			if (e.code == ErrorCodes.NOT_FOUND) return $toast.show("error", "This item does not exist");
+
+			$toast.show("error", "Oops, something went wrong. Please try again.");
+		}
+	};
 
 	const close = async () => {
 		await saveDescription();
@@ -21,7 +30,7 @@
 		$apiKeyList = await keyService.listApiKeys();
 		$keySuccessModalOpen = false;
 		$createdApiKey = null;
-	}
+	};
 
 	const handleKeyboard = (e: KeyboardEvent) => {
 		if ($keySuccessModalOpen) {
@@ -29,8 +38,7 @@
 				close();
 			}
 		}
-	}
-
+	};
 </script>
 
 <svelte:window on:keydown={(e) => handleKeyboard(e)} />
@@ -46,7 +54,7 @@
 				<h3 class="text-3xl font-bold mb-12">Success!</h3>
 
 				<p class="text-center">Your API key is ready for action. Time to start building and integrating!</p>
-				
+
 				<div class="flex items-center border border-[#E6E4DF] rounded-xl my-8 py-4 px-3">
 					<span>{$createdApiKey?.data ?? ""}</span>
 					<button class="ml-6" on:click|preventDefault={() => copyText($createdApiKey?.data)}>
@@ -54,15 +62,8 @@
 					</button>
 				</div>
 
-				<StyledInput
-					className="mb-8 w-full"
-					label="Description"
-					placeholder="Optional"
-					bind:val={descInput}
-				/>
-				<StyledButton className="w-full" type="submit" autofocus>
-					Complete
-				</StyledButton>
+				<StyledInput className="mb-8 w-full" label="Description" placeholder="Optional" bind:val={descInput} />
+				<StyledButton className="w-full" type="submit" autofocus>Complete</StyledButton>
 			</form>
 		</div>
 	</div>
@@ -83,5 +84,4 @@
 		max-width: 600px;
 		height: 600px;
 	}
-
 </style>

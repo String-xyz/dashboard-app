@@ -43,9 +43,12 @@
 			inviteRole = Role.MEMBER;
 
 			$toast.show("success", "Invite sent!");
-		} catch (e) {
+		} catch (e: any) {
+			console.error("code", e.code);
+
+			if (e.code === "CONFLICT") return $toast.show("error", "This email is already in use.");
+
 			$toast.show("error", "Oops, something went wrong. Please try again.");
-			console.error(e);
 		}
 
 		$inviteModalOpen = false;

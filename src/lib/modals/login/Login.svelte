@@ -4,14 +4,13 @@
 	import ModalBase from "../ModalBase.svelte";
 	import StyledInput from "$lib/components/StyledInput.svelte";
 	import StyledButton from "$lib/components/StyledButton.svelte";
-	// import Toast from "$lib/components/Toast.svelte";
 
 	import ForgotPassword from "../reset/ForgotPassword.svelte";
 	import CreateAccount from "./CreateAccount.svelte";
 	import LoginSuccess from "./LoginSuccess.svelte";
 
 	import { activeModal, currentUser, loginEmail, toast } from "$lib/stores";
-	import { authService } from "$lib/services";
+	import { authService, ErrorCodes } from "$lib/services";
 	import { onMount } from "svelte";
 
 	let emailInput = "";
@@ -39,7 +38,9 @@
 		}
 	});
 
-	const handleLogin = async () => {
+	const handleLogin = async (e: any) => {
+		e.preventDefault(); // TODO this is not working for some reason, ask Dante
+
 		if (!isValidInput()) return;
 
 		$loginEmail = emailInput;
@@ -51,16 +52,19 @@
 			$activeModal = LoginSuccess;
 
 			$toast.show("success", "Login successful");
-		} catch (error) {
-			$toast.show("error", "444 Invalid email or password");
-			console.error(error);
+		} catch (e: any) {
+			console.error(e);
+
+			if (e.code === ErrorCodes.UNAUTHORIZED) return $toast.show("error", "Invalid email or password");
+
+			$toast.show("error", "Oops, something went wrong. Please try again.");
 		}
 	};
 </script>
 
 <div>
 	<ModalBase>
-		<form class="main flex flex-col items-center" on:submit={handleLogin}>
+		<form class="main flex flex-col items-center" on:submit|preventDefault={handleLogin}>
 			<img src="/assets/string_logo.svg" alt="String" width="76px" height="18px" class="mb-12" />
 			<h3 class="text-2xl font-bold">Login to String’s Developer dashboard</h3>
 			<p class="my-8">Unlock the magic of String’s API by entering your email below.</p>
@@ -101,8 +105,6 @@
 			</span>
 		</form>
 	</ModalBase>
-
-	<!-- <Toast type={$toast.type} size="sm" bind:show={$toast._show}>{$toast.message}</Toast> -->
 </div>
 
 <style>

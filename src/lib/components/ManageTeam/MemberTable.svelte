@@ -1,32 +1,38 @@
 <script lang="ts">
-	import { Role, type TeamItem } from '$lib/types'
-	import { teamItems, currentUser } from '$lib/stores'
+	import { Role, type TeamItem } from "$lib/types";
+	import { teamItems, currentUser, toast } from "$lib/stores";
 
-	import Avatar from '../Avatar.svelte';
-	import StyledButton from '../StyledButton.svelte';
-	import RoleDropdown from './RoleDropdown.svelte';
-	import { apiClient, authService, teamService } from '$lib/services';
-	import { formatDate } from '$lib/utils';
+	import Avatar from "../Avatar.svelte";
+	import StyledButton from "../StyledButton.svelte";
+	import RoleDropdown from "./RoleDropdown.svelte";
+	import { apiClient, authService, ErrorCodes, teamService } from "$lib/services";
+	import { formatDate } from "$lib/utils";
 
 	const handleResend = async (id: string) => {
 		try {
-			const res = await apiClient.resendInvite(id);
+			await apiClient.resendInvite(id);
+			$toast.show("success", "Invite resent!");
 		} catch (e) {
-			console.error('resend invite error', e);
-			// TODO: Show notification error
+			console.error("resend invite error", e);
+			$toast.show("error", "Oops, something went wrong. Please try again.");
 		}
-	}
+	};
 
 	const reactivateMember = async (member: TeamItem) => {
 		try {
 			await apiClient.reactivateMember(member.id);
 			$teamItems = await teamService.rebuildTeamList();
-		} catch (e) {
-			console.error('reactivate member error', e);
-		}
-	}
 
+			$toast.show("success", "Member reactivated!");
+		} catch (e: any) {
+			console.error("reactivate member error", e);
+			if (e.code === ErrorCodes.CONFLICT) return $toast.show("error", "You don't have permission to do that.");
+
+			$toast.show("error", "Oops, something went wrong. Please try again.");
+		}
+	};
 </script>
+
 <div class="members w-full">
 	<div class="flex justify-between py-4 font-bold">
 		<p class="ml-6">Team</p>
@@ -54,22 +60,20 @@
 								<span class="text-xs flex items-center mt-1 greyed">
 									<span>Invitation sent to <span class="select-all">{member.email}</span></span>
 								</span>
+							{:else if member.deactivatedAt}
+								<p class="text-sm text-warning font-semibold inline-block select-all">{member.name}</p>
+								<span class="text-xs greyed flex items-center mt-1 ">
+									<span class="select-all">{member.email}</span>
+									<span class="dot mx-2" />
+									<span class="select-all">Deactivated {formatDate(member.deactivatedAt)}</span>
+								</span>
 							{:else}
-								{#if member.deactivatedAt}
-									<p class="text-sm text-warning font-semibold inline-block select-all">{member.name}</p>
-									<span class="text-xs greyed flex items-center mt-1 ">
-										<span class="select-all">{member.email}</span>
-										<span class="dot mx-2"></span>
-										<span class="select-all">Deactivated {formatDate(member.deactivatedAt)}</span>
-									</span>
-								{:else}
-									<p class="text-sm font-semibold inline-block select-all">{member.name}</p>
-									<span class="text-xs greyed flex items-center mt-1 ">
-										<span class="select-all">{member.email}</span>
-										<span class="dot mx-2"></span>
-										<span class="select-all">Joined {member.joinDate}</span>
-									</span>
-								{/if}
+								<p class="text-sm font-semibold inline-block select-all">{member.name}</p>
+								<span class="text-xs greyed flex items-center mt-1 ">
+									<span class="select-all">{member.email}</span>
+									<span class="dot mx-2" />
+									<span class="select-all">Joined {member.joinDate}</span>
+								</span>
 							{/if}
 						</div>
 					</div>
@@ -111,15 +115,15 @@
 
 <style>
 	.row {
-		border-top: 1px solid #F2F2F2;
+		border-top: 1px solid #f2f2f2;
 	}
 
 	.greyed {
-		color: #BEBCBA;
+		color: #bebcba;
 	}
 
 	.members {
-		border: 1px solid #F2F2F2;
+		border: 1px solid #f2f2f2;
 		border-radius: 4px;
 	}
 
@@ -127,7 +131,7 @@
 		border-radius: 50%;
 		width: 2px;
 		height: 2px;
-		background-color: #BEBCBA;
+		background-color: #bebcba;
 		display: inline-block;
 	}
 
