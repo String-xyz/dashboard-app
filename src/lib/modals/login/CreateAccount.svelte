@@ -11,37 +11,30 @@
 	import { activeModal, loginEmail, toast } from "$lib/stores";
 	import { apiClient } from "$lib/services";
 
-	let fullNameInput: string;
+	let ownerNameInput: string;
 	let companyNameInput: string;
 	let emailInput: string;
 
-	const emailSchema = z
-		.string()
-		.trim()
-		.email()
-		.transform((email) => email.toLowerCase());
+	const emailSchema = z.string().trim().email();
 	const nameSchema = z.string().min(1);
-	let isValidInput = false;
 
-	// Bind a verification function to the email input. This will be called every time the input changes
-	$: {
-		try {
-			emailSchema.parse(emailInput);
-			nameSchema.parse(companyNameInput);
+	let isOwnerNameValid = true;
+	let isCompanyNameValid = true;
+	let isEmailValid = true;
 
-			isValidInput = true;
-		} catch (error) {
-			isValidInput = false;
-		}
+	const isValidInput = () => {
+		isOwnerNameValid = nameSchema.safeParse(ownerNameInput).success;
+		isCompanyNameValid = nameSchema.safeParse(companyNameInput).success;
+		isEmailValid = emailSchema.safeParse(emailInput).success;
+
+		return isOwnerNameValid && isCompanyNameValid && isEmailValid;
 	}
 
-	$: disabled = false;
-
 	const createAccount = async () => {
-		if (!isValidInput) return $toast.show("error", "Please fill out all fields");
+		if (!isValidInput()) return $toast.show("error", "Please fill out all fields");
 
 		try {
-			const platform = await apiClient.createPlatform(companyNameInput, emailInput.toLowerCase(), fullNameInput);
+			const platform = await apiClient.createPlatform(companyNameInput, emailInput.toLowerCase(), ownerNameInput);
 			console.debug(platform);
 			$loginEmail = emailInput;
 			$activeModal = VerifyEmail;
@@ -61,11 +54,30 @@
 		<h3 class="text-2xl font-bold">Create a Company account</h3>
 		<p class="my-8">Unlock the magic of String’s API by entering your email below.</p>
 
-		<StyledInput className="mb-6 w-full" label="Your Full Name" placeholder="Ex. John Doe" bind:val={fullNameInput} required />
-		<StyledInput className="mb-6 w-full" label="Company Name" placeholder="Enter Company name" bind:val={companyNameInput} required />
-		<StyledInput className="mb-8 w-full" type="email" label="Email" placeholder="Enter email" bind:val={emailInput} required />
+		<StyledInput
+			className="mb-6 w-full"
+			label="Your full name"
+			placeholder="Enter owner name"
+			bind:val={ownerNameInput}
+			required
+		/>
+		<StyledInput
+			className="mb-6 w-full"
+			label="Company name"
+			placeholder="Enter company name"
+			bind:val={companyNameInput}
+			required
+		/>
+		<StyledInput
+			className="mb-8 w-full"
+			type="email"
+			label="Email address"
+			placeholder="Enter email address"
+			bind:val={emailInput}
+			required
+		/>
 
-		<StyledButton className="w-full mb-6" {disabled} type="submit">Continue</StyledButton>
+		<StyledButton className="w-full mb-6" type="submit">Continue</StyledButton>
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<span
 			>Have an account?

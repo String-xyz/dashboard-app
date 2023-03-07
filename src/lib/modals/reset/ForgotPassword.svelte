@@ -11,9 +11,11 @@
 	import { activeModal, loginEmail, toast } from "$lib/stores";
 	import { apiClient, ErrorCodes } from "$lib/services";
 
-	let isEmailValid = false;
 	const emailSchema = z.string().trim().email();
+
+	let isEmailValid = false;
 	let emailInput: string;
+
 	$: disabled = !isEmailValid;
 
 	// validate email input on change
@@ -28,7 +30,9 @@
 
 	const reset = async () => {
 		try {
+			emailInput = emailInput.toLowerCase();
 			await apiClient.sendResetPasswordToken(emailInput);
+
 			$loginEmail = emailInput;
 			$activeModal = PwdResetEmail;
 		} catch (e: any) {
@@ -50,7 +54,16 @@
 		<h3 class="text-2xl font-bold mb-2">Forgot password?</h3>
 		<p class="mb-8">No worries, we’ll send you reset instructions</p>
 
-		<StyledInput className="mb-8 w-full" type="email" label="Email" placeholder="Enter your email" bind:val={emailInput} autofocus required />
+		<StyledInput
+			className="mb-8 w-full"
+			type='email'
+			label="Email"
+			placeholder="Enter your email"
+			autocomplete="username"
+			bind:val={emailInput}
+			autofocus
+			required
+		/>
 
 		<StyledButton className="mb-8 w-full" type="submit" {disabled}>Reset password</StyledButton>
 

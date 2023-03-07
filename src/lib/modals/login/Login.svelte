@@ -39,7 +39,6 @@
 	});
 
 	const handleLogin = async (e: any) => {
-
 		if (!isValidInput()) return;
 
 		$loginEmail = emailInput;

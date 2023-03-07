@@ -17,8 +17,8 @@
 		<img src="/assets/indicator/success.svg" alt="Success" class="mb-8" />
 
 		<h3 class="text-2xl font-bold mb-8">Password reset</h3>
-		<p class="">Your password has been successfully reset.</p>
-		<p class="mb-8">Click below to log in magically.</p>
+		<p>Your password has been successfully reset.</p>
+		<p class="mb-10">Click below to log in.</p>
 
 		<StyledButton className="mb-8 w-full" action={backToLogin}>Back to log in</StyledButton>
 	</div>

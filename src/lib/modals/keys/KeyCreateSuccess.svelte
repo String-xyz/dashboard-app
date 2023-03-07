@@ -15,10 +15,13 @@
 
 		try {
 			await keyService.editApiKey($createdApiKey.id, descInput);
+			$toast.show("success", "Description updated");
 		} catch (e: any) {
 			console.error(e);
 
-			$toast.show("error", "We couldn't save your description. Please try again.");
+			if (e.code == ErrorCodes.NOT_FOUND) return $toast.show("error", "This item does not exist");
+
+			$toast.show("error", "Oops, something went wrong. Please try again.");
 		}
 	};
 
