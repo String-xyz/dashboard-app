@@ -1,6 +1,6 @@
-<script lang='ts'>
+<script lang="ts">
 	import { keyService } from "$lib/services";
-	import { apiKeyList, editKey } from "$lib/stores";
+	import { apiKeyList, editKey, toast } from "$lib/stores";
 	import { copyText } from "$lib/utils";
 	import type { ApiKey } from "$lib/types";
 
@@ -22,7 +22,10 @@
 		{
 			name: "Copy Key",
 			icon: assetPath + "copy.svg",
-			handler: () => copyText(key.data)
+			handler: () => {
+				copyText(key.data);
+				$toast.show("success", "Key copied to clipboard");
+			}
 		},
 		{
 			name: "Edit",
@@ -35,7 +38,7 @@
 			red: true,
 			handler: () => deactivateKey()
 		}
-	]
+	];
 
 	const toggleDropdown = () => {
 		if (dropdownOpen) {
@@ -44,39 +47,34 @@
 		} else {
 			dropdownOpen = true;
 		}
-	}
+	};
 
 	const setEdit = () => {
 		$editKey = key;
-	}
+	};
 
 	const deactivateKey = async () => {
 		try {
-			const deactivatedKey = await keyService.deactivateApiKey(key.id);
-			
+			await keyService.deactivateApiKey(key.id);
 			$apiKeyList = await keyService.listApiKeys();
+
+			$toast.show("success", "Key deactivated");
 		} catch (e) {
 			console.error(e);
+			$toast.show("error", "Failed to deactivate key");
 		}
-	}
+	};
 
 	const handleAndClose = async (handler: Function) => {
 		await handler();
 
-		const btn = document.activeElement as HTMLButtonElement
+		const btn = document.activeElement as HTMLButtonElement;
 		btn.blur();
-	}
-
+	};
 </script>
 
 <div class="dropdown dropdown-bottom dropdown-end overflow-visible">
-	<button
-		on:click={toggleDropdown}
-		on:blur={toggleDropdown}
-		bind:this={dropdownElem}
-		tabindex="0"
-		class="flex items-center"
-	>
+	<button on:click={toggleDropdown} on:blur={toggleDropdown} bind:this={dropdownElem} tabindex="0" class="flex items-center">
 		<img src="/assets/ellipsis.svg" alt="..." width="18px" height="4px" class="inline m-2" />
 	</button>
 	<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
@@ -96,7 +94,6 @@
 	.dropdown-content {
 		border: 1px solid #e6e4df;
 		border-radius: 4px;
-		background-color: #FAF9F9;
+		background-color: #faf9f9;
 	}
 </style>
-

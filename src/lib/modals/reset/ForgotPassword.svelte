@@ -1,21 +1,21 @@
 <script lang="ts">
-	import { z } from 'zod';
+	import { z } from "zod";
 
-	import ModalBase from '../ModalBase.svelte';
-	import StyledInput from '$lib/components/StyledInput.svelte';
-	import StyledButton from '$lib/components/StyledButton.svelte';
+	import ModalBase from "../ModalBase.svelte";
+	import StyledInput from "$lib/components/StyledInput.svelte";
+	import StyledButton from "$lib/components/StyledButton.svelte";
 
-	import PwdResetEmail from './PwdResetEmail.svelte';
-	import Login from '../login/Login.svelte';
+	import PwdResetEmail from "./PwdResetEmail.svelte";
+	import Login from "../login/Login.svelte";
 
-	import { activeModal, loginEmail } from '$lib/stores';
-	import { apiClient } from '$lib/services';
+	import { activeModal, loginEmail, toast } from "$lib/stores";
+	import { apiClient, ErrorCodes } from "$lib/services";
 
 	let isEmailValid = false;
 	const emailSchema = z.string().trim().email();
 	let emailInput: string;
 	$: disabled = !isEmailValid;
-	
+
 	// validate email input on change
 	$: {
 		try {
@@ -31,15 +31,17 @@
 			await apiClient.sendResetPasswordToken(emailInput);
 			$loginEmail = emailInput;
 			$activeModal = PwdResetEmail;
-		} catch (e) {
+		} catch (e: any) {
 			console.error(e);
+			if (e.code === ErrorCodes.NOT_FOUND) return $toast.show("error", "User not found");
+
+			$toast.show("error", "Something went wrong");
 		}
 	};
 
 	const backToLogin = () => {
 		$activeModal = Login;
-	}
-
+	};
 </script>
 
 <ModalBase size="size-md">
@@ -48,15 +50,7 @@
 		<h3 class="text-2xl font-bold mb-2">Forgot password?</h3>
 		<p class="mb-8">No worries, we’ll send you reset instructions</p>
 
-		<StyledInput
-			className="mb-8 w-full"
-			type='email'
-			label="Email"
-			placeholder="Enter your email"
-			bind:val={emailInput}
-			autofocus
-			required
-		/>
+		<StyledInput className="mb-8 w-full" type="email" label="Email" placeholder="Enter your email" bind:val={emailInput} autofocus required />
 
 		<StyledButton className="mb-8 w-full" type="submit" {disabled}>Reset password</StyledButton>
 
@@ -75,5 +69,4 @@
 		padding-right: 60px;
 		padding-top: 70px;
 	}
-
 </style>

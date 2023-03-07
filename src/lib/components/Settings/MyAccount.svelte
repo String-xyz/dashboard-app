@@ -2,7 +2,7 @@
 	import StyledButton from "../StyledButton.svelte";
 	import StyledInput from "../StyledInput.svelte";
 
-	import { currentUser } from "$lib/stores";
+	import { currentUser, toast } from "$lib/stores";
 	import { apiClient } from "$lib/services";
 
 	let nameInput = $currentUser.name;
@@ -11,23 +11,24 @@
 
 	const showEdit = () => {
 		isEditingName = true;
-	}
+	};
 
 	const saveEdit = async () => {
 		isEditingName = false;
 		try {
 			const member = await apiClient.changeSelfName(nameInput);
 			$currentUser.name = member.name;
-			// TODO: Show success message
+
+			$toast.show("success", "Name changed");
 		} catch (error) {
 			console.log(error);
-			// TODO: show error message
+			$toast.show("error", "Error changing name");
 		}
-	}
+	};
 
 	const cancelEdit = () => {
 		isEditingName = false;
-	}
+	};
 
 	const handleKeyboard = (e: KeyboardEvent) => {
 		if (isEditingName) {
@@ -37,8 +38,7 @@
 				cancelEdit();
 			}
 		}
-	}
-
+	};
 </script>
 
 <svelte:window on:keydown={(e) => handleKeyboard(e)} />
@@ -75,12 +75,7 @@
 	</div>
 	{#if isEditingName}
 		<div class="ml-auto mt-24">
-			<button
-				class="uppercase text-sm font-bold tracking-wider mr-6"
-				on:click={cancelEdit}
-			>
-			Cancel
-			</button>
+			<button class="uppercase text-sm font-bold tracking-wider mr-6" on:click={cancelEdit}>Cancel</button>
 			<StyledButton className="w-32" action={saveEdit}>Save</StyledButton>
 		</div>
 	{:else}

@@ -1,15 +1,8 @@
 <script lang="ts">
-	import { cards } from '$lib/constants/cards';
-	import Card from '$lib/components/Dashboard/Card.svelte';
-
-	// import { onMount } from 'svelte';
-	// import Toast from '$lib/components/Toast.svelte';
-
-	// let showSuccessToast: () => void;
-
-	// onMount(() => {
-	// 	showSuccessToast();
-	// })
+	import { cards } from "$lib/constants/cards";
+	import Card from "$lib/components/Dashboard/Card.svelte";
+	import Toast from "$lib/components/Toast.svelte";
+	import { toast } from "$lib/stores";
 </script>
 
 <svelte:head>
@@ -28,7 +21,7 @@
 		</div>
 	</div>
 
-	<!-- <Toast type="success" size="sm" bind:show={showSuccessToast}>This is a test </Toast> -->
+	<Toast type={$toast.type} size="sm" bind:show={$toast._show}>{$toast.message}</Toast>
 </div>
 
 <style>
@@ -45,5 +38,4 @@
 			grid-template-columns: 1fr;
 		}
 	}
-
 </style>

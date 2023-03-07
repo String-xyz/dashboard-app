@@ -1,12 +1,12 @@
 <script lang="ts">
-	import { z } from 'zod';
-	import { Role } from '$lib/types';
-	import { apiClient, teamService } from '$lib/services';
-	import { inviteModalOpen, teamItems } from '$lib/stores';
-	
-	import StyledInput from '$lib/components/StyledInput.svelte';
-	import StyledButton from '$lib/components/StyledButton.svelte';
-	import RoleDropdown from '$lib/components/ManageTeam/RoleDropdown.svelte';	
+	import { z } from "zod";
+	import { Role } from "$lib/types";
+	import { apiClient, teamService } from "$lib/services";
+	import { inviteModalOpen, teamItems, toast } from "$lib/stores";
+
+	import StyledInput from "$lib/components/StyledInput.svelte";
+	import StyledButton from "$lib/components/StyledButton.svelte";
+	import RoleDropdown from "$lib/components/ManageTeam/RoleDropdown.svelte";
 
 	const emailSchema = z.string().trim().email();
 	const nameSchema = z.string().min(1);
@@ -17,33 +17,42 @@
 	let emailInput: string;
 	let nameInput: string;
 
-	let isEmailValid = false;
-	let isNameValid = false;
+	let validInput = false;
+	let isEmailValid = true;
 
-	const isValidInput = () => {
+	// Bind a verification function to the password input
+	$: disabled = !validInput;
+	$: {
 		isEmailValid = emailSchema.safeParse(emailInput).success;
-		isNameValid = nameSchema.safeParse(nameInput).success;
+		const isNameValid = nameSchema.safeParse(nameInput).success;
 
-		return isEmailValid && isNameValid;
+		validInput = isEmailValid && isNameValid;
 	}
 
 	const handleInvite = async () => {
-		if (!isValidInput()) return;
+		if (!validInput) return;
 
 		try {
 			await apiClient.sendInvite(emailInput, nameInput, inviteRole);
 
 			$teamItems = await teamService.rebuildTeamList();
 
+			// clear inputs
 			emailInput = "";
 			nameInput = "";
 			inviteRole = Role.MEMBER;
-		} catch (e) {
-			console.error(e);
+
+			$toast.show("success", "Invite sent!");
+		} catch (e: any) {
+			console.error("code", e.code);
+
+			if (e.code === "CONFLICT") return $toast.show("error", "This email is already in use.");
+
+			$toast.show("error", "Oops, something went wrong. Please try again.");
 		}
 
 		$inviteModalOpen = false;
-	}
+	};
 
 	const handleKeyboard = (e: KeyboardEvent) => {
 		if ($inviteModalOpen) {
@@ -54,12 +63,11 @@
 				handleInvite();
 			}
 		}
-	}
+	};
 
 	const close = () => {
 		$inviteModalOpen = false;
-	}
-
+	};
 </script>
 
 <svelte:window on:keydown={(e) => handleKeyboard(e)} />
@@ -74,7 +82,7 @@
 
 			<StyledInput
 				className="mb-6 w-full"
-				type='email'
+				type="email"
 				label="Email address"
 				placeholder="test@string.xyz"
 				borderError={!isEmailValid && emailInput !== ""}
@@ -83,24 +91,13 @@
 				required
 			/>
 			<div class="flex justify-between mb-20 w-full">
-				<StyledInput
-					className="mb-2 w-full mr-6"
-					label="Full name"
-					placeholder="John Smith"
-					bind:val={nameInput}
-					required
-				/>
-				<StyledInput
-					label="Role"
-					className="flex justify-center w-48 h-[54px]"
-					wrapper={true}
-					focused={dropdownOpen}
-				>
+				<StyledInput className="mb-2 w-full mr-6" label="Full name" placeholder="John Smith" bind:val={nameInput} required />
+				<StyledInput label="Role" className="flex justify-center w-48 h-[54px]" wrapper={true} focused={dropdownOpen}>
 					<RoleDropdown isForInvite={true} bind:dropdownOpen bind:activeRole={inviteRole} />
 				</StyledInput>
 			</div>
-			<StyledButton className="w-full" action={handleInvite}>
-				<img src="/assets/button/send_mail.svg" alt="send" class="mr-3">
+			<StyledButton className="w-full" action={handleInvite} {disabled}>
+				<img src="/assets/button/send_mail.svg" alt="send" class="mr-3" />
 				Send Invite
 			</StyledButton>
 		</div>
@@ -121,5 +118,4 @@
 		width: 500px;
 		height: 450px;
 	}
-
 </style>
