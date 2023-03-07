@@ -8,26 +8,29 @@
 	import { apiKeyList, createdApiKey, keySuccessModalOpen, toast } from "$lib/stores";
 
 	const createApiKey = async () => {
-		if (!$keySuccessModalOpen) {
-			try {
-				const newApiKey = await keyService.createApiKey();
-				$createdApiKey = newApiKey;
-				$keySuccessModalOpen = true;
-
-				$toast.show("success", "API Key created successfully");
-
-				$apiKeyList = await keyService.listApiKeys();
-			} catch (e) {
-				$toast.show("error", "Error creating API Key");
-				console.error(e);
-			}
-		} else {
+		if ($keySuccessModalOpen) {
 			$keySuccessModalOpen = false;
+		}
+
+		try {
+			const newApiKey = await keyService.createApiKey();
+			$createdApiKey = newApiKey;
+			$keySuccessModalOpen = true;
+
+			$apiKeyList = await keyService.listApiKeys();
+		} catch (e) {
+			$toast.show("error", "Oops, something went wrong. Please try again.");
+			console.error(e);
 		}
 	};
 
 	onMount(async () => {
-		$apiKeyList = await keyService.listApiKeys();
+		try {
+			$apiKeyList = await keyService.listApiKeys();
+		} catch (e) {
+			console.error(e);
+			$toast.show("error", "Error fetching API Keys");
+		}
 	});
 </script>
 

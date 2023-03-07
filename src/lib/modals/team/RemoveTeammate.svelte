@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { apiClient, teamService } from '$lib/services';
+	import { apiClient, teamService } from "$lib/services";
 
-	import UserCard from '$lib/components/ManageTeam/UserCard.svelte';
-	import StyledButton from '$lib/components/StyledButton.svelte';
+	import UserCard from "$lib/components/ManageTeam/UserCard.svelte";
+	import StyledButton from "$lib/components/StyledButton.svelte";
 
-	import { deactModalOpen, deactUser, teamItems } from '$lib/stores';
+	import { deactModalOpen, deactUser, teamItems, toast } from "$lib/stores";
 
 	const handleDeactivate = async () => {
 		// Deactivate user
@@ -13,34 +13,33 @@
 
 			if ($deactUser.isInvite) {
 				await apiClient.revokeInvite($deactUser?.id);
+				$toast.show("success", "Invite revoked!");
 			} else {
 				await apiClient.deactivateMember($deactUser.id);
+				$toast.show("success", "Member removed!");
 			}
 
 			$teamItems = await teamService.rebuildTeamList();
-
 			$deactModalOpen = false;
-			// TODO: Show success notification
 		} catch (e) {
 			console.error(e);
-			// TODO: Show error notification
+
+			$toast.show("error", "Oops, something went wrong. Please try again.");
 		}
-		
-	}
-	
+	};
+
 	const handleKeyboard = (e: KeyboardEvent) => {
 		if ($deactModalOpen) {
 			if (e.key == "Escape") {
 				close();
 			}
 		}
-	}
+	};
 
 	const close = () => {
 		$deactUser = null;
 		$deactModalOpen = false;
-	}
-
+	};
 </script>
 
 <svelte:window on:keydown={(e) => handleKeyboard(e)} />
@@ -59,7 +58,7 @@
 			{/if}
 
 			{#if $deactUser}
-				<UserCard user={$deactUser} className="my-12"/>
+				<UserCard user={$deactUser} className="my-12" />
 			{/if}
 
 			<StyledButton className="btn-warning w-full" action={handleDeactivate}>
@@ -86,5 +85,4 @@
 		width: 500px;
 		height: 500px;
 	}
-
 </style>

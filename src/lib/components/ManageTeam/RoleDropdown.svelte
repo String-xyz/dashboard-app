@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Role, type TeamItem } from "$lib/types";
 	import { apiClient } from "$lib/services";
-	import { rolesList, currentUser, deactModalOpen, deactUser, transferOwnerModalOpen, ownershipTransferee, teamItems } from "$lib/stores";
+	import { rolesList, currentUser, deactModalOpen, deactUser, transferOwnerModalOpen, ownershipTransferee, teamItems, toast } from "$lib/stores";
 	import { onMount } from "svelte";
 
 	export let member: TeamItem | null = null;
@@ -15,11 +15,11 @@
 
 	let dropdownElem: HTMLButtonElement;
 
-	const assetPath = "/assets/dropdown/"
+	const assetPath = "/assets/dropdown/";
 
 	// [src, alt text]
-	const radioActive = [assetPath + "radio_checked.svg", "radio-checked"]
-	const radioInactive = [assetPath + "radio_inactive.svg", "radio-inactive"]
+	const radioActive = [assetPath + "radio_checked.svg", "radio-checked"];
+	const radioInactive = [assetPath + "radio_inactive.svg", "radio-inactive"];
 
 	const toggleDropdown = () => {
 		if (dropdownOpen) {
@@ -28,17 +28,17 @@
 		} else {
 			dropdownOpen = true;
 		}
-	}
+	};
 
 	const setMemberRole = async (toRole: Role) => {
 		const prevActiveRole = activeRole;
 		activeRole = toRole;
 
-		const btn = document.activeElement as HTMLButtonElement
+		const btn = document.activeElement as HTMLButtonElement;
 		btn.blur();
-		
+
 		if (!member) return;
-		
+
 		try {
 			if (toRole === Role.OWNER) {
 				activeRole = prevActiveRole;
@@ -49,8 +49,10 @@
 
 			if (isForInvite) {
 				await apiClient.changeInviteRole(member.id, toRole);
+				$toast.show("success", "Invite role updated!");
 			} else {
 				await apiClient.changeMemberRole(member.id, toRole);
+				$toast.show("success", "Member role updated!");
 			}
 
 			const memberIdx = $teamItems.findIndex((t) => t.id === member?.id);
@@ -58,53 +60,45 @@
 			if (memberIdx > 0) {
 				$teamItems[memberIdx].role = activeRole;
 			}
-		} catch (error) {
+		} catch (e: any) {
+			console.log(e);
 			activeRole = prevActiveRole;
-			// TODO: Show error notification
-			console.log(error);
+
+			$toast.show("error", "Something went wrong!");
 		}
-		
-	}
+	};
 
 	const getFilteredRoles = () => {
-		return rolesList.filter(r => {
+		return rolesList.filter((r) => {
 			if (r === Role.OWNER) {
 				return $currentUser.role === Role.OWNER && !isForInvite;
 			} else {
 				return true;
 			}
 		});
-	}
+	};
 
 	const openDeactivateModal = () => {
 		if (!member) return;
 
 		$deactUser = member;
 		$deactModalOpen = true;
-
-	}
-
+	};
 </script>
 
 <div class="dropdown dropdown-bottom dropdown-end">
-	<button 
-		on:click={toggleDropdown}
-		on:blur={toggleDropdown}
-		bind:this={dropdownElem}
-		tabindex="0"
-		class="font-bold tracking-wider text-sm"
-	>
+	<button on:click={toggleDropdown} on:blur={toggleDropdown} bind:this={dropdownElem} tabindex="0" class="font-bold tracking-wider text-sm">
 		{activeRole}
-		<img src="/assets/button/dropdown_arrow.svg" alt="dropdown" width="12px" height="12px" class="ml-2 inline" />	
+		<img src="/assets/button/dropdown_arrow.svg" alt="dropdown" width="12px" height="12px" class="ml-2 inline" />
 	</button>
 	<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 	<ul tabindex="0" class="dropdown-content menu w-60">
 		{#key activeRole}
 			{#each getFilteredRoles() as role}
 				{@const active = role === activeRole}
-				<li class:active={active}>
+				<li class:active>
 					<button on:click={() => setMemberRole(role)} class="font-bold text-xs tracking-wider uppercase">
-						<img src={ active ? radioActive[0] : radioInactive[0] } alt={ active ? radioActive[1] : radioInactive[1] }/>
+						<img src={active ? radioActive[0] : radioInactive[0]} alt={active ? radioActive[1] : radioInactive[1]} />
 						<p class="my-1">{role}</p>
 					</button>
 				</li>
@@ -122,7 +116,7 @@
 
 <style>
 	.active {
-		background-color: #DFF1FF; 
+		background-color: #dff1ff;
 	}
 
 	.dropdown-content {
@@ -130,5 +124,4 @@
 		border-radius: 4px;
 		background-color: #faf9f9;
 	}
-
 </style>

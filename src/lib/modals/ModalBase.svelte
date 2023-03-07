@@ -1,18 +1,22 @@
 <script lang="ts">
-	export let size = 'size-lg';
+	import Toast from "$lib/components/Toast.svelte";
+	import { toast } from "$lib/stores";
 
+	export let size = "size-lg";
 </script>
 
 <div
 	class="str-modal text-neutral border border-neutral"
-	class:size-xl={size === 'size-xl'}
-	class:size-lg={size === 'size-lg'}
-	class:size-md={size === 'size-md'}
-	class:size-sm={size === 'size-sm'}
+	class:size-xl={size === "size-xl"}
+	class:size-lg={size === "size-lg"}
+	class:size-md={size === "size-md"}
+	class:size-sm={size === "size-sm"}
 >
 	<div class="content w-full h-full">
 		<slot />
 	</div>
+
+	<Toast type={$toast.type} size="sm" bind:show={$toast._show}>{$toast.message}</Toast>
 </div>
 
 <style>
@@ -38,5 +42,4 @@
 	.size-sm {
 		height: 440px;
 	}
-
 </style>

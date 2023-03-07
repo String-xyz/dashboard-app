@@ -13,7 +13,6 @@ export function createAuthService(apiClient: ApiClient) {
 			console.debug("User is logged in");
 			return true;
 		} catch (e) {
-			console.debug("User is not logged in");
 			return false;
 		}
 	}
@@ -38,8 +37,8 @@ export function createAuthService(apiClient: ApiClient) {
 	async function logout() {
 		try {
 			await apiClient.logout();
-			window.location.href = "/login";
 			localStorage.removeItem("user");
+			window.location.href = "/login";
 		} catch (e) {
 			console.error(e);
 		}

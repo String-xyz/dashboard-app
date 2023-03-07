@@ -15,34 +15,41 @@
 	let companyNameInput: string;
 	let emailInput: string;
 
-	const emailSchema = z.string().trim().email();
+	const emailSchema = z
+		.string()
+		.trim()
+		.email()
+		.transform((email) => email.toLowerCase());
 	const nameSchema = z.string().min(1);
-	let isEmailValid = false;
+	let inputsValid = false;
 
 	// Bind a verification function to the email input. This will be called every time the input changes
 	$: {
 		try {
 			emailSchema.parse(emailInput);
-			isEmailValid = true;
+			nameSchema.parse(companyNameInput);
+
+			inputsValid = true;
 		} catch (error) {
-			isEmailValid = false;
+			inputsValid = false;
 		}
 	}
 
 	$: disabled = false;
 
 	const createAccount = async () => {
-		if (!isEmailValid) return console.error("Invalid email or password");
+		if (!inputsValid) return $toast.show("error", "Please fill out all fields");
 
 		try {
-			const platform = await apiClient.createPlatform(companyNameInput, emailInput, fullNameInput);
+			const platform = await apiClient.createPlatform(companyNameInput, emailInput.toLowerCase(), fullNameInput);
 			console.debug(platform);
 			$loginEmail = emailInput;
 			$activeModal = VerifyEmail;
+		} catch (e: any) {
+			console.error(e);
 
-			$toast.show("success", "Account created successfully");
-		} catch (error) {
-			console.log(error);
+			if (e.code === "CONFLICT") return $toast.show("error", "This email is already in use", "Error");
+
 			$toast.show("error", "Error creating account");
 		}
 	};

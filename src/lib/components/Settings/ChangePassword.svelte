@@ -1,8 +1,9 @@
 <script lang="ts">
-	import { z } from 'zod';
-	import { apiClient } from "$lib/services";
+	import { z } from "zod";
+	import { apiClient, ErrorCodes } from "$lib/services";
 	import StyledButton from "../StyledButton.svelte";
 	import StyledInput from "../StyledInput.svelte";
+	import { toast } from "$lib/stores";
 
 	// import { currentUser } from "$lib/stores";
 
@@ -22,7 +23,6 @@
 		}
 	}
 
-
 	const changePassword = async () => {
 		try {
 			await apiClient.changeSelfPassword(oldPasswordInput, newPasswordInput);
@@ -31,13 +31,14 @@
 			oldPasswordInput = "";
 			newPasswordInput = "";
 
-			// TODO: Show success message
-		} catch (error) {
-			console.log(error);
-			// TODO: show error message
-		}
-	}
+			$toast.show("success", "Password changed");
+		} catch (e: any) {
+			console.log(e);
+			if (e.code === ErrorCodes.BAD_REQUEST) return $toast.show("error", "Incorrect old password");
 
+			$toast.show("error", "Error changing password");
+		}
+	};
 </script>
 
 <form on:submit={changePassword} class="flex flex-col rounded-xl border-2 border-[#F2F2F2] p-8">
@@ -59,7 +60,7 @@
 		<div class="w-full">
 			<StyledInput
 				label="New Password"
-				type="password" 
+				type="password"
 				autocomplete="new-password"
 				placeholder="********"
 				className="w-full"

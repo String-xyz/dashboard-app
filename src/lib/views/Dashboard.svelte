@@ -2,7 +2,6 @@
 	import { cards } from "$lib/constants/cards";
 	import Card from "$lib/components/Dashboard/Card.svelte";
 	import Toast from "$lib/components/Toast.svelte";
-
 	import { toast } from "$lib/stores";
 </script>
 
@@ -22,7 +21,7 @@
 		</div>
 	</div>
 
-	<!-- <Toast type={$toast.type} size="sm" bind:show={$toast._show}>{$toast.message}</Toast> -->
+	<Toast type={$toast.type} size="sm" bind:show={$toast._show}>{$toast.message}</Toast>
 </div>
 
 <style>

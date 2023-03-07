@@ -9,8 +9,6 @@
 	import StyledButton from "$lib/components/StyledButton.svelte";
 	import Toast from "$lib/components/Toast.svelte";
 
-	let _teamItems: TeamItem[] = []; // local copy of team items. This only gets updated when the component is mounted
-
 	$: canEdit = $currentUser.role !== Role.MEMBER;
 
 	onMount(async () => {
@@ -19,9 +17,9 @@
 
 		try {
 			$activeFilter.filter = Filter.ALL_MEMBERS;
-		} catch (error) {
-			console.log(error);
-			// TODO: Show error notification
+		} catch (e) {
+			console.log(e);
+			$toast.show("error", "Oops, something went wrong. Please try again.");
 		}
 	});
 </script>
@@ -57,7 +55,7 @@
 
 	<MemberTable />
 
-	<!-- <Toast type={$toast.type} size="sm" bind:show={$toast._show}>{$toast.message}</Toast> -->
+	<Toast type={$toast.type} size="sm" bind:show={$toast._show}>{$toast.message}</Toast>
 </div>
 
 <style>
