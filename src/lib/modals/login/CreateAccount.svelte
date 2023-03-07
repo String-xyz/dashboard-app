@@ -1,15 +1,15 @@
 <script lang="ts">
-	import { z } from 'zod';
+	import { z } from "zod";
 
-	import ModalBase from '../ModalBase.svelte';
-	import StyledInput from '$lib/components/StyledInput.svelte';
-	import StyledButton from '$lib/components/StyledButton.svelte';
+	import ModalBase from "../ModalBase.svelte";
+	import StyledInput from "$lib/components/StyledInput.svelte";
+	import StyledButton from "$lib/components/StyledButton.svelte";
 
-	import Login from './Login.svelte';
-	import VerifyEmail from './VerifyEmail.svelte';
+	import Login from "./Login.svelte";
+	import VerifyEmail from "./VerifyEmail.svelte";
 
-	import { activeModal, loginEmail } from '$lib/stores';
-	import { apiClient } from '$lib/services';
+	import { activeModal, loginEmail, toast } from "$lib/stores";
+	import { apiClient } from "$lib/services";
 
 	let ownerNameInput: string;
 	let companyNameInput: string;
@@ -31,18 +31,21 @@
 	}
 
 	const createAccount = async () => {
-		if (!isValidInput()) return console.error("Invalid email or password");
+		if (!isValidInput()) return $toast.show("error", "Please fill out all fields");
 
 		try {
-			const platform = await apiClient.createPlatform(companyNameInput, emailInput, ownerNameInput);
+			const platform = await apiClient.createPlatform(companyNameInput, emailInput.toLowerCase(), ownerNameInput);
 			console.debug(platform);
 			$loginEmail = emailInput;
 			$activeModal = VerifyEmail;
-		} catch (error) {
-			console.log(error);
-		}
-	}
+		} catch (e: any) {
+			console.error(e);
 
+			if (e.code === "CONFLICT") return $toast.show("error", "This email is already in use", "Error");
+
+			$toast.show("error", "Error creating account");
+		}
+	};
 </script>
 
 <ModalBase>
@@ -76,10 +79,9 @@
 
 		<StyledButton className="w-full mb-6" type="submit">Continue</StyledButton>
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
-		<span>Have an account? 
-			<span on:click={() => ($activeModal = Login)} class="link link-primary mt-2">
-				Login
-			</span>
+		<span
+			>Have an account?
+			<span on:click={() => ($activeModal = Login)} class="link link-primary mt-2"> Login </span>
 		</span>
 	</form>
 </ModalBase>
@@ -89,5 +91,4 @@
 		padding-left: 60px;
 		padding-right: 60px;
 	}
-
 </style>

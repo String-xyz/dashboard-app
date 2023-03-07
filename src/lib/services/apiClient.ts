@@ -291,3 +291,12 @@ export type Invite = {
 	expiredAt?: string;
 	deactivatedAt?: string;
 };
+
+export enum ErrorCodes {
+	BAD_REQUEST = "BAD_REQUEST",
+	UNAUTHORIZED = "UNAUTHORIZED",
+	FORBIDDEN = "FORBIDDEN",
+	NOT_FOUND = "NOT_FOUND",
+	CONFLICT = "CONFLICT",
+	INTERNAL_SERVER_ERROR = "INTERNAL_SERVER"
+}

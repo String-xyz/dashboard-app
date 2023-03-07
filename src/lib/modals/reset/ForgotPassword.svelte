@@ -1,15 +1,15 @@
 <script lang="ts">
-	import { z } from 'zod';
+	import { z } from "zod";
 
-	import ModalBase from '../ModalBase.svelte';
-	import StyledInput from '$lib/components/StyledInput.svelte';
-	import StyledButton from '$lib/components/StyledButton.svelte';
+	import ModalBase from "../ModalBase.svelte";
+	import StyledInput from "$lib/components/StyledInput.svelte";
+	import StyledButton from "$lib/components/StyledButton.svelte";
 
-	import PwdResetEmail from './PwdResetEmail.svelte';
-	import Login from '../login/Login.svelte';
+	import PwdResetEmail from "./PwdResetEmail.svelte";
+	import Login from "../login/Login.svelte";
 
-	import { activeModal, loginEmail } from '$lib/stores';
-	import { apiClient } from '$lib/services';
+	import { activeModal, loginEmail, toast } from "$lib/stores";
+	import { apiClient, ErrorCodes } from "$lib/services";
 
 	const emailSchema = z.string().trim().email();
 
@@ -17,7 +17,7 @@
 	let emailInput: string;
 
 	$: disabled = !isEmailValid;
-	
+
 	// validate email input on change
 	$: {
 		try {
@@ -35,15 +35,17 @@
 
 			$loginEmail = emailInput;
 			$activeModal = PwdResetEmail;
-		} catch (e) {
+		} catch (e: any) {
 			console.error(e);
+			if (e.code === ErrorCodes.NOT_FOUND) return $toast.show("error", "User not found");
+
+			$toast.show("error", "Something went wrong");
 		}
 	};
 
 	const backToLogin = () => {
 		$activeModal = Login;
-	}
-
+	};
 </script>
 
 <ModalBase size="size-md">
@@ -80,5 +82,4 @@
 		padding-right: 60px;
 		padding-top: 70px;
 	}
-
 </style>

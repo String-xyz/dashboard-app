@@ -1,23 +1,23 @@
 <script lang="ts">
-	import { onMount, SvelteComponent } from 'svelte';
+	import { onMount, SvelteComponent } from "svelte";
 
-	import SideMenu from '$lib/components/SideMenu/SideMenu.svelte';
-	
-	import Dashboard from '$lib/views/Dashboard.svelte';
-	import ManageTeam from '$lib/views/ManageTeam.svelte';
-	import ManageKeys from '$lib/views/ManageKeys.svelte';
-	import Settings from '$lib/views/Settings.svelte';
+	import SideMenu from "$lib/components/SideMenu/SideMenu.svelte";
 
-	import InviteTeammate from '$lib/modals/team/InviteTeammate.svelte';
-	import RemoveTeammate from '$lib/modals/team/RemoveTeammate.svelte';
-	import KeyCreateSuccess from '$lib/modals/keys/KeyCreateSuccess.svelte';
-	import TransferOwnership from '$lib/modals/team/TransferOwnership.svelte';
+	import Dashboard from "$lib/views/Dashboard.svelte";
+	import ManageTeam from "$lib/views/ManageTeam.svelte";
+	import ManageKeys from "$lib/views/ManageKeys.svelte";
+	import Settings from "$lib/views/Settings.svelte";
 
-	import MyAccount from '$lib/components/Settings/MyAccount.svelte';
-	import ChangePassword from '$lib/components/Settings/ChangePassword.svelte';
+	import InviteTeammate from "$lib/modals/team/InviteTeammate.svelte";
+	import RemoveTeammate from "$lib/modals/team/RemoveTeammate.svelte";
+	import KeyCreateSuccess from "$lib/modals/keys/KeyCreateSuccess.svelte";
+	import TransferOwnership from "$lib/modals/team/TransferOwnership.svelte";
 
-	import { MenuItems, activeTab, menuItems, SettingsTab, tabToViewMap } from '$lib/stores';
-	import { authService } from '$lib/services';
+	import MyAccount from "$lib/components/Settings/MyAccount.svelte";
+	import ChangePassword from "$lib/components/Settings/ChangePassword.svelte";
+
+	import { MenuItems, activeTab, menuItems, SettingsTab, tabToViewMap, toast } from "$lib/stores";
+	import { authService } from "$lib/services";
 
 	let isLoggedIn = false;
 
@@ -29,12 +29,12 @@
 		mapViewsToMenuItems.set(MenuItems.MANAGE_TEAM, ManageTeam);
 		mapViewsToMenuItems.set(MenuItems.MANAGE_KEYS, ManageKeys);
 		mapViewsToMenuItems.set(MenuItems.SETTINGS, Settings);
-		
-		$menuItems.forEach((item) => item.view = mapViewsToMenuItems.get(item.name));
+
+		$menuItems.forEach((item) => (item.view = mapViewsToMenuItems.get(item.name)));
 		/* End Set the view for each menu item */
 
 		// Settings tabs
-		$tabToViewMap = new Map<SettingsTab, typeof SvelteComponent>()
+		$tabToViewMap = new Map<SettingsTab, typeof SvelteComponent>();
 		$tabToViewMap.set(SettingsTab.MY_ACCOUNT, MyAccount);
 		$tabToViewMap.set(SettingsTab.CHANGE_PASSWORD, ChangePassword);
 
@@ -46,13 +46,12 @@
 		}
 
 		if (!isLoggedIn) {
-			window.location.href = '/login';
-			return
+			window.location.href = "/login";
+			return;
 		}
 
 		$activeTab = $menuItems[0];
 	});
-
 </script>
 
 <svelte:head>
@@ -81,5 +80,4 @@
 		width: calc(100% - 260px);
 		height: 100%;
 	}
-
 </style>

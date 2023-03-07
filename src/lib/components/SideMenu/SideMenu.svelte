@@ -1,13 +1,12 @@
 <script lang="ts">
-	import { Role } from '$lib/types';
-	import { authService } from '$lib/services';
-	import { menuItems, currentUser } from '$lib/stores';
+	import { Role } from "$lib/types";
+	import { authService } from "$lib/services";
+	import { menuItems, currentUser } from "$lib/stores";
 
-	import Avatar from '../Avatar.svelte';
-	import EnvIndicator from './EnvIndicator.svelte';
-	import MenuItem from './MenuItem.svelte';
-	import Signout from './Signout.svelte';
-
+	import Avatar from "../Avatar.svelte";
+	import EnvIndicator from "./EnvIndicator.svelte";
+	import MenuItem from "./MenuItem.svelte";
+	import Signout from "./Signout.svelte";
 </script>
 
 <div class="side-menu flex flex-col">
@@ -15,8 +14,8 @@
 	<div class="user my-6 flex justify-items-start">
 		<Avatar user={$currentUser} />
 		<div class="ml-2 w-40">
-			<p class="text-sm truncate" title={$currentUser.name}>{$currentUser.name}</p>
-			<p class="text-xs">{$currentUser.role}</p>
+			<p class="text-sm truncate" title={$currentUser?.name}>{$currentUser?.name}</p>
+			<p class="text-xs">{$currentUser?.role}</p>
 		</div>
 	</div>
 
@@ -27,7 +26,7 @@
 	<nav>
 		<ul class="menu bg-transparent">
 			{#if $menuItems}
-				{#each $menuItems.filter(t => authService.canView($currentUser.role, t.minPerms ?? Role.MEMBER)) as tab}
+				{#each $menuItems.filter((t) => authService.canView($currentUser?.role, t.minPerms ?? Role.MEMBER)) as tab}
 					<MenuItem {tab} />
 				{/each}
 			{/if}
