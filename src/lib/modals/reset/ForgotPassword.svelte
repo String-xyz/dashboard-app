@@ -11,9 +11,11 @@
 	import { activeModal, loginEmail } from '$lib/stores';
 	import { apiClient } from '$lib/services';
 
-	let isEmailValid = false;
 	const emailSchema = z.string().trim().email();
+
+	let isEmailValid = false;
 	let emailInput: string;
+
 	$: disabled = !isEmailValid;
 	
 	// validate email input on change
@@ -28,7 +30,9 @@
 
 	const reset = async () => {
 		try {
+			emailInput = emailInput.toLowerCase();
 			await apiClient.sendResetPasswordToken(emailInput);
+
 			$loginEmail = emailInput;
 			$activeModal = PwdResetEmail;
 		} catch (e) {
