@@ -1,13 +1,21 @@
 <script lang="ts">
+	import { z } from 'zod';
+
 	import UserCard from '$lib/components/ManageTeam/UserCard.svelte';
 	import StyledButton from '$lib/components/StyledButton.svelte';
 	import StyledInput from '$lib/components/StyledInput.svelte';
-	import { apiClient, teamService } from '$lib/services';
 
+	import { apiClient, teamService } from '$lib/services';
 	import { transferOwnerModalOpen, ownershipTransferee, currentUser, teamItems, toast } from '$lib/stores';
 	import { Role } from '$lib/types';
 
 	let pwdInput: string;
+
+	let isPwdValid = true;
+
+	const passwordSchema = z.string().min(8);
+
+	$: disabled = !passwordSchema.safeParse(pwdInput).success;
 
 	const handleTransferOwnership = async () => {
 		if ($ownershipTransferee) {
@@ -22,6 +30,12 @@
 				close();
 				$toast.show("success", "Ownership transferred!");
 			} catch (e: any) {
+				if (e.message = "Invalid password") {
+					isPwdValid = false;
+					setTimeout(() => {
+						isPwdValid = true;
+					}, 3000);
+				}
 				console.error(e);
 			}
 		}
@@ -48,7 +62,7 @@
 
 <label for="transfer-modal" class="modal cursor-pointer">
 	<label class="modal-box relative" for="">
-		<form on:submit={handleTransferOwnership} class="main flex flex-col items-center w-full">
+		<form on:submit|preventDefault={handleTransferOwnership} class="main flex flex-col items-center w-full">
 			<button class="ml-auto mb-2" on:click={close}><img src="/assets/close.svg" alt="Close" /></button>
 			<h3 class="text-2xl font-bold mb-6">Transfer Ownership?</h3>
 			<p class="text-center">Are you sure you want to transfer your platform ownership to this person? You will lose owner access to all of String’s admin panel.</p>
@@ -61,7 +75,7 @@
 			<input autocomplete="username" hidden class="hidden" />
 
 			<StyledInput
-				className="mb-12 w-full"
+				className="w-full"
 				label="Enter Password"
 				type="password"
 				autocomplete="current-password"
@@ -69,8 +83,13 @@
 				bind:val={pwdInput}
 				required
 			/>
+			{#if !isPwdValid && pwdInput !== ""}
+				<p class="text-error mt-2 mb-10 mr-auto">Invalid password</p>
+			{:else}
+				<div class="mb-12" />
+			{/if}
 
-			<StyledButton className="btn-warning w-full" type="submit">
+			<StyledButton className="btn-warning w-full" type="submit" {disabled}>
 				Transfer Ownership
 			</StyledButton>
 			<button class="mt-7 p-1 bg-transparent text-sm text-primary font-bold tracking-wider border-none no-animation uppercase" on:click={close}>
