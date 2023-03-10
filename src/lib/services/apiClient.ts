@@ -44,6 +44,10 @@ export function createApiClient(): ApiClient {
 		return (await httpClient.put<Member>(`/members`, { oldPassword, newPassword })).data;
 	}
 
+	async function transferOwnership(memberId: string, password: string) {
+		return (await httpClient.put<Member>(`/members/${memberId}`, { password })).data;
+	}
+
 	async function deactivateMember(memberId: string) {
 		return (await httpClient.put<void>(`/members/${memberId}/deactivate`)).data;
 	}
@@ -177,6 +181,7 @@ export function createApiClient(): ApiClient {
 		changeSelfName,
 		changeMemberRole,
 		changeSelfPassword,
+		transferOwnership,
 		deactivateMember,
 		reactivateMember,
 		sendResetPasswordToken,
@@ -215,8 +220,9 @@ export interface ApiClient {
 	getMembers(): Promise<Member[]>;
 	getMember(memberId: string): Promise<Member>;
 	changeSelfName(name: string): Promise<Member>;
-	changeMemberRole(memberId: string, role: Role, password?: string): Promise<Member>;
+	changeMemberRole(memberId: string, role: Role): Promise<Member>;
 	changeSelfPassword(oldPassword: string, newPassword: string): Promise<Member>;
+	transferOwnership(memberId: string, password: string): Promise<Member>;
 	deactivateMember(memberId: string): Promise<void>;
 	reactivateMember(memberId: string): Promise<void>;
 	sendResetPasswordToken(email: string): Promise<void>;

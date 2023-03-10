@@ -19,10 +19,10 @@
 
 	const handleTransferOwnership = async () => {
 		if ($ownershipTransferee) {
-			console.debug("Transferring ownership of platform to " + $ownershipTransferee?.name)
+			console.debug("Transferring ownership of platform to " + $ownershipTransferee?.name);
 
 			try {
-				await apiClient.changeMemberRole($ownershipTransferee.id, Role.OWNER, pwdInput)
+				await apiClient.transferOwnership($ownershipTransferee.id, pwdInput);
 
 				$currentUser.role = Role.ADMIN;
 				$teamItems = await teamService.rebuildTeamList();
@@ -84,7 +84,7 @@
 				required
 			/>
 			{#if !isPwdValid && pwdInput !== ""}
-				<p class="text-error mt-2 mb-10 mr-auto">Invalid password</p>
+				<p class="text-error mt-2 mb-9 mr-auto">Invalid password</p>
 			{:else}
 				<div class="mb-12" />
 			{/if}
