@@ -2,15 +2,28 @@
 	import UserCard from '$lib/components/ManageTeam/UserCard.svelte';
 	import StyledButton from '$lib/components/StyledButton.svelte';
 	import StyledInput from '$lib/components/StyledInput.svelte';
+	import { apiClient, teamService } from '$lib/services';
 
-	import { transferOwnerModalOpen, ownershipTransferee } from '$lib/stores';
+	import { transferOwnerModalOpen, ownershipTransferee, currentUser, teamItems, toast } from '$lib/stores';
+	import { Role } from '$lib/types';
 
 	let pwdInput: string;
 
-	const handleTransferOwnership = () => {
+	const handleTransferOwnership = async () => {
 		if ($ownershipTransferee) {
-			console.log("[Mock] Transferring ownership of platform to " + $ownershipTransferee?.name)
-			// Call transferOwnership
+			console.debug("Transferring ownership of platform to " + $ownershipTransferee?.name)
+
+			try {
+				await apiClient.changeMemberRole($ownershipTransferee.id, Role.OWNER, pwdInput)
+
+				$currentUser.role = Role.ADMIN;
+				$teamItems = await teamService.rebuildTeamList();
+
+				close();
+				$toast.show("success", "Ownership transferred!");
+			} catch (e: any) {
+				console.error(e);
+			}
 		}
 	}
 
