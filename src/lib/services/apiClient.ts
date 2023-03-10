@@ -36,8 +36,8 @@ export function createApiClient(): ApiClient {
 		return (await httpClient.put<Member>(`/members`, { name })).data;
 	}
 
-	async function changeMemberRole(memberId: string, role: Role, password = "") {
-		return (await httpClient.put<Member>(`/members/${memberId}`, { role, password })).data;
+	async function changeMemberRole(memberId: string, role: Role) {
+		return (await httpClient.put<Member>(`/members/${memberId}`, { role })).data;
 	}
 
 	async function changeSelfPassword(oldPassword: string, newPassword: string) {
