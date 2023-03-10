@@ -45,7 +45,7 @@ export function createApiClient(): ApiClient {
 	}
 
 	async function transferOwnership(memberId: string, password: string) {
-		return (await httpClient.put<Member>(`/members/${memberId}`, { password })).data;
+		return (await httpClient.put<Member>(`/members/${memberId}/transferOwner`, { password })).data;
 	}
 
 	async function deactivateMember(memberId: string) {
