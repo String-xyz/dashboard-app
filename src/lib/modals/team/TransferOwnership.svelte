@@ -62,7 +62,7 @@
 
 <label for="transfer-modal" class="modal cursor-pointer">
 	<label class="modal-box relative" for="">
-		<form on:submit|preventDefault={handleTransferOwnership} class="main flex flex-col items-center w-full">
+		<form on:submit={handleTransferOwnership} class="main flex flex-col items-center w-full">
 			<button class="ml-auto mb-2" on:click={close}><img src="/assets/close.svg" alt="Close" /></button>
 			<h3 class="text-2xl font-bold mb-6">Transfer Ownership?</h3>
 			<p class="text-center">Are you sure you want to transfer your platform ownership to this person? You will lose owner access to all of String’s admin panel.</p>
