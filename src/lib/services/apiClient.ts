@@ -45,11 +45,11 @@ export function createApiClient(): ApiClient {
 	}
 
 	async function deactivateMember(memberId: string) {
-		return (await httpClient.put<void>(`/members/${memberId}/deactivate`)).data;
+		return (await httpClient.put<Member>(`/members/${memberId}/deactivate`)).data;
 	}
 
 	async function reactivateMember(memberId: string) {
-		return (await httpClient.put<void>(`/members/${memberId}/reactivate`)).data;
+		return (await httpClient.put<Member>(`/members/${memberId}/reactivate`)).data;
 	}
 
 	async function sendResetPasswordToken(email: string) {
@@ -217,8 +217,8 @@ export interface ApiClient {
 	changeSelfName(name: string): Promise<Member>;
 	changeMemberRole(memberId: string, role: Role): Promise<Member>;
 	changeSelfPassword(oldPassword: string, newPassword: string): Promise<Member>;
-	deactivateMember(memberId: string): Promise<void>;
-	reactivateMember(memberId: string): Promise<void>;
+	deactivateMember(memberId: string): Promise<Member>;
+	reactivateMember(memberId: string): Promise<Member>;
 	sendResetPasswordToken(email: string): Promise<void>;
 	resetPassword(token: string, password: string): Promise<void>;
 
