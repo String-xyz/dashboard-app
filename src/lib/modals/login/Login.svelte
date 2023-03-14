@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { z } from "zod";
+	import { onMount } from "svelte";
 
 	import ModalBase from "../ModalBase.svelte";
 	import StyledInput from "$lib/components/StyledInput.svelte";
@@ -9,15 +9,12 @@
 	import CreateAccount from "./CreateAccount.svelte";
 	import LoginSuccess from "./LoginSuccess.svelte";
 
+	import { validator } from "$lib/utils";
 	import { activeModal, currentUser, loginEmail, toast } from "$lib/stores";
 	import { authService, ErrorCodes } from "$lib/services";
-	import { onMount } from "svelte";
 
 	let emailInput = "";
 	let pwdInput = "";
-
-	const emailSchema = z.string().trim().email();
-	const passwordSchema = z.string().min(8);
 
 	let isEmailValid = true;
 	let isPassValid = true;
@@ -25,8 +22,8 @@
 	$: disabled = false;
 
 	const isValidInput = () => {
-		isEmailValid = emailSchema.safeParse(emailInput).success;
-		isPassValid = passwordSchema.safeParse(pwdInput).success;
+		isEmailValid = validator.isValidEmail(emailInput);
+		isPassValid = validator.isValidPwd(pwdInput);
 
 		return isEmailValid && isPassValid;
 	};
@@ -41,8 +38,9 @@
 	const handleLogin = async (e: any) => {
 		if (!isValidInput()) return;
 
+		emailInput = validator.normalizeEmail(emailInput);
 		$loginEmail = emailInput;
-
+	
 		try {
 			const user = await authService.login(emailInput, pwdInput);
 

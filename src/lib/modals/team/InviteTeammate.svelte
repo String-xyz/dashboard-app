@@ -1,15 +1,12 @@
 <script lang="ts">
-	import { z } from "zod";
-	import { Role } from "$lib/types";
-	import { apiClient, teamService } from "$lib/services";
-	import { inviteModalOpen, teamItems, toast } from "$lib/stores";
-
 	import StyledInput from "$lib/components/StyledInput.svelte";
 	import StyledButton from "$lib/components/StyledButton.svelte";
 	import RoleDropdown from "$lib/components/ManageTeam/RoleDropdown.svelte";
 
-	const emailSchema = z.string().trim().email();
-	const nameSchema = z.string().min(1);
+	import { Role } from "$lib/types";
+	import { validator } from "$lib/utils";
+	import { apiClient, teamService } from "$lib/services";
+	import { inviteModalOpen, teamItems, toast } from "$lib/stores";
 
 	let dropdownOpen: boolean;
 	let inviteRole: Role;
@@ -17,22 +14,16 @@
 	let emailInput: string;
 	let nameInput: string;
 
-	let validInput = false;
-	let isEmailValid = true;
+	$: isEmailValid = validator.isValidEmail(emailInput);
+	$: isNameValid = validator.isValidName(nameInput);
 
-	// Bind a verification function to the password input
-	$: disabled = !validInput;
-	$: {
-		isEmailValid = emailSchema.safeParse(emailInput).success;
-		const isNameValid = nameSchema.safeParse(nameInput).success;
-
-		validInput = isEmailValid && isNameValid;
-	}
+	$: disabled = !isEmailValid || !isNameValid;
 
 	const handleInvite = async () => {
-		if (!validInput) return;
+		if (disabled) return;
 
 		try {
+			emailInput = validator.normalizeEmail(emailInput);
 			await apiClient.sendInvite(emailInput, nameInput, inviteRole);
 
 			$teamItems = await teamService.rebuildTeamList();
