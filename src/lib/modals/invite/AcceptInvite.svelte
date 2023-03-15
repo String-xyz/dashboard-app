@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { z } from 'zod';
-
 	import ModalBase from '../ModalBase.svelte';
 	import StyledInput from '$lib/components/StyledInput.svelte';
 	import StyledButton from '$lib/components/StyledButton.svelte';
@@ -10,27 +8,20 @@
 	import InviteFailed from './InviteFailed.svelte';
 	
 	import { activeModal, currentUser, _invite} from '$lib/stores';
+	import { validator } from "$lib/utils";
 	import { authService } from '$lib/services';
 
-	const passwordSchema = z.string().min(8);
 
 	let pwdInput: string;
-	let isPassValid = true;
 
-	// Bind a verification function to the password input
-	$: {
-		try {
-			passwordSchema.parse(pwdInput);
-			isPassValid = true;
-		} catch (error) {
-			isPassValid = false;
-		}
-	}
+	$: isPwdValid = validator.isValidPwd(pwdInput);
 
-	$: disabled = !isPassValid;
+	$: disabled = !isPwdValid;
 
 	const acceptInvite = async () => {
 		try {
+			if (!pwdInput) return;
+
 			const user = await authService.acceptInvite($_invite, pwdInput);
 			
 			$currentUser = user;

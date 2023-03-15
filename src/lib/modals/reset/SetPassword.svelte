@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { z } from 'zod';
-
 	import ModalBase from '../ModalBase.svelte';
 	import StyledInput from '$lib/components/StyledInput.svelte';
 	import StyledButton from '$lib/components/StyledButton.svelte';
@@ -10,27 +8,20 @@
 	import ResetFailed from './ResetFailed.svelte';
 
 	import { activeModal, resetToken } from '$lib/stores';
+	import { validator } from '$lib/utils';
 	import { apiClient } from '$lib/services';
-
-	const passwordSchema = z.string().min(8);
 
 	let pwdInput: string;
 	let confPwdInput: string;
 
-	let isPwdValid = true;
+	$: isPwdValid = validator.isValidPwd(pwdInput);
 
 	$: disabled = !isPwdValid || pwdInput !== confPwdInput;
-	$: {
-		try {
-			passwordSchema.parse(pwdInput);
-			isPwdValid = true;
-		} catch (error) {
-			isPwdValid = false;
-		}
-	}
 
 	const handleReset = async () => {
+		if (!isPwdValid) return console.error("Invalid password");
 		if (pwdInput !== confPwdInput) return console.error("Passwords do not match");
+
 		if (!$resetToken) {
 			console.error("No reset token found");
 			return $activeModal = ResetFailed;

@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { z } from "zod";
-
 	import ModalBase from "../ModalBase.svelte";
 	import StyledInput from "$lib/components/StyledInput.svelte";
 	import StyledButton from "$lib/components/StyledButton.svelte";
@@ -9,28 +7,17 @@
 	import Login from "../login/Login.svelte";
 
 	import { activeModal, loginEmail, toast } from "$lib/stores";
+	import { validator } from "$lib/utils";
 	import { apiClient, ErrorCodes } from "$lib/services";
 
-	const emailSchema = z.string().trim().email();
-
-	let isEmailValid = false;
 	let emailInput: string;
 
+	$: isEmailValid = validator.isValidPwd(emailInput);
 	$: disabled = !isEmailValid;
-
-	// validate email input on change
-	$: {
-		try {
-			emailSchema.parse(emailInput);
-			isEmailValid = true;
-		} catch (error) {
-			isEmailValid = false;
-		}
-	}
 
 	const reset = async () => {
 		try {
-			emailInput = emailInput.toLowerCase();
+			emailInput = validator.normalizeEmail(emailInput);
 			await apiClient.sendResetPasswordToken(emailInput);
 
 			$loginEmail = emailInput;
