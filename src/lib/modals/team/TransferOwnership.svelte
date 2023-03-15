@@ -10,7 +10,7 @@
 
 	let pwdInput: string;
 
-	$: showPwdInvalid = false;
+	let showPwdInvalid = false;
 
 	$: disabled = !validator.isValidPwd(pwdInput);
 
@@ -73,7 +73,7 @@
 			{/if}
 
 			<!-- Silence a11y warning -->
-			<input autocomplete="username" hidden class="hidden" />
+			<!-- <input autocomplete="username" hidden class="hidden" /> -->
 
 			<StyledInput
 				className="w-full"
