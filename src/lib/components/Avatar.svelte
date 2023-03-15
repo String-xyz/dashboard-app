@@ -13,21 +13,19 @@
 	
 	const path = type === 'self' ? assetPathSelf : assetPathOther;
 	
-	$: pfp = "";
-	$: name = "";
+	let pfp = "";
+	$: name = user.name || user.email;
 
-	onMount(() => {
-		name = user.name || user.email;
-
+	$: {
 		if ("isInvite" in user && user.isInvite) {
 			pfp = `${assetPathOther}/invite_sent.svg`
 		} else {
 			const firstinitial = name?.charAt(0)?.toUpperCase();
 			pfp = `${path}/${firstinitial}.svg`;
 		}
-	});
+	}
 </script>
 
-{#if name}
+{#if pfp}
 	<img src={pfp} alt="profile" class={className} />
 {/if}
