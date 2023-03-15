@@ -1,35 +1,27 @@
 <script lang="ts">
-	import { z } from "zod";
-	import { apiClient, ErrorCodes } from "$lib/services";
 	import StyledButton from "../StyledButton.svelte";
 	import StyledInput from "../StyledInput.svelte";
+
 	import { toast } from "$lib/stores";
+	import { validator } from "$lib/utils";
+	import { apiClient, ErrorCodes } from "$lib/services";
 
-	// import { currentUser } from "$lib/stores";
+	let oldPwdInput: string;
+	let newPwdInput: string;
 
-	let oldPasswordInput: string;
-	let newPasswordInput: string;
-	const passwordSchema = z.string().min(8);
-
-	let isPwdValid = true;
+	$: isPwdValid = validator.isValidPwd(newPwdInput);
 
 	$: disabled = !isPwdValid;
-	$: {
-		try {
-			passwordSchema.parse(newPasswordInput);
-			isPwdValid = true;
-		} catch (error) {
-			isPwdValid = false;
-		}
-	}
 
 	const changePassword = async () => {
 		try {
-			await apiClient.changeSelfPassword(oldPasswordInput, newPasswordInput);
+			if (!isPwdValid) return;
+
+			await apiClient.changeSelfPassword(oldPwdInput, newPwdInput);
 
 			// clear inputs
-			oldPasswordInput = "";
-			newPasswordInput = "";
+			oldPwdInput = "";
+			newPwdInput = "";
 
 			$toast.show("success", "Password changed");
 		} catch (e: any) {
@@ -53,7 +45,7 @@
 			autocomplete="current-password"
 			placeholder="********"
 			className="w-full mr-6"
-			bind:val={oldPasswordInput}
+			bind:val={oldPwdInput}
 			autofocus
 			required
 		/>
@@ -64,7 +56,7 @@
 				autocomplete="new-password"
 				placeholder="********"
 				className="w-full"
-				bind:val={newPasswordInput}
+				bind:val={newPwdInput}
 				required
 			/>
 			<span class="mt-2 whitespace-nowrap text-sm flex items-center">

@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { z } from "zod";
-
 	import ModalBase from "../ModalBase.svelte";
 	import StyledInput from "$lib/components/StyledInput.svelte";
 	import StyledButton from "$lib/components/StyledButton.svelte";
@@ -9,23 +7,23 @@
 	import VerifyEmail from "./VerifyEmail.svelte";
 
 	import { activeModal, loginEmail, toast } from "$lib/stores";
+	import { validator } from '$lib/utils';
 	import { apiClient } from "$lib/services";
 
 	let ownerNameInput: string;
 	let companyNameInput: string;
 	let emailInput: string;
 
-	const emailSchema = z.string().trim().email();
-	const nameSchema = z.string().min(1);
-
 	let isOwnerNameValid = true;
 	let isCompanyNameValid = true;
 	let isEmailValid = true;
 
 	const isValidInput = () => {
-		isOwnerNameValid = nameSchema.safeParse(ownerNameInput).success;
-		isCompanyNameValid = nameSchema.safeParse(companyNameInput).success;
-		isEmailValid = emailSchema.safeParse(emailInput).success;
+		isOwnerNameValid = validator.isValidName(ownerNameInput);
+		isCompanyNameValid = validator.isValidName(companyNameInput);
+
+		emailInput = validator.normalizeEmail(emailInput);
+		isEmailValid = validator.isValidEmail(emailInput);
 
 		return isOwnerNameValid && isCompanyNameValid && isEmailValid;
 	}
@@ -34,8 +32,8 @@
 		if (!isValidInput()) return $toast.show("error", "Please fill out all fields");
 
 		try {
-			const platform = await apiClient.createPlatform(companyNameInput, emailInput.toLowerCase(), ownerNameInput);
-			console.debug(platform);
+			await apiClient.createPlatform(companyNameInput, emailInput, ownerNameInput);
+
 			$loginEmail = emailInput;
 			$activeModal = VerifyEmail;
 		} catch (e: any) {
