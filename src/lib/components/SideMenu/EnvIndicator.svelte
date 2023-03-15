@@ -15,7 +15,7 @@
 </script>
 
 <div class="env">
-	<p class="text-sm">
+	<p class="text-sm flex items-center">
 		<img src={checkmark} alt="check" class="inline mr-2" />
 		{indicatorText}
 	</p>

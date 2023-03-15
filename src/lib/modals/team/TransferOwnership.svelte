@@ -3,19 +3,46 @@
 	import StyledButton from '$lib/components/StyledButton.svelte';
 	import StyledInput from '$lib/components/StyledInput.svelte';
 
-	import { transferOwnerModalOpen, ownershipTransferee } from '$lib/stores';
+	import { transferOwnerModalOpen, ownershipTransferee, currentUser, teamItems, toast } from '$lib/stores';
+	import { apiClient, teamService } from '$lib/services';
+	import { validator } from '$lib/utils';
+	import { Role } from '$lib/types';
 
 	let pwdInput: string;
 
-	const handleTransferOwnership = () => {
+	let showPwdInvalid = false;
+
+	$: disabled = !validator.isValidPwd(pwdInput);
+
+	const handleTransferOwnership = async () => {
 		if ($ownershipTransferee) {
-			console.log("[Mock] Transferring ownership of platform to " + $ownershipTransferee?.name)
-			// Call transferOwnership
+			console.debug("Transferring ownership of platform to " + $ownershipTransferee?.name);
+
+			try {
+				await apiClient.transferOwnership($ownershipTransferee.id, pwdInput);
+
+				$currentUser.role = Role.ADMIN;
+				$teamItems = await teamService.rebuildTeamList();
+
+				close();
+				$toast.show("success", "Ownership transferred!");
+			} catch (e: any) {
+				if (e.message = "Invalid password") {
+					showPwdInvalid = true;
+					setTimeout(() => {
+						showPwdInvalid = false;
+					}, 3000);
+				}
+				console.error(e);
+			}
 		}
 	}
 
 	const handleKeyboard = (e: KeyboardEvent) => {
 		if ($transferOwnerModalOpen) {
+			if (e.key == "Enter") {
+				handleTransferOwnership();
+			}
 			if (e.key == "Escape") {
 				close();
 			}
@@ -23,6 +50,7 @@
 	}
 
 	const close = () => {
+		pwdInput = "";
 		$ownershipTransferee = null;
 		$transferOwnerModalOpen = false;
 	}
@@ -33,9 +61,9 @@
 
 <input type="checkbox" id="transfer-modal" class="modal-toggle" bind:checked={$transferOwnerModalOpen} />
 
-<label for="transfer-modal" class="modal cursor-pointer">
-	<label class="modal-box relative" for="">
-		<form on:submit={handleTransferOwnership} class="main flex flex-col items-center w-full">
+<div class="modal">
+	<div class="modal-box relative">
+		<div class="main flex flex-col items-center w-full">
 			<button class="ml-auto mb-2" on:click={close}><img src="/assets/close.svg" alt="Close" /></button>
 			<h3 class="text-2xl font-bold mb-6">Transfer Ownership?</h3>
 			<p class="text-center">Are you sure you want to transfer your platform ownership to this person? You will lose owner access to all of String’s admin panel.</p>
@@ -45,10 +73,10 @@
 			{/if}
 
 			<!-- Silence a11y warning -->
-			<input autocomplete="username" hidden class="hidden" />
+			<!-- <input autocomplete="username" hidden class="hidden" /> -->
 
 			<StyledInput
-				className="mb-12 w-full"
+				className="w-full"
 				label="Enter Password"
 				type="password"
 				autocomplete="current-password"
@@ -56,16 +84,21 @@
 				bind:val={pwdInput}
 				required
 			/>
+			{#if showPwdInvalid && pwdInput !== ""}
+				<p class="text-error mt-2 mb-9 mr-auto">Invalid password</p>
+			{:else}
+				<div class="mb-12" />
+			{/if}
 
-			<StyledButton className="btn-warning w-full" type="submit">
+			<StyledButton className="btn-warning w-full" action={handleTransferOwnership} {disabled}>
 				Transfer Ownership
 			</StyledButton>
 			<button class="mt-7 p-1 bg-transparent text-sm text-primary font-bold tracking-wider border-none no-animation uppercase" on:click={close}>
 				Cancel
 			</button>
-		</form>
-	</label>
-</label>
+		</div>
+	</div>
+</div>
 
 <style>
 	.modal {

@@ -62,6 +62,9 @@ export function createTeamService(apiClient: ApiClient) {
 				// If it is the current user, put them to the top of the list only
 				_teamItems.unshift(teamItem);
 				return;
+			} else if (teamItem.role === Role.OWNER) {
+				_teamItems.splice(1, 0, teamItem);
+				return;
 			}
 
 			_teamItems.push(teamItem);
