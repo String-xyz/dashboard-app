@@ -7,7 +7,7 @@
 	import InviteSuccess from './InviteSuccess.svelte';
 	import InviteFailed from './InviteFailed.svelte';
 	
-	import { activeModal, currentUser, _invite} from '$lib/stores';
+	import { activeModal, currentUser, _invite, _inviteToken} from '$lib/stores';
 	import { validator } from "$lib/utils";
 	import { authService } from '$lib/services';
 
@@ -22,7 +22,7 @@
 		try {
 			if (!pwdInput) return;
 
-			const user = await authService.acceptInvite($_invite, pwdInput);
+			const user = await authService.acceptInvite($_invite, pwdInput, $_inviteToken);
 			
 			$currentUser = user;
 			$activeModal = InviteSuccess;

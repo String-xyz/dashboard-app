@@ -1,7 +1,10 @@
-import type { PageLoad } from './$types';
+import type { PageLoad } from "./$types";
 
-export const load = (({ params }) => {
+export const load = ((data) => {
+	const token = data.url.searchParams.get("token");
+
 	return {
-		id: params.slug
-	}
+		id: data.params.slug,
+		token
+	};
 }) satisfies PageLoad;
