@@ -69,8 +69,8 @@ export function createApiClient(): ApiClient {
 		return (await httpClient.post<Invite>("/invites", { email, name, role })).data;
 	}
 
-	async function acceptInvite(inviteId: string, password: string) {
-		return (await httpClient.post<Member>(`/invites/${inviteId}`, { password })).data;
+	async function acceptInvite(inviteId: string, password: string, token: string) {
+		return (await httpClient.post<Member>(`/invites/${inviteId}`, { password, token })).data;
 	}
 
 	async function listInvites() {
@@ -230,7 +230,7 @@ export interface ApiClient {
 
 	/* Invitations */
 	sendInvite(email: string, name: string, role: Role): Promise<Invite>;
-	acceptInvite(inviteId: string, password: string): Promise<Member>;
+	acceptInvite(inviteId: string, password: string, token: string): Promise<Member>;
 	getInvite(inviteId: string): Promise<Invite>;
 	listInvites(): Promise<Invite[]>;
 	resendInvite(inviteId: string): Promise<Member>;
