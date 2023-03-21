@@ -71,16 +71,19 @@
 			<button class="ml-auto mb-1" on:click={close}><img src="/assets/close.svg" alt="Close" /></button>
 			<h3 class="text-3xl font-bold mb-12">Invite a teammate</h3>
 
-			<StyledInput
-				className="mb-6 w-full"
-				type="email"
-				label="Email address"
-				placeholder="test@string.xyz"
-				borderError={!isEmailValid && emailInput !== ""}
-				bind:val={emailInput}
-				autofocus
-				required
-			/>
+			{#if $inviteModalOpen}
+				<StyledInput
+					className="mb-6 w-full"
+					type="email"
+					label="Email address"
+					placeholder="test@string.xyz"
+					borderError={!isEmailValid && emailInput !== ""}
+					bind:val={emailInput}
+					autofocus={true}
+					required
+				/>
+			{/if}
+
 			<div class="flex justify-between mb-20 w-full">
 				<StyledInput className="mb-2 w-full mr-6" label="Full name" placeholder="John Smith" bind:val={nameInput} required />
 				<StyledInput label="Role" className="flex justify-center w-48 h-[54px]" wrapper={true} focused={dropdownOpen}>

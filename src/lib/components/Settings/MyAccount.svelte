@@ -7,7 +7,7 @@
 
 	let nameInput = $currentUser.name;
 
-	$: isEditingName = false;
+	let isEditingName = false;
 
 	const showEdit = () => {
 		isEditingName = true;
@@ -16,6 +16,10 @@
 	const saveEdit = async () => {
 		isEditingName = false;
 		try {
+			if (nameInput == $currentUser.name) {
+				return;
+			}
+
 			const member = await apiClient.changeSelfName(nameInput);
 			$currentUser.name = member.name;
 

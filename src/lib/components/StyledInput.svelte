@@ -13,7 +13,9 @@
 
 	onMount(() => {
 		if (autofocus) {
-			inputElm.focus();
+			setTimeout(() => {
+				inputElm.focus();
+			}, 100);
 		}
 	});
 
