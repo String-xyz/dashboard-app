@@ -63,9 +63,16 @@
 						<img src="/assets/dropdown/copy.svg" alt="copy" />
 					</button>
 				</div>
-
-				<StyledInput className="mb-8 w-full" label="Description" placeholder="Optional" bind:val={descInput} />
-				<StyledButton className="w-full" type="submit" autofocus>Complete</StyledButton>
+				{#if $keySuccessModalOpen}
+					<StyledInput
+						className="mb-8 w-full"
+						label="Description"
+						placeholder="Optional"
+						bind:val={descInput}
+						autofocus 
+					/>
+				{/if}
+				<StyledButton className="w-full" type="submit">Complete</StyledButton>
 			</form>
 		</div>
 	</div>

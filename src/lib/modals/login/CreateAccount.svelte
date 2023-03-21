@@ -58,6 +58,7 @@
 			placeholder="Enter owner name"
 			bind:val={ownerNameInput}
 			required
+			autofocus
 		/>
 		<StyledInput
 			className="mb-6 w-full"

@@ -74,16 +74,18 @@
 
 			<!-- Silence a11y warning -->
 			<!-- <input autocomplete="username" hidden class="hidden" /> -->
-
-			<StyledInput
-				className="w-full"
-				label="Enter Password"
-				type="password"
-				autocomplete="current-password"
-				placeholder="********"
-				bind:val={pwdInput}
-				required
-			/>
+			{#if $transferOwnerModalOpen}
+				<StyledInput
+					className="w-full"
+					label="Enter Password"
+					type="password"
+					autocomplete="current-password"
+					placeholder="********"
+					bind:val={pwdInput}
+					required
+					autofocus
+				/>
+			{/if}
 			{#if showPwdInvalid && pwdInput !== ""}
 				<p class="text-error mt-2 mb-9 mr-auto">Invalid password</p>
 			{:else}
