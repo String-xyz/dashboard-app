@@ -8,7 +8,7 @@ dev_DISTRIBUTION_ID=E15ATFGWUQ4174
 test-envvars:
 	@[ "${env}" ] || ( echo "env var is not set"; exit 1 )
 
-build:-test-envvars
+build: test-envvars
 	npm run build
 
 build-sandbox: test-envvars
