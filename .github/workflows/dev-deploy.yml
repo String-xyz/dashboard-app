@@ -1,4 +1,4 @@
-name: deploy to development
+name: development
 permissions:
   id-token: write
   contents: read
@@ -8,10 +8,10 @@ on:
 
 jobs:
   deploy:
+    name: deploy to development
     environment: 
       name: development
       url: https://dashboard.dev.string-api.xyz
-    name: deploy to development
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

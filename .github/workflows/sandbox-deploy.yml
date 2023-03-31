@@ -1,4 +1,4 @@
-name: deploy to sandbox
+name: sandbox
 permissions:
   id-token: write
   contents: read
@@ -7,12 +7,11 @@ on:
     branches: [sandbox]
 
 jobs:
-  sandbox:
+  deploy:
+    name: deploy to sandbox
     environment: 
       name: sandbox
       url: https://sandbox.string.xyz
-
-    name: build push and deploy
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
