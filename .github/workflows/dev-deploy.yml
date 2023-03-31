@@ -7,7 +7,7 @@ on:
     branches: [develop]
 
 jobs:
-  deploy:
+  develop:
     environment: 
       name: development
       url: https://dashboard.dev.string-api.xyz
