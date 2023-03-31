@@ -7,7 +7,7 @@ on:
     branches: [sandbox]
 
 jobs:
-  deploy:
+  sandbox:
     environment: 
       name: sandbox
       url: https://sandbox.string.xyz
