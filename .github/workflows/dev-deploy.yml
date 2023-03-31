@@ -7,12 +7,11 @@ on:
     branches: [develop]
 
 jobs:
-  develop:
+  deploy:
     environment: 
       name: development
       url: https://dashboard.dev.string-api.xyz
-
-    name: build push and deploy
+    name: deploy to development
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
