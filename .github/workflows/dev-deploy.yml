@@ -6,6 +6,7 @@ on:
   push:
     branches: [develop]
 jobs:
+  deploy:
     name: deploy to development
     environment: 
       name: development
