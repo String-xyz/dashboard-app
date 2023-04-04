@@ -2,7 +2,7 @@
 	import { cards } from "$lib/constants/cards";
 	import Card from "$lib/components/Dashboard/Card.svelte";
 	import Toast from "$lib/components/Toast.svelte";
-	import { toast } from "$lib/stores";
+	import { toast, currentUser } from "$lib/stores";
 </script>
 
 <svelte:head>
@@ -10,7 +10,7 @@
 </svelte:head>
 
 <div class="main h-full">
-	<h3 class="text-2xl font-bold">Let’s get you started!</h3>
+	<h3 class="text-2xl font-bold">Welcome {$currentUser.name?.split(' ')[0] ?? ""}!</h3>
 	<div class="divider mb-6" />
 
 	<div class="flex justify-center items-center w-full">

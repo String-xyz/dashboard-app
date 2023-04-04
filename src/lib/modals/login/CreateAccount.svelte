@@ -48,8 +48,8 @@
 
 <ModalBase>
 	<form on:submit={createAccount} class="main flex flex-col items-center">
-		<img src="/assets/string_logo.svg" alt="String" width="76px" height="18px" class="mb-12 mt-7" />
-		<h3 class="text-2xl font-bold">Create a Company account</h3>
+		<img src="/assets/string_logo.svg" alt="String" width="76px" height="18px" class="mb-7 mt-12" />
+		<h3 class="text-2xl font-bold">Create a company account</h3>
 		<p class="my-8">Unlock the magic of String’s API by entering your email below.</p>
 
 		<StyledInput
