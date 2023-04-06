@@ -108,7 +108,7 @@ export function createApiClient(): ApiClient {
 
 	/*********** API KEYS ***********/
 	async function createApiKey(keyType = "public") {
-		return (await httpClient.post<ApiKeyResponse>("/apikeys", { type: keyType })).data;
+		return (await httpClient.post<ApiKeyResponse>(`/apikeys?type=${keyType}`)).data;
 	}
 
 	async function listApiKeys(limit = 10) {
