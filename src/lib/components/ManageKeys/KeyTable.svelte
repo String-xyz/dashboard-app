@@ -75,10 +75,10 @@
 			{#each $apiKeyList as key, i}
 				<div class="row flex flex-nowrap items-center gap-x-5 py-6 pl-4 pr-9">
 					<div class="col flex flex-col">
-						<p class="font-bold">{truncate(key.data)}</p>
+						<p class="font-bold">{truncate(key.public)}</p>
 						<span class="text-sm">
 							{#if key.showFullKey}
-								<span class="select-all text-clip break-all">{key.data}</span>
+								<span class="select-all text-clip break-all">{key.public}</span>
 								<button on:click={() => (key.showFullKey = !key.showFullKey)}>
 									<img src="/assets/dropdown/eye_con_hide.svg" alt="view" class="inline mx-2" />
 								</button>
