@@ -49,7 +49,7 @@ export function createApiClient(): ApiClient {
 	}
 
 	async function deactivateMember(memberId: string) {
-		return (await httpClient.delete<Member>(`/members/${memberId}`)).data;
+		return (await httpClient.patch<Member>(`/members/${memberId}/deactivate`)).data;
 	}
 
 	async function reactivateMember(memberId: string) {
@@ -90,7 +90,7 @@ export function createApiClient(): ApiClient {
 	}
 
 	async function revokeInvite(inviteId: string) {
-		return (await httpClient.delete<void>(`/invites/${inviteId}`)).data;
+		return (await httpClient.patch<void>(`/invites/${inviteId}/deactivate`)).data;
 	}
 
 	/*********** PLATFORM ***********/
@@ -120,7 +120,7 @@ export function createApiClient(): ApiClient {
 	}
 
 	async function deactivateApiKey(keyId: string) {
-		return (await httpClient.delete<ApiKeyResponse>(`/apikeys/${keyId}`)).data;
+		return (await httpClient.patch<ApiKeyResponse>(`/apikeys/${keyId}/deactivate`)).data;
 	}
 
 	async function editApiKey(keyId: string, description: string) {
