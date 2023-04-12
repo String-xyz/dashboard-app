@@ -53,7 +53,7 @@ export function createApiClient(): ApiClient {
 	}
 
 	async function reactivateMember(memberId: string) {
-		return (await httpClient.post<Member>(`/members/${memberId}/reactivate`)).data;
+		return (await httpClient.patch<Member>(`/members/${memberId}/reactivate`)).data;
 	}
 
 	async function sendResetPasswordToken(email: string) {
