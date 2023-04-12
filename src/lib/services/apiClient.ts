@@ -33,27 +33,27 @@ export function createApiClient(): ApiClient {
 	}
 
 	async function changeSelfName(name: string) {
-		return (await httpClient.put<Member>(`/members`, { name })).data;
+		return (await httpClient.patch<Member>(`/members`, { name })).data;
 	}
 
 	async function changeMemberRole(memberId: string, role: Role) {
-		return (await httpClient.put<Member>(`/members/${memberId}`, { role })).data;
+		return (await httpClient.patch<Member>(`/members/${memberId}`, { role })).data;
 	}
 
 	async function changeSelfPassword(oldPassword: string, newPassword: string) {
-		return (await httpClient.put<Member>(`/members`, { oldPassword, newPassword })).data;
+		return (await httpClient.patch<Member>(`/members`, { oldPassword, newPassword })).data;
 	}
 
 	async function transferOwnership(memberId: string, password: string) {
-		return (await httpClient.put<Member>(`/members/${memberId}/transferOwner`, { password })).data;
+		return (await httpClient.patch<Member>(`/members/${memberId}/transferOwner`, { password })).data;
 	}
 
 	async function deactivateMember(memberId: string) {
-		return (await httpClient.put<Member>(`/members/${memberId}/deactivate`)).data;
+		return (await httpClient.delete<Member>(`/members/${memberId}`)).data;
 	}
 
 	async function reactivateMember(memberId: string) {
-		return (await httpClient.put<Member>(`/members/${memberId}/reactivate`)).data;
+		return (await httpClient.post<Member>(`/members/${memberId}/reactivate`)).data;
 	}
 
 	async function sendResetPasswordToken(email: string) {
@@ -86,11 +86,11 @@ export function createApiClient(): ApiClient {
 	}
 
 	async function changeInviteRole(inviteId: string, role: Role) {
-		return (await httpClient.put<void>(`/invites/${inviteId}`, { role })).data;
+		return (await httpClient.patch<void>(`/invites/${inviteId}`, { role })).data;
 	}
 
 	async function revokeInvite(inviteId: string) {
-		return (await httpClient.put<void>(`/invites/${inviteId}/deactivate`)).data;
+		return (await httpClient.delete<void>(`/invites/${inviteId}`)).data;
 	}
 
 	/*********** PLATFORM ***********/
@@ -103,7 +103,7 @@ export function createApiClient(): ApiClient {
 	}
 
 	async function updatePlatform(name: string) {
-		return (await httpClient.put<Platform>(`/platforms`, { name })).data;
+		return (await httpClient.patch<Platform>(`/platforms`, { name })).data;
 	}
 
 	/*********** API KEYS ***********/
@@ -120,11 +120,11 @@ export function createApiClient(): ApiClient {
 	}
 
 	async function deactivateApiKey(keyId: string) {
-		return (await httpClient.put<ApiKeyResponse>(`/apikeys/${keyId}/deactivate`)).data;
+		return (await httpClient.delete<ApiKeyResponse>(`/apikeys/${keyId}`)).data;
 	}
 
 	async function editApiKey(keyId: string, description: string) {
-		return (await httpClient.put<ApiKeyResponse>(`/apikeys/${keyId}`, { description })).data;
+		return (await httpClient.patch<ApiKeyResponse>(`/apikeys/${keyId}`, { description })).data;
 	}
 
 	/*---------- INTERCEPTORS ----------*/
