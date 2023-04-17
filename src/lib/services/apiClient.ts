@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { Role } from "$lib/types";
+import type { Role } from "$lib/common/types";
 
 export function createApiClient(): ApiClient {
 	const baseUrl = import.meta.env.VITE_API_URL;
@@ -298,7 +298,7 @@ export type Invite = {
 	deactivatedAt?: string;
 };
 
-export enum ErrorCodes {
+export enum ErrorCode {
 	BAD_REQUEST = "BAD_REQUEST",
 	UNAUTHORIZED = "UNAUTHORIZED",
 	FORBIDDEN = "FORBIDDEN",
@@ -306,3 +306,19 @@ export enum ErrorCodes {
 	CONFLICT = "CONFLICT",
 	INTERNAL_SERVER_ERROR = "INTERNAL_SERVER"
 }
+
+export type ApiError = {
+	code: ErrorCode;
+	message: string;
+	details?: {
+		invalidParams: InvalidParams[];
+	};
+};
+
+type InvalidParams = {
+	param: string;
+	value: string;
+	expectedType: string;
+	message: string;
+}
+

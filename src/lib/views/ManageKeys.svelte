@@ -6,6 +6,7 @@
 
 	import { keyService } from "$lib/services";
 	import { apiKeyList, createdApiKey, keySuccessModalOpen, toast } from "$lib/stores";
+	import { commonErrorHandler } from "$lib/common/errors";
 
 	const createApiKey = async () => {
 		if ($keySuccessModalOpen) {
@@ -19,9 +20,8 @@
 			$keySuccessModalOpen = true;
 
 			$apiKeyList = await keyService.listApiKeys();
-		} catch (e) {
-			$toast.show("error", "Oops, something went wrong. Please try again.");
-			console.error(e);
+		} catch (e: any) {
+			commonErrorHandler(e, "API Key");
 		}
 	};
 
@@ -53,7 +53,7 @@
 
 	<KeyTable />
 
-	<Toast type={$toast.type} size="sm" bind:show={$toast._show}>{$toast.message}</Toast>
+	<Toast type={$toast.type} size="sm" bind:display={$toast._display}>{$toast.message}</Toast>
 </div>
 
 <style>

@@ -3,7 +3,8 @@
 	import StyledButton from "$lib/components/StyledButton.svelte";
 
 	import { keySuccessModalOpen, createdApiKey, apiKeyList, toast } from "$lib/stores";
-	import { ErrorCodes, keyService } from "$lib/services";
+	import { commonErrorHandler } from "$lib/common/errors";
+	import { keyService } from "$lib/services";
 	import { copyText } from "$lib/utils";
 
 	let descInput: string;
@@ -17,11 +18,7 @@
 			await keyService.editApiKey($createdApiKey.id, descInput);
 			$toast.show("success", "Description updated");
 		} catch (e: any) {
-			console.error(e);
-
-			if (e.code == ErrorCodes.NOT_FOUND) return $toast.show("error", "This item does not exist");
-
-			$toast.show("error", "Oops, something went wrong. Please try again.");
+			commonErrorHandler(e, "API Key");
 		}
 	};
 

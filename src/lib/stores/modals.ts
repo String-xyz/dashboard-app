@@ -1,6 +1,6 @@
 import { writable, type Writable } from 'svelte/store';
 import type { SvelteComponent } from 'svelte';
-import type { TeamItem } from '$lib/types';
+import type { TeamItem } from '$lib/common/types';
 
 export const activeModal: Writable<typeof SvelteComponent | null> = writable();
 

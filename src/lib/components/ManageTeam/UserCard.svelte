@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Avatar from "../Avatar.svelte";
-	import type { TeamItem } from "$lib/types";
+	import type { TeamItem } from "$lib/common/types";
 	import type { Member } from "$lib/services";
 
 	export let user: TeamItem | Member;

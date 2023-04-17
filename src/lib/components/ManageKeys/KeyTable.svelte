@@ -4,8 +4,9 @@
 	import StatusLabel from "./StatusLabel.svelte";
 	import KeyDropdown from "./KeyDropdown.svelte";
 
-	import { ErrorCodes, keyService } from "$lib/services";
+	import { keyService } from "$lib/services";
 	import { apiKeyList, createdApiKey, editKey, keySuccessModalOpen, toast } from "$lib/stores";
+	import { commonErrorHandler } from "$lib/common/errors";
 
 	let descInput: string;
 
@@ -34,11 +35,7 @@
 
 			$toast.show("success", "Description updated");
 		} catch (e: any) {
-			console.error(e);
-
-			if (e.code == ErrorCodes.NOT_FOUND) return $toast.show("error", "This item does not exist");
-
-			$toast.show("error", "Oops, something went wrong. Please try again.");
+			commonErrorHandler(e, "API Key");
 		}
 	};
 

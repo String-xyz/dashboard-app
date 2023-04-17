@@ -5,21 +5,18 @@ type ToastOptions = {
 	type: toastType;
 	message: string;
 	title?: string;
-	_show: () => boolean;
-	show: (type: toastType, message: string, title?: string) => void;
+	_display?: () => void;
+	show: (type: toastType, message: string) => void;
 };
 
-const _showToast = (type: toastType = "error", message: string, title?: string) => {
+const _showToast = (type: toastType = "error", message: string) => {
 	const _toast = getStore(toast);
-	toast.set({ ..._toast, type, message, title });
-	_toast._show();
+	toast.set({ ..._toast, type, message });
+	if (_toast._display) _toast._display();
 };
 
 export const toast: Writable<ToastOptions> = writable({
 	type: "error",
 	message: "error",
-	_show: () => {
-		return true;
-	},
 	show: _showToast
 });

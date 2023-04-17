@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { onMount } from "svelte";
-	import { Role, type TeamItem } from "$lib/types";
+	import { Role } from "$lib/common/types";
 	import { teamService } from "$lib/services";
+	import { commonErrorHandler } from "$lib/common/errors";
 	import { currentUser, inviteModalOpen, teamItems, activeFilter, Filter, toast } from "$lib/stores";
 
 	import FilterDropdown from "$lib/components/ManageTeam/FilterDropdown.svelte";
@@ -17,9 +18,8 @@
 
 		try {
 			$activeFilter.filter = Filter.ALL_MEMBERS;
-		} catch (e) {
-			console.log(e);
-			$toast.show("error", "Oops, something went wrong. Please try again.");
+		} catch (e: any) {
+			commonErrorHandler(e, "members");
 		}
 	});
 </script>
@@ -55,7 +55,7 @@
 
 	<MemberTable />
 
-	<Toast type={$toast.type} size="sm" bind:show={$toast._show}>{$toast.message}</Toast>
+	<Toast type={$toast.type} size="sm" bind:display={$toast._display}>{$toast.message}</Toast>
 </div>
 
 <style>

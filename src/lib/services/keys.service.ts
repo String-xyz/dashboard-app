@@ -1,6 +1,6 @@
 import { formatDate } from "$lib/utils";
 
-import type { ApiKey } from "$lib/types";
+import type { ApiKey } from "$lib/common/types";
 import type { ApiClient } from "./apiClient";
 
 export function createKeysService(apiClient: ApiClient) {

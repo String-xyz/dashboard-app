@@ -1,20 +1,20 @@
 <script lang="ts">
-	import { Role, type TeamItem } from "$lib/types";
-	import { teamItems, currentUser, toast } from "$lib/stores";
-
 	import Avatar from "../Avatar.svelte";
 	import StyledButton from "../StyledButton.svelte";
 	import RoleDropdown from "./RoleDropdown.svelte";
-	import { apiClient, authService, ErrorCodes, teamService } from "$lib/services";
+
+	import { apiClient, authService, teamService } from "$lib/services";
+	import { teamItems, currentUser, toast } from "$lib/stores";
+	import { Role, type TeamItem } from "$lib/common/types";
+	import { commonErrorHandler } from "$lib/common/errors";
 	import { formatDate } from "$lib/utils";
 
 	const handleResend = async (id: string) => {
 		try {
 			await apiClient.resendInvite(id);
 			$toast.show("success", "Invite resent!");
-		} catch (e) {
-			console.error("resend invite error", e);
-			$toast.show("error", "Oops, something went wrong. Please try again.");
+		} catch (e: any) {
+			commonErrorHandler(e, "invite");
 		}
 	};
 
@@ -25,10 +25,7 @@
 
 			$toast.show("success", "Member reactivated!");
 		} catch (e: any) {
-			console.error("reactivate member error", e);
-			if (e.code === ErrorCodes.CONFLICT) return $toast.show("error", "You don't have permission to do that.");
-
-			$toast.show("error", "Oops, something went wrong. Please try again.");
+			commonErrorHandler(e, "member");
 		}
 	};
 </script>

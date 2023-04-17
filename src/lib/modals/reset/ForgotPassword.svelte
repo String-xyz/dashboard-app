@@ -6,9 +6,10 @@
 	import PwdResetEmail from "./PwdResetEmail.svelte";
 	import Login from "../login/Login.svelte";
 
-	import { activeModal, loginEmail, toast } from "$lib/stores";
+	import { activeModal, loginEmail } from "$lib/stores";
+	import { commonErrorHandler } from "$lib/common/errors";
+	import { apiClient } from "$lib/services";
 	import { validator } from "$lib/utils";
-	import { apiClient, ErrorCodes } from "$lib/services";
 
 	let emailInput: string;
 
@@ -23,10 +24,7 @@
 			$loginEmail = emailInput;
 			$activeModal = PwdResetEmail;
 		} catch (e: any) {
-			console.error(e);
-			if (e.code === ErrorCodes.NOT_FOUND) return $toast.show("error", "User not found");
-
-			$toast.show("error", "Something went wrong");
+			commonErrorHandler(e, "user");
 		}
 	};
 

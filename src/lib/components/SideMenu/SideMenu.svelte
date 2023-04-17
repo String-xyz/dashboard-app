@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Role } from "$lib/types";
+	import { Role } from "$lib/common/types";
 	import { authService } from "$lib/services";
 	import { menuItems, currentUser } from "$lib/stores";
 

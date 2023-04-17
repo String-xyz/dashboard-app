@@ -4,7 +4,8 @@
 
 	import { toast } from "$lib/stores";
 	import { validator } from "$lib/utils";
-	import { apiClient, ErrorCodes } from "$lib/services";
+	import { apiClient, ErrorCode } from "$lib/services";
+	import { commonErrorHandler } from "$lib/common/errors";
 
 	let oldPwdInput: string;
 	let newPwdInput: string;
@@ -25,10 +26,8 @@
 
 			$toast.show("success", "Password changed");
 		} catch (e: any) {
-			console.log(e);
-			if (e.code === ErrorCodes.BAD_REQUEST) return $toast.show("error", "Incorrect old password");
-
-			$toast.show("error", "Error changing password");
+			if (e.code === ErrorCode.BAD_REQUEST) return $toast.show("error", "Incorrect old password");
+			commonErrorHandler(e, "old password", [ErrorCode.BAD_REQUEST]);
 		}
 	};
 </script>

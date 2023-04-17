@@ -2,8 +2,9 @@
 	import StyledButton from "../StyledButton.svelte";
 	import StyledInput from "../StyledInput.svelte";
 
-	import { currentUser, toast } from "$lib/stores";
 	import { apiClient } from "$lib/services";
+	import { currentUser, toast } from "$lib/stores";
+	import { commonErrorHandler } from "$lib/common/errors";
 
 	let nameInput = $currentUser.name;
 
@@ -24,9 +25,8 @@
 			$currentUser.name = member.name;
 
 			$toast.show("success", "Name changed");
-		} catch (error) {
-			console.log(error);
-			$toast.show("error", "Error changing name");
+		} catch (e: any) {
+			commonErrorHandler(e, "member");
 		}
 	};
 

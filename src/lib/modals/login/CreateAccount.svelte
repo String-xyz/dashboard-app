@@ -7,6 +7,7 @@
 	import VerifyEmail from "./VerifyEmail.svelte";
 
 	import { activeModal, loginEmail, toast } from "$lib/stores";
+	import { commonErrorHandler } from "$lib/common/errors";
 	import { validator } from '$lib/utils';
 	import { apiClient } from "$lib/services";
 
@@ -37,11 +38,8 @@
 			$loginEmail = emailInput;
 			$activeModal = VerifyEmail;
 		} catch (e: any) {
-			console.error(e);
-
-			if (e.code === "CONFLICT") return $toast.show("error", "This email is already in use", "Error");
-
-			$toast.show("error", "Error creating account");
+			if (e.code === "CONFLICT") return $toast.show("error", "This email is already in use");
+			commonErrorHandler(e, "email");
 		}
 	};
 </script>

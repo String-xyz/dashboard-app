@@ -1,12 +1,13 @@
 <script lang="ts">
+	import { commonErrorHandler } from "$lib/common/errors";
 	import { authService } from "$lib/services";
 
 
 	const signout = async () => {
 		try {
 			await authService.logout();
-		} catch (error) {
-			console.error(error);
+		} catch (e: any) {
+			commonErrorHandler(e, "logout");
 		}
 	}
 
