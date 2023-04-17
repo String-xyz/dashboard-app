@@ -51,7 +51,7 @@
 			$toast.show("success", "Login successful");
 		} catch (e: any) {
 			if (e.code === ErrorCode.UNAUTHORIZED) return $toast.show("error", "Invalid email or password");
-			commonErrorHandler(e, "email");
+			return commonErrorHandler(e, "email");
 		}
 	};
 </script>

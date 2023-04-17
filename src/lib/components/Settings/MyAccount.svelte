@@ -26,7 +26,7 @@
 
 			$toast.show("success", "Name changed");
 		} catch (e: any) {
-			commonErrorHandler(e, "member");
+			return commonErrorHandler(e, "member");
 		}
 	};
 

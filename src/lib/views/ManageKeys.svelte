@@ -21,7 +21,7 @@
 
 			$apiKeyList = await keyService.listApiKeys();
 		} catch (e: any) {
-			commonErrorHandler(e, "API Key");
+			return commonErrorHandler(e, "API Key");
 		}
 	};
 

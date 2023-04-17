@@ -16,7 +16,7 @@
 		try {
 			await apiClient.sendResetPasswordToken($loginEmail);
 		} catch (e: any) {
-			commonErrorHandler(e, "user");
+			return commonErrorHandler(e, "user");
 		}
 	};
 </script>

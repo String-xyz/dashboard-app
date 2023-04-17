@@ -7,7 +7,7 @@
 		try {
 			await authService.logout();
 		} catch (e: any) {
-			commonErrorHandler(e, "logout");
+			return commonErrorHandler(e, "logout");
 		}
 	}
 

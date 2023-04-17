@@ -65,7 +65,7 @@
 		} catch (e: any) {
 			activeRole = prevActiveRole;
 
-			commonErrorHandler(e, "member");
+			return commonErrorHandler(e, "member");
 		}
 	};
 

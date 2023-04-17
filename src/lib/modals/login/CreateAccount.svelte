@@ -39,7 +39,7 @@
 			$activeModal = VerifyEmail;
 		} catch (e: any) {
 			if (e.code === "CONFLICT") return $toast.show("error", "This email is already in use");
-			commonErrorHandler(e, "email");
+			return commonErrorHandler(e, "email");
 		}
 	};
 </script>

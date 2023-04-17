@@ -24,7 +24,7 @@
 			$loginEmail = emailInput;
 			$activeModal = PwdResetEmail;
 		} catch (e: any) {
-			commonErrorHandler(e, "user");
+			return commonErrorHandler(e, "user");
 		}
 	};
 

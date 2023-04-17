@@ -61,7 +61,7 @@
 
 			$toast.show("success", "Key deactivated");
 		} catch (e: any) {
-			commonErrorHandler(e, "API key");
+			return commonErrorHandler(e, "API key");
 		}
 	};
 

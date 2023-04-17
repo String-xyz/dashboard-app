@@ -18,7 +18,7 @@
 			await keyService.editApiKey($createdApiKey.id, descInput);
 			$toast.show("success", "Description updated");
 		} catch (e: any) {
-			commonErrorHandler(e, "API Key");
+			return commonErrorHandler(e, "API Key");
 		}
 	};
 

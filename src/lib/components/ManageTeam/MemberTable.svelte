@@ -14,7 +14,7 @@
 			await apiClient.resendInvite(id);
 			$toast.show("success", "Invite resent!");
 		} catch (e: any) {
-			commonErrorHandler(e, "invite");
+			return commonErrorHandler(e, "invite");
 		}
 	};
 
@@ -25,7 +25,7 @@
 
 			$toast.show("success", "Member reactivated!");
 		} catch (e: any) {
-			commonErrorHandler(e, "member");
+			return commonErrorHandler(e, "member");
 		}
 	};
 </script>
