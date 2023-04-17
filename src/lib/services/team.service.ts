@@ -2,7 +2,7 @@ import { get as getStore } from "svelte/store";
 
 import { authService } from ".";
 import { formatDate } from "$lib/utils";
-import type { TeamItem, Role } from "$lib/common/types";
+import { type TeamItem, Role } from "$lib/common/types";
 import type { ApiClient, Invite, Member } from "./apiClient";
 import { Filter, currentUser, activeFilter } from "$lib/stores";
 
