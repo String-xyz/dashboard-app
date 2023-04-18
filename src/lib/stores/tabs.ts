@@ -1,6 +1,6 @@
 import { writable, type Writable, get as getStore } from 'svelte/store';
 import type { SvelteComponent } from 'svelte';
-import { Role } from '$lib/types';
+import { Role } from '$lib/common/types';
 
 export interface MenuItem {
 	name: MenuItems;

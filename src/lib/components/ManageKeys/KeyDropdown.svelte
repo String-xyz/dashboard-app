@@ -2,7 +2,8 @@
 	import { keyService } from "$lib/services";
 	import { apiKeyList, editKey, toast } from "$lib/stores";
 	import { copyText } from "$lib/utils";
-	import type { ApiKey } from "$lib/types";
+	import type { ApiKey } from "$lib/common/types";
+	import { commonErrorHandler } from "$lib/common/errors";
 
 	export let key: ApiKey;
 	export let dropdownOpen = false;
@@ -59,9 +60,8 @@
 			$apiKeyList = await keyService.listApiKeys();
 
 			$toast.show("success", "Key deactivated");
-		} catch (e) {
-			console.error(e);
-			$toast.show("error", "Failed to deactivate key");
+		} catch (e: any) {
+			return commonErrorHandler(e, "API key");
 		}
 	};
 

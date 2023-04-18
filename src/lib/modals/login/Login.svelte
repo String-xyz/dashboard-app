@@ -9,9 +9,10 @@
 	import CreateAccount from "./CreateAccount.svelte";
 	import LoginSuccess from "./LoginSuccess.svelte";
 
-	import { validator } from "$lib/utils";
 	import { activeModal, currentUser, loginEmail, toast } from "$lib/stores";
-	import { authService, ErrorCodes } from "$lib/services";
+	import { authService, ErrorCode } from "$lib/services";
+	import { commonErrorHandler } from "$lib/common/errors";
+	import { validator } from "$lib/utils";
 
 	let emailInput = "";
 	let pwdInput = "";
@@ -49,11 +50,8 @@
 
 			$toast.show("success", "Login successful");
 		} catch (e: any) {
-			console.error(e);
-
-			if (e.code === ErrorCodes.UNAUTHORIZED) return $toast.show("error", "Invalid email or password");
-
-			$toast.show("error", "Oops, something went wrong. Please try again.");
+			if (e.code === ErrorCode.UNAUTHORIZED) return $toast.show("error", "Invalid email or password");
+			return commonErrorHandler(e, "email");
 		}
 	};
 </script>

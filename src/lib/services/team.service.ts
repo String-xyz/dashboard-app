@@ -1,10 +1,10 @@
 import { get as getStore } from "svelte/store";
 
 import { authService } from ".";
-import type { ApiClient, Invite, Member } from "./apiClient";
-import { type TeamItem, Role } from "$lib/types";
-import { Filter, currentUser, activeFilter } from "$lib/stores";
 import { formatDate } from "$lib/utils";
+import { type TeamItem, Role } from "$lib/common/types";
+import type { ApiClient, Invite, Member } from "./apiClient";
+import { Filter, currentUser, activeFilter } from "$lib/stores";
 
 export function createTeamService(apiClient: ApiClient) {
 	async function buildTeamItems(): Promise<TeamItem[]> {

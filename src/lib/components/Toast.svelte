@@ -9,7 +9,7 @@
 	export let visible = false;
 
 	let timeout: NodeJS.Timeout;
-	export const show = () => {
+	export const display = () => {
 		if (timeout) clearTimeout(timeout);
 
 		visible = true;

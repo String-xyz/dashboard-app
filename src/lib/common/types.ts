@@ -1,4 +1,4 @@
-import type { ApiKeyResponse } from "./services";
+import type { ApiKeyResponse } from "$lib/services";
 
 export enum Role {
 	MEMBER = 'Member',

@@ -28,7 +28,7 @@
 
 	<svelte:component this={$tabToViewMap.get($activeSettingsTab)} />
 
-	<Toast type={$toast.type} size="sm" bind:show={$toast._show}>{$toast.message}</Toast>
+	<Toast type={$toast.type} size="sm" bind:display={$toast._display}>{$toast.message}</Toast>
 </div>
 
 <style lang="postcss">

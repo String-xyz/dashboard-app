@@ -6,7 +6,7 @@
 	import { transferOwnerModalOpen, ownershipTransferee, currentUser, teamItems, toast } from '$lib/stores';
 	import { apiClient, teamService } from '$lib/services';
 	import { validator } from '$lib/utils';
-	import { Role } from '$lib/types';
+	import { Role } from '$lib/common/types';
 
 	let pwdInput: string;
 

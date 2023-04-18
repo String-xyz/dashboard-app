@@ -23,7 +23,7 @@ export const cards: CardItem[] = [
 		id: CARD_NAME.unlock_live,
 		icon: assetPath + 'shield_icon.svg',
 		iconAlt: 'Shield',
-		title: 'Unlock production',
+		title: 'Unlock production mode',
 		subtitle: `Verify your account to begin processing real transactions!`,
 		btnText: 'Get Verified',
 	},

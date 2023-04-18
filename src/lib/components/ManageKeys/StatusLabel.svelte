@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { ApiKey } from "$lib/types";
+	import type { ApiKey } from "$lib/common/types";
 	import { isSandbox } from "$lib/utils";
 
 	export let key: ApiKey;

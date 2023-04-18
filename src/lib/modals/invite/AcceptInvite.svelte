@@ -11,7 +11,6 @@
 	import { validator } from "$lib/utils";
 	import { authService } from '$lib/services';
 
-
 	let pwdInput: string;
 
 	$: isPwdValid = validator.isValidPwd(pwdInput);
@@ -26,7 +25,7 @@
 			
 			$currentUser = user;
 			$activeModal = InviteSuccess;
-		} catch (e) {
+		} catch (e: any) {
 			console.error(e);
 			$activeModal = InviteFailed;
 		}

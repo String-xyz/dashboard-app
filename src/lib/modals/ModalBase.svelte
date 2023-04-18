@@ -16,7 +16,7 @@
 		<slot />
 	</div>
 
-	<Toast type={$toast.type} size="sm" bind:show={$toast._show}>{$toast.message}</Toast>
+	<Toast type={$toast.type} size="sm">{$toast.message}</Toast>
 </div>
 
 <style>

@@ -1,5 +1,5 @@
 import type { ApiClient, Invite, Member } from "./apiClient";
-import { Role } from "$lib/types";
+import { Role } from "$lib/common/types";
 
 export function createAuthService(apiClient: ApiClient) {
 	async function login(email: string, pwd: string): Promise<Member> {

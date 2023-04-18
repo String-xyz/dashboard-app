@@ -1,8 +1,10 @@
 <script lang="ts">
-	import { Role, type TeamItem } from "$lib/types";
-	import { apiClient } from "$lib/services";
-	import { rolesList, currentUser, deactModalOpen, deactUser, transferOwnerModalOpen, ownershipTransferee, teamItems, toast } from "$lib/stores";
 	import { onMount } from "svelte";
+	import { apiClient } from "$lib/services";
+	import { commonErrorHandler } from "$lib/common/errors";
+	import { Role, type TeamItem } from "$lib/common/types";
+	import { rolesList, currentUser, deactModalOpen, deactUser,
+		transferOwnerModalOpen, ownershipTransferee, teamItems, toast } from "$lib/stores";
 
 	export let member: TeamItem | null = null;
 	export let activeRole: Role = Role.MEMBER;
@@ -61,10 +63,9 @@
 				$teamItems[memberIdx].role = activeRole;
 			}
 		} catch (e: any) {
-			console.log(e);
 			activeRole = prevActiveRole;
 
-			$toast.show("error", "Something went wrong!");
+			return commonErrorHandler(e, "member");
 		}
 	};
 

@@ -4,8 +4,9 @@
 
 	import ForgotPassword from "./ForgotPassword.svelte";
 
-	import { apiClient, ErrorCodes } from "$lib/services";
-	import { activeModal, loginEmail, toast } from "$lib/stores";
+	import { apiClient } from "$lib/services";
+	import { activeModal, loginEmail } from "$lib/stores";
+	import { commonErrorHandler } from "$lib/common/errors";
 
 	const back = () => {
 		$activeModal = ForgotPassword;
@@ -15,11 +16,7 @@
 		try {
 			await apiClient.sendResetPasswordToken($loginEmail);
 		} catch (e: any) {
-			console.error(e);
-
-			if (e.code === ErrorCodes.NOT_FOUND) return $toast.show("error", "User not found");
-
-			$toast.show("error", "Something went wrong");
+			return commonErrorHandler(e, "user");
 		}
 	};
 </script>

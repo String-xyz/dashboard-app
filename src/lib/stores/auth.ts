@@ -1,7 +1,7 @@
 import { writable, type Writable } from "svelte/store";
 import { browser } from "$app/environment";
 import type { Member } from "$lib/services";
-import { Role } from "$lib/types";
+import { Role } from "$lib/common/types";
 
 export const loginEmail = writable("");
 export const resetToken = writable("");

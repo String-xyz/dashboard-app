@@ -3,9 +3,9 @@
 	import StyledButton from "$lib/components/StyledButton.svelte";
 	import RoleDropdown from "$lib/components/ManageTeam/RoleDropdown.svelte";
 
-	import { Role } from "$lib/types";
+	import { Role } from "$lib/common/types";
 	import { validator } from "$lib/utils";
-	import { apiClient, teamService } from "$lib/services";
+	import { apiClient, ErrorCode, teamService } from "$lib/services";
 	import { inviteModalOpen, teamItems, toast } from "$lib/stores";
 
 	let dropdownOpen: boolean;
@@ -13,6 +13,8 @@
 
 	let emailInput: string;
 	let nameInput: string;
+
+	let emailAlreadyInUse = false;
 
 	$: isEmailValid = validator.isValidEmail(emailInput);
 	$: isNameValid = validator.isValidName(nameInput);
@@ -32,17 +34,19 @@
 			emailInput = "";
 			nameInput = "";
 			inviteRole = Role.MEMBER;
+			
+			close();
 
 			$toast.show("success", "Invite sent!");
 		} catch (e: any) {
-			console.error("code", e.code);
-
-			if (e.code === "CONFLICT") return $toast.show("error", "This email is already in use.");
-
-			$toast.show("error", "Oops, something went wrong. Please try again.");
+			if (e.code === ErrorCode.CONFLICT) {
+				emailAlreadyInUse = true;
+				setTimeout(() => {
+					emailAlreadyInUse = false;
+				}, 3000);
+				return;
+			}
 		}
-
-		$inviteModalOpen = false;
 	};
 
 	const handleKeyboard = (e: KeyboardEvent) => {
@@ -73,15 +77,22 @@
 
 			{#if $inviteModalOpen}
 				<StyledInput
-					className="mb-6 w-full"
+					className="w-full"
 					type="email"
 					label="Email address"
 					placeholder="test@string.xyz"
-					borderError={!isEmailValid && emailInput !== ""}
+					borderError={(!isEmailValid || emailAlreadyInUse) && emailInput !== ""}
 					bind:val={emailInput}
 					autofocus={true}
 					required
 				/>
+
+				{#if emailAlreadyInUse && emailInput !== ""}
+					<p class="text-warning text-sm mt-2 mb-4 mr-auto">This email is already in use.</p>
+				{:else}
+					<div class="mb-6" />
+				{/if}
+
 			{/if}
 
 			<div class="flex justify-between mb-20 w-full">
