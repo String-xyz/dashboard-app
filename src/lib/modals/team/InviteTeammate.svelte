@@ -34,6 +34,8 @@
 			emailInput = "";
 			nameInput = "";
 			inviteRole = Role.MEMBER;
+			
+			close();
 
 			$toast.show("success", "Invite sent!");
 		} catch (e: any) {

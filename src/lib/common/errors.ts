@@ -17,6 +17,9 @@ export const commonErrorHandler = (err: ApiError, object = "object") => {
 		case ErrorCode.FORBIDDEN:
 			toast.show("error", `You do not have authority to perform this action`);
 		break;
+		case ErrorCode.CONFLICT:
+			toast.show("error", `${object} already exists`);
+		break;
 		case ErrorCode.INTERNAL_SERVER_ERROR:
 			toast.show("error", `Oops, something went wrong. Please try again.`);
 		break;
