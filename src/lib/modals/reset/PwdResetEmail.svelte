@@ -7,18 +7,19 @@
 	import { apiClient } from "$lib/services";
 	import { activeModal, loginEmail } from "$lib/stores";
 	import { commonErrorHandler } from "$lib/common/errors";
+	import { Throttled } from "$lib/utils";
 
 	const back = () => {
 		$activeModal = ForgotPassword;
 	};
 
-	const handleResend = async () => {
+	const handleResend = new Throttled(async () => {
 		try {
 			await apiClient.sendResetPasswordToken($loginEmail);
 		} catch (e: any) {
 			return commonErrorHandler(e, "user");
 		}
-	};
+	});
 </script>
 
 <ModalBase size="size-md">
@@ -34,7 +35,7 @@
 				<img src="/assets/button/left_chevron.svg" alt="<" class="mr-3" />
 				Go Back
 			</StyledButton>
-			<StyledButton className="w-40" action={handleResend}>Resend</StyledButton>
+			<StyledButton className="w-40" action={handleResend.call}>Resend</StyledButton>
 		</div>
 	</div>
 </ModalBase>

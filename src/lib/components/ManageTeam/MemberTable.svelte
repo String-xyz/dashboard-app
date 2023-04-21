@@ -8,15 +8,16 @@
 	import { Role, type TeamItem } from "$lib/common/types";
 	import { commonErrorHandler } from "$lib/common/errors";
 	import { formatDate } from "$lib/utils";
+	import { Throttled } from "$lib/utils/throttler";
 
-	const handleResend = async (id: string) => {
+	const handleResend = new Throttled<{id: string}>(async (id: string) => {
 		try {
 			await apiClient.resendInvite(id);
 			$toast.show("success", "Invite resent!");
 		} catch (e: any) {
 			return commonErrorHandler(e, "invite");
 		}
-	};
+	});
 
 	const reactivateMember = async (member: TeamItem) => {
 		try {
@@ -88,7 +89,7 @@
 								<RoleDropdown {member} isForInvite={member.isInvite || false} />
 
 								{#if member.isInvite}
-									<StyledButton className="rounded-3xl ml-4" action={() => handleResend(member.id)}>
+									<StyledButton className="rounded-3xl ml-4" action={() => handleResend.call(member.id)}>
 										Resend
 										<img src="/assets/button/resend.svg" alt="resend" class="ml-2" />
 									</StyledButton>
