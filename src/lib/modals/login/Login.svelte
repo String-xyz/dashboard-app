@@ -50,7 +50,9 @@
 
 			$toast.show("success", "Login successful");
 		} catch (e: any) {
-			if (e.code === ErrorCode.UNAUTHORIZED) return $toast.show("error", "Invalid email or password");
+			if (e.code === ErrorCode.UNAUTHORIZED) {
+				return $toast.show("error", "Invalid email or password");
+			}
 			return commonErrorHandler(e, "email");
 		}
 	};

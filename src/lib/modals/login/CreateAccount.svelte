@@ -38,7 +38,9 @@
 			$loginEmail = emailInput;
 			$activeModal = VerifyEmail;
 		} catch (e: any) {
-			if (e.code === "CONFLICT") return $toast.show("error", "This email is already in use");
+			if (e.code === "CONFLICT") {
+				return $toast.show("error", "This email is already in use");
+			}
 			return commonErrorHandler(e, "email");
 		}
 	};

@@ -26,7 +26,9 @@
 
 			$toast.show("success", "Password changed");
 		} catch (e: any) {
-			if (e.code === ErrorCode.BAD_REQUEST) return $toast.show("error", "Incorrect old password");
+			if (e.code === ErrorCode.BAD_REQUEST) {
+				return $toast.show("error", "Incorrect old password");
+			}
 			return commonErrorHandler(e, "old password");
 		}
 	};

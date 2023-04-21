@@ -257,6 +257,7 @@ export interface ApiKeyResponse {
 	deactivatedAt?: string;
 	type: string;
 	data: string;
+	hint: string;
 	description: string;
 	createdBy: string;
 	platformId: string;
