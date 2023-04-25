@@ -90,7 +90,7 @@ export function createApiClient(): ApiClient {
 	}
 
 	async function revokeInvite(inviteId: string) {
-		return (await httpClient.patch<void>(`/invites/${inviteId}/deactivate`)).data;
+		return (await httpClient.delete<void>(`/invites/${inviteId}`)).data;
 	}
 
 	/*********** PLATFORM ***********/
@@ -119,12 +119,12 @@ export function createApiClient(): ApiClient {
 		return (await httpClient.get<ApiKeyResponse>(`/apikeys/${keyId}`)).data;
 	}
 
-	async function deactivateApiKey(keyId: string) {
-		return (await httpClient.patch<ApiKeyResponse>(`/apikeys/${keyId}/deactivate`)).data;
-	}
-
 	async function editApiKey(keyId: string, description: string) {
 		return (await httpClient.patch<ApiKeyResponse>(`/apikeys/${keyId}`, { description })).data;
+	}
+
+	async function deactivateApiKey(keyId: string) {
+		return (await httpClient.delete<ApiKeyResponse>(`/apikeys/${keyId}`)).data;
 	}
 
 	/*---------- INTERCEPTORS ----------*/
@@ -320,5 +320,4 @@ type InvalidParams = {
 	value: string;
 	expectedType: string;
 	message: string;
-}
-
+};
