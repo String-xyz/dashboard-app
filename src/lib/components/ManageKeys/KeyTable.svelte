@@ -4,7 +4,7 @@
 	import StatusLabel from "./StatusLabel.svelte";
 	import KeyDropdown from "./KeyDropdown.svelte";
 
-	import { keyService } from "$lib/services";
+	import { ErrorCode, keyService } from "$lib/services";
 	import { apiKeyList, createdApiKey, editKey, keySuccessModalOpen, toast } from "$lib/stores";
 	import { commonErrorHandler } from "$lib/common/errors";
 
@@ -35,6 +35,9 @@
 
 			$toast.show("success", "Description updated");
 		} catch (e: any) {
+			if (e.code == ErrorCode.BAD_REQUEST) {
+				return $toast.show("error", "Description must be between 0 and 144 characters");
+			}
 			return commonErrorHandler(e, "API Key");
 		}
 	};
@@ -53,9 +56,6 @@
 		}
 	};
 
-	const truncate = (key: string) => {
-		return key.slice(0, 10);
-	};
 </script>
 
 <svelte:window on:keydown={(e) => handleKeyboard(e)} />
@@ -72,7 +72,7 @@
 			{#each $apiKeyList as key, i}
 				<div class="row flex flex-nowrap items-center gap-x-5 py-6 pl-4 pr-9">
 					<div class="col flex flex-col">
-						<p class="font-bold">{truncate(key.data)}</p>
+						<p class="font-bold">{key.hint}</p>
 						<span class="text-sm">
 							{#if key.showFullKey}
 								<span class="select-all text-clip break-all">{key.data}</span>
@@ -89,9 +89,9 @@
 					</div>
 					<div class="col">
 						{#if $editKey == key}
-							<StyledInput className="mb-1" label="Description" placeholder="Optional" bind:val={descInput} autofocus={true} />
+							<StyledInput className="mb-1" label="Description" placeholder="Optional. Max 144 chars" bind:val={descInput} autofocus={true} />
 						{:else}
-							<p class="truncate text-sm font-medium" title={key.description ?? ""}>{key.description ?? ""}</p>
+							<p class="break-all text-sm font-medium select-text">{key.description ?? ""}</p>
 						{/if}
 					</div>
 					<div class="col">
