@@ -106,7 +106,7 @@
 							<StyledButton className="rounded-3xl px-6" action={() => updateDescription(key.id, i, descInput)}>Save</StyledButton>
 						{:else}
 							<p class="text-xs mr-4 font-medium tabular-nums">Created on {key.createdAt}</p>
-							{#if !key.deactivatedAt}
+							{#if !key.deletedAt}
 								<KeyDropdown {key} />
 							{/if}
 						{/if}

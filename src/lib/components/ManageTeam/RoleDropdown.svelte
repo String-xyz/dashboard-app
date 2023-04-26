@@ -3,8 +3,7 @@
 	import { apiClient } from "$lib/services";
 	import { commonErrorHandler } from "$lib/common/errors";
 	import { Role, type TeamItem } from "$lib/common/types";
-	import { rolesList, currentUser, deactModalOpen, deactUser,
-		transferOwnerModalOpen, ownershipTransferee, teamItems, toast } from "$lib/stores";
+	import { rolesList, currentUser, deactModalOpen, deactUser, transferOwnerModalOpen, ownershipTransferee, teamItems, toast } from "$lib/stores";
 
 	export let member: TeamItem | null = null;
 	export let activeRole: Role = Role.MEMBER;
@@ -107,7 +106,7 @@
 			{#if member}
 				<li>
 					<button on:click={openDeactivateModal} class="text-warning text-sm">
-						{member?.isInvite ? "Revoke invite" : "Remove member"}
+						{member?.isInvite ? "Revoke invite" : "Deactivate member"}
 					</button>
 				</li>
 			{/if}

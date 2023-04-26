@@ -254,7 +254,7 @@ export interface ApiKeyResponse {
 	id: string;
 	createdAt: string;
 	updatedAt: string;
-	deactivatedAt?: string;
+	deletedAt?: string;
 	type: string;
 	data: string;
 	description: string;
