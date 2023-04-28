@@ -34,7 +34,7 @@
 			handler: () => setEdit()
 		},
 		{
-			name: "Deactivate",
+			name: "Delete",
 			icon: assetPath + "trash.svg",
 			red: true,
 			handler: () => deactivateKey()
@@ -59,7 +59,7 @@
 			await keyService.deactivateApiKey(key.id);
 			$apiKeyList = await keyService.listApiKeys();
 
-			$toast.show("success", "Key deactivated");
+			$toast.show("success", "Key deleted");
 		} catch (e: any) {
 			return commonErrorHandler(e, "API key");
 		}
