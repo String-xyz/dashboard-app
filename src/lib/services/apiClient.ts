@@ -267,7 +267,6 @@ export type Platform = {
 	createdAt: string;
 	updatedAt: string;
 	deactivatedAt?: string;
-	activatedAt: string;
 	name: string;
 	description: string;
 	domains: string[];
