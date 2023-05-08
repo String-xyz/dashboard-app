@@ -16,7 +16,7 @@
 				$toast.show("success", "Invite revoked!");
 			} else {
 				await apiClient.deactivateMember($deactUser.id);
-				$toast.show("success", "Member removed!");
+				$toast.show("success", "Member deactivated!");
 			}
 
 			$teamItems = await teamService.rebuildTeamList();
@@ -62,7 +62,7 @@
 			{/if}
 
 			<StyledButton className="btn-warning w-full" action={handleDeactivate}>
-				{$deactUser?.isInvite ? "Revoke" : "Remove"}
+				{$deactUser?.isInvite ? "Revoke" : "Deactivate"}
 			</StyledButton>
 			<button class="mt-7 p-1 bg-transparent text-sm text-primary font-bold tracking-wider border-none no-animation uppercase" on:click={close}>
 				Cancel

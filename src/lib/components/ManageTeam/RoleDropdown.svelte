@@ -106,7 +106,7 @@
 			{#if member}
 				<li>
 					<button on:click={openDeactivateModal} class="text-warning text-sm">
-						{member?.isInvite ? "Revoke invite" : "Remove member"}
+						{member?.isInvite ? "Revoke invite" : "Deactivate member"}
 					</button>
 				</li>
 			{/if}
