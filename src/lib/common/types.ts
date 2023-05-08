@@ -1,4 +1,6 @@
+import type { NavItem } from "$lib/constants/tabs";
 import type { ApiKeyResponse } from "$lib/services";
+import type { SvelteComponent } from 'svelte';
 
 export enum Role {
 	MEMBER = 'Member',
@@ -20,4 +22,12 @@ export type TeamItem = {
 
 export interface ApiKey extends ApiKeyResponse {
 	showFullKey?: boolean; // For UI
+}
+
+export interface MenuItem {
+	name: NavItem;
+	icon: string;
+	view?: typeof SvelteComponent;
+	href?: string;
+	minPerms?: Role;
 }
