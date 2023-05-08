@@ -63,7 +63,7 @@
 				<div class="key-warning w-full flex flex-col items-center p-4 mb-6 pt-5">
 					<div class="flex">
 						<img src="/assets/indicator/warning.svg" alt="warning" width="32px" height="32px" class="ml-1 mr-4 mb-2" />
-						<p class="warning-text text-xs text-center mt-2 mb-3">
+						<p class="warning-text text-xs text-center mb-3">
 							Deactivating this platform will disable its associated API keys and deny it from using our services. 
 							Before deactivating, please consider the impact of disabling the following keys:
 						</p>
@@ -78,7 +78,7 @@
 								{key.data}
 							</span>
 						{:else}
-							<p class="text-xs text-neutral text-center mt-2 mb-3">No keys found</p>
+							<p class="text-xs text-neutral text-center mt-2">No keys found</p>
 						{/each}
 					</div>
 				</div>
@@ -100,7 +100,7 @@
 					<div class="mb-8" />
 				{/if}
 				<StyledButton className="w-full btn-warning" type="submit" {disabled}>Deactivate</StyledButton>
-				<button class="mt-7 p-1 bg-transparent text-sm text-primary font-bold tracking-wider border-none no-animation uppercase" on:click={close}>
+				<button class="mt-6 p-1 bg-transparent text-sm text-primary font-bold tracking-wider border-none no-animation uppercase" on:click={close}>
 					Cancel
 				</button>
 			</form>

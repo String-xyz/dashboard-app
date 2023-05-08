@@ -86,6 +86,7 @@
 		<CreatePlatform />
 		<EditPlatform />
 		<DeactPlatform />
+
 		<!-- Manage API Keys -->
 		<KeyCreateSuccess />
 

@@ -24,7 +24,7 @@
 				<div class="w-2/4">
 					<p class="font-semibold select-text" class:deactivated={platform.deactivatedAt}>{platform.description}</p>
 				</div>
-				<div class="w-1/4 flex items-center justify-end">
+				<div class="w-1/4 flex items-center justify-end info">
 					{#if authService.canView($currentUser.role, Role.ADMIN)}
 						<p class="text-xs font-medium tabular-nums select-text mr-4" class:deactivated={platform.deactivatedAt}>Created on {formatDate(platform.createdAt)}</p>
 						{#if !platform.deactivatedAt}
@@ -55,10 +55,18 @@
 		border-radius: 4px;
 	}
 
-	/* @media (max-width: 1050px) {
+	@media (max-width: 900px) {
 		.row {
 			flex-direction: column;
 			row-gap: 20px;
+			justify-content: center;
+			text-align: center;
 		}
-	} */
+
+		.info {
+			white-space: nowrap;
+			flex-direction: column;
+			row-gap: 10px;
+		}
+	}
 </style>

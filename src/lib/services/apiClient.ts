@@ -311,7 +311,7 @@ export type Platform = {
 
 export interface UpdatePlatform {
 	platformName?: string;
-	platformDescription?: string;
+	description?: string;
 	domains?: string[];
 	ipAddresses?: string[];
 }

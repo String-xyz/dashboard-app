@@ -18,7 +18,7 @@ export function createPlatformService(apiClient: ApiClient) {
 	}
 
 	async function updatePlatform(id: string, name: string, desc: string) {
-		const platform = await apiClient.updatePlatform(id, { platformName: name, platformDescription: desc });
+		const platform = await apiClient.updatePlatform(id, { platformName: name, description: desc });
 
 		return platform;
 	}
