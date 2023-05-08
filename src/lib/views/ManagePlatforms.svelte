@@ -29,22 +29,22 @@
 </script>
 
 <svelte:head>
-	<title>Manage Platforms | String Dashboard</title>
+	<title>Manage Games | String Dashboard</title>
 </svelte:head>
 
 <div class="main h-full">
 	<header>
 		<div class="header flex justify-between items-center">
-			<h3 class="text-2xl font-bold">Manage Platforms</h3>
+			<h3 class="text-2xl font-bold">Manage Games</h3>
 			{#if authService.canView($currentUser.role, Role.ADMIN)}
 				<StyledButton className="btn-outline" action={createPlatform}>
 					<img src={"/assets/button/plus.svg"} alt="+" class="inline mr-3" />
-					New Platform
+					New Game
 				</StyledButton>
 			{:else}
 				<span class="text-sm">
 					<img src="/assets/info.svg" alt="info" class="inline mr-2" />
-					Members do not have permission to manage platforms.
+					Members do not have permission to manage Games.
 				</span>
 			{/if}
 		</div>

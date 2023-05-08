@@ -35,7 +35,7 @@
 			</div>
 		{:else}
 			<div class="row flex justify-center items-center p-6">
-				<p class="font-bold">No Platforms Found</p>
+				<p class="font-bold">No Games Found</p>
 			</div>
 		{/each}
 	</div>

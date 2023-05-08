@@ -6,7 +6,7 @@ const assetPath = '/assets/tab/';
 export enum NavItem { 
 	DASHBOARD = 'Dashboard',
 	MANAGE_TEAM = 'Your Organization',
-	MANAGE_PLATFORMS = 'Manage Platforms',
+	MANAGE_PLATFORMS = 'Manage Games',
 	MANAGE_KEYS = 'Manage API Keys',
 	VERIFY_ACCOUNT = 'Verify Account',
 	VIEW_DOCS = 'View API Docs',

@@ -16,16 +16,16 @@
 	const editPlatform = async () => {
 		try {
 			if (!nameInput) {
-				return $toast.show("error", "Platform name cannot be empty");
+				return $toast.show("error", "Game name cannot be empty");
 			}
 
 			await platformService.updatePlatform($selectedPlatform.id, nameInput, descInput);
 			$platformList = await platformService.listPlatforms();
 
 			close();
-			$toast.show("success", "Platform updated");
+			$toast.show("success", "Game updated");
 		} catch (err: any) {
-			commonErrorHandler(err, "Platform");
+			commonErrorHandler(err, "Game");
 		}
 	};
 
@@ -54,19 +54,19 @@
 		<div class="flex flex-col">
 			<button class="ml-auto" on:click={close}><img src="/assets/close.svg" alt="Close" /></button>
 			<form on:submit={editPlatform} class="main flex flex-col items-center w-full pr-6 pt-2">
-				<img src="/assets/card/platform_icon.svg" alt="platform" class="mb-8" />
-				<h3 class="text-3xl font-bold mb-12">Edit Platform</h3>
+				<img src="/assets/card/platform_icon.svg" alt="game" class="mb-8" />
+				<h3 class="text-3xl font-bold mb-12">Edit Game</h3>
 
 				<StyledInput
 					className="mb-8 w-full"
-					label="Platform name"
-					placeholder="Platform"
+					label="Game name"
+					placeholder="Game"
 					bind:val={nameInput}
 					autofocus 
 				/>
 				<StyledInput
 					className="mb-12 w-full"
-					label="Platform description"
+					label="Game description"
 					placeholder="Optional"
 					bind:val={descInput}
 				/>

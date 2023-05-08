@@ -12,7 +12,7 @@
 	const createPlatform = async () => {
 		try {
 			if (!nameInput) {
-				$toast.show("error", "Platform name is required");
+				$toast.show("error", "Game name is required");
 				return;
 			}
 
@@ -20,9 +20,9 @@
 			$platformList = await platformService.listPlatforms();
 
 			close();
-			$toast.show("success", "Platform created");
+			$toast.show("success", "Game created");
 		} catch (err: any) {
-			commonErrorHandler(err, "Platform");
+			commonErrorHandler(err, "Game");
 		}
 	};
 
@@ -54,20 +54,20 @@
 		<div class="flex flex-col">
 			<button class="ml-auto" on:click={close}><img src="/assets/close.svg" alt="Close" /></button>
 			<form on:submit={createPlatform} class="main flex flex-col items-center w-full pr-6 pt-2">
-				<img src="/assets/card/platform_icon.svg" alt="platform" class="mb-8" />
-				<h3 class="text-3xl font-bold mb-12">Create a new Platform</h3>
+				<img src="/assets/card/platform_icon.svg" alt="game" class="mb-8" />
+				<h3 class="text-3xl font-bold mb-12">Create a new Game</h3>
 
 				<StyledInput
 					className="mb-8 w-full"
-					label="Platform name"
-					placeholder="Platform"
+					label="Game name"
+					placeholder="Game"
 					bind:val={nameInput}
 					autofocus
 					required
 				/>
 				<StyledInput
 					className="mb-12 w-full"
-					label="Platform description"
+					label="Game description"
 					placeholder="Optional"
 					bind:val={descInput}
 				/>

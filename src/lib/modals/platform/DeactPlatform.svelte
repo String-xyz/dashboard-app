@@ -24,9 +24,9 @@
 			$platformList = await platformService.listPlatforms();
 
 			close();
-			$toast.show("success", "Platform deactivated");
+			$toast.show("success", "Game deactivated");
 		} catch (err: any) {
-			commonErrorHandler(err, "Platform");
+			commonErrorHandler(err, "Game");
 		}
 	};
 
@@ -52,8 +52,8 @@
 		<div class="flex flex-col">
 			<button class="ml-auto" on:click={close}><img src="/assets/close.svg" alt="Close" /></button>
 			<form on:submit={deactivatePlatform} class="main flex flex-col items-center w-full pr-6 pt-2">
-				<h3 class="text-2xl font-bold mb-4">Deactivate Platform</h3>
-				<p class="mb-8">Are you sure you want to <span class="text-warning">deactivate</span> this platform?</p>
+				<h3 class="text-2xl font-bold mb-4">Deactivate Game</h3>
+				<p class="mb-8">Are you sure you want to <span class="text-warning">deactivate</span> this Game?</p>
 				<div class="info-card flex flex-col justify-center items-center py-3 px-4 w-full mb-6">
 					<p class="font-bold">{$selectedPlatform?.name}</p>
 					{#if $selectedPlatform?.description}
@@ -64,7 +64,7 @@
 					<div class="flex">
 						<img src="/assets/indicator/warning.svg" alt="warning" width="32px" height="32px" class="ml-1 mr-4 mb-2" />
 						<p class="warning-text text-xs text-center mb-3">
-							Deactivating this platform will disable its associated API keys and deny it from using our services. 
+							Deactivating this Game will disable its associated API keys and deny it from using our services. 
 							Before deactivating, please consider the impact of disabling the following keys:
 						</p>
 					</div>
