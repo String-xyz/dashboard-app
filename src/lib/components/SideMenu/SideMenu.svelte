@@ -1,7 +1,8 @@
 <script lang="ts">
-	import { Role } from "$lib/common/types";
+	import { Role } from "$lib/common";
+	import { menuItems } from "$lib/constants";
+	import { currentUser } from "$lib/stores";
 	import { authService } from "$lib/services";
-	import { menuItems, currentUser } from "$lib/stores";
 
 	import Avatar from "../Avatar.svelte";
 	import EnvIndicator from "./EnvIndicator.svelte";
@@ -25,11 +26,9 @@
 
 	<nav>
 		<ul class="menu bg-transparent">
-			{#if $menuItems}
-				{#each $menuItems.filter((t) => authService.canView($currentUser?.role, t.minPerms ?? Role.MEMBER)) as tab}
-					<MenuItem {tab} />
-				{/each}
-			{/if}
+			{#each menuItems.filter((t) => authService.canView($currentUser?.role, t.minPerms ?? Role.MEMBER)) as tab}
+				<MenuItem {tab} />
+			{/each}
 		</ul>
 	</nav>
 

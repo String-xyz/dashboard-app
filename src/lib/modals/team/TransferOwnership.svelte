@@ -6,7 +6,7 @@
 	import { transferOwnerModalOpen, ownershipTransferee, currentUser, teamItems, toast } from '$lib/stores';
 	import { apiClient, teamService } from '$lib/services';
 	import { validator } from '$lib/utils';
-	import { Role } from '$lib/common/types';
+	import { Role } from '$lib/common';
 
 	let pwdInput: string;
 
@@ -16,7 +16,7 @@
 
 	const handleTransferOwnership = async () => {
 		if ($ownershipTransferee) {
-			console.debug("Transferring ownership of platform to " + $ownershipTransferee?.name);
+			console.debug("Transferring ownership of organization to " + $ownershipTransferee?.name);
 
 			try {
 				await apiClient.transferOwnership($ownershipTransferee.id, pwdInput);
@@ -66,14 +66,14 @@
 		<div class="main flex flex-col items-center w-full">
 			<button class="ml-auto mb-2" on:click={close}><img src="/assets/close.svg" alt="Close" /></button>
 			<h3 class="text-2xl font-bold mb-6">Transfer Ownership?</h3>
-			<p class="text-center">Are you sure you want to transfer your platform ownership to this person? You will lose owner access to all of String’s admin panel.</p>
+			<p class="text-center">Are you sure you want to transfer your Organization ownership to this person? You will lose owner access to all of String’s admin panel.</p>
 
 			{#if $ownershipTransferee}
 				<UserCard user={$ownershipTransferee} className="my-8"/>
 			{/if}
 
 			<!-- Silence a11y warning -->
-			<!-- <input autocomplete="username" hidden class="hidden" /> -->
+			<input autocomplete="username" hidden class="hidden" />
 			{#if $transferOwnerModalOpen}
 				<StyledInput
 					className="w-full"

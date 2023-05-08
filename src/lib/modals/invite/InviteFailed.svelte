@@ -10,7 +10,7 @@
 		<h3 class="text-2xl font-bold">Your invitation hit a roadblock</h3>
 		<p class="my-8 text-center">
 			Oops, it looks like there was an issue with your invitation. Please try again or contact the
-			platform owner to resend you an invitation.
+			organization owner to resend you an invitation.
 		</p>
 		<img src="/assets/string_logo.svg" alt="String" width="76px" height="18px" class="mt-12" />
 	</div>

@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { ApiKey } from "$lib/common/types";
-	import { isSandbox } from "$lib/utils";
+	import config from '$lib/config';
+	import type { ApiKey } from "$lib/common";
 
 	export let key: ApiKey;
 
@@ -10,7 +10,7 @@
 		if (key.deactivatedAt) {
 			status = "deactivated";
 		} else {
-			status = isSandbox ? "test" : "live";
+			status = config.IS_SANDBOX ? "test" : "live";
 		}
 	}
 	

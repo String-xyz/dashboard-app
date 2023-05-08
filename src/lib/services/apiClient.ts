@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { Role } from "$lib/common/types";
+import type { Role } from "$lib/common";
 
 export function createApiClient(): ApiClient {
 	const baseUrl = import.meta.env.VITE_API_URL;
@@ -9,6 +9,19 @@ export function createApiClient(): ApiClient {
 		headers: commonHeaders,
 		withCredentials: true // send cookies
 	});
+
+	/*********** ORGANIZATIONS ***********/
+	async function createOrganization(organizationName: string, name: string, email: string) {
+		return (await httpClient.post<Organization>("/organizations", { organizationName, name, email })).data;
+	}
+
+	async function getOrganization() {
+		return (await httpClient.get<Organization>("/organizations")).data;
+	}
+
+	async function updateOrganization(organizationName?: string, description?: string) {
+		return (await httpClient.patch<Organization>("/organizations", { organizationName, description })).data;
+	}
 
 	/*********** LOGIN ***********/
 	async function login(email: string, password: string) {
@@ -21,6 +34,23 @@ export function createApiClient(): ApiClient {
 
 	async function refreshToken() {
 		return (await httpClient.post(`/login/refresh`)).data;
+	}
+
+	/*********** PLATFORM ***********/
+	async function createPlatform(platformName: string, platformDescription: string) {
+		return (await httpClient.post<Platform>("/platforms", { platformName, platformDescription })).data;
+	}
+
+	async function listPlatforms(limit = 0) {
+		return (await httpClient.get<Platform[]>("/platforms", { params: { limit } })).data;
+	}
+
+	async function getPlatform(platformId: string) {
+		return (await httpClient.get<Platform>(`/platforms/${platformId}`)).data;
+	}
+
+	async function updatePlatform(platformId: string, request: UpdatePlatform) {
+		return (await httpClient.patch<Platform>(`/platforms/${platformId}`, request)).data;
 	}
 
 	/*********** MEMBERS ***********/
@@ -69,8 +99,8 @@ export function createApiClient(): ApiClient {
 		return (await httpClient.post<Invite>("/invites", { email, name, role })).data;
 	}
 
-	async function acceptInvite(inviteId: string, password: string, token: string) {
-		return (await httpClient.post<Member>(`/invites/${inviteId}`, { password, token })).data;
+	async function acceptInvite(inviteId: string, request: AcceptInvite) {
+		return (await httpClient.post<Member>(`/invites/${inviteId}`, request)).data;
 	}
 
 	async function listInvites() {
@@ -93,34 +123,21 @@ export function createApiClient(): ApiClient {
 		return (await httpClient.patch<void>(`/invites/${inviteId}/deactivate`)).data;
 	}
 
-	/*********** PLATFORM ***********/
-	async function createPlatform(platformName: string, ownerEmail: string, ownerName: string) {
-		return (await httpClient.post<Platform>("/platforms", { platformName, email: ownerEmail, name: ownerName })).data;
-	}
-
-	async function getPlatform() {
-		return (await httpClient.get<Platform>(`/platforms`)).data;
-	}
-
-	async function updatePlatform(name: string) {
-		return (await httpClient.patch<Platform>(`/platforms`, { name })).data;
-	}
-
 	/*********** API KEYS ***********/
-	async function createApiKey(keyType = "public") {
-		return (await httpClient.post<ApiKeyResponse>(`/apikeys?type=${keyType}`)).data;
+	async function createApiKey(platformId = "", keyType = "public") {
+		return (await httpClient.post<ApiKeyResponse>(`/apikeys?platformId=${platformId}&type=${keyType}`)).data;
 	}
 
-	async function listApiKeys(limit = 10) {
-		return (await httpClient.get<ApiKeyResponse[]>("/apikeys", { params: { limit } })).data;
+	async function listApiKeys(platformId = "", limit = 0) {
+		return (await httpClient.get<ApiKeyResponse[]>(`/apikeys?platformId=${platformId}`, { params: { limit } })).data;
 	}
 
 	async function getApiKey(keyId: string) {
 		return (await httpClient.get<ApiKeyResponse>(`/apikeys/${keyId}`)).data;
 	}
 
-	async function deactivateApiKey(keyId: string) {
-		return (await httpClient.patch<ApiKeyResponse>(`/apikeys/${keyId}/deactivate`)).data;
+	async function deleteApiKey(keyId: string) {
+		return (await httpClient.delete<ApiKeyResponse>(`/apikeys/${keyId}`)).data;
 	}
 
 	async function editApiKey(keyId: string, description: string) {
@@ -170,10 +187,21 @@ export function createApiClient(): ApiClient {
 	}
 
 	return {
+		/* Organizations */
+		createOrganization,
+		getOrganization,
+		updateOrganization,
+
 		/* Login */
 		login,
 		logout,
 		refreshToken,
+
+		/* Platform */
+		createPlatform,
+		listPlatforms,
+		getPlatform,
+		updatePlatform,
 
 		/* Members */
 		getMembers,
@@ -196,25 +224,31 @@ export function createApiClient(): ApiClient {
 		changeInviteRole,
 		revokeInvite,
 
-		/* Platform */
-		createPlatform,
-		getPlatform,
-		updatePlatform,
-
 		/* API Keys */
 		createApiKey,
 		listApiKeys,
 		getApiKey,
-		deactivateApiKey,
+		deleteApiKey,
 		editApiKey
 	};
 }
 
 export interface ApiClient {
+	/* Organizations */
+	createOrganization(organizationName: string, ownerName: string, email: string): Promise<Organization>;
+	getOrganization(): Promise<Organization>;
+	updateOrganization(organizationName?: string, description?: string): Promise<Organization>;
+
 	/* Login */
 	login(email: string, password: string): Promise<Member>;
 	logout(): Promise<void>;
 	refreshToken(): Promise<void>;
+
+	/* Platform */
+	createPlatform(platformName: string, platformDescription: string): Promise<Platform>;
+	listPlatforms(limit?: number): Promise<Platform[] | null>;
+	getPlatform(platformId: string): Promise<Platform>;
+	updatePlatform(platformId: string, request: UpdatePlatform): Promise<Platform>;
 
 	/* Members */
 	getMembers(): Promise<Member[]>;
@@ -230,25 +264,86 @@ export interface ApiClient {
 
 	/* Invitations */
 	sendInvite(email: string, name: string, role: Role): Promise<Invite>;
-	acceptInvite(inviteId: string, password: string, token: string): Promise<Member>;
+	acceptInvite(inviteId: string, request: AcceptInvite): Promise<Member>;
 	getInvite(inviteId: string): Promise<Invite>;
 	listInvites(): Promise<Invite[]>;
 	resendInvite(inviteId: string): Promise<Member>;
 	changeInviteRole(inviteId: string, role: Role): Promise<void>;
 	revokeInvite(inviteId: string): Promise<void>;
 
-	/* Platform */
-	createPlatform(platformName: string, ownerEmail: string, ownerName: string): Promise<Platform>;
-	getPlatform(): Promise<Platform>;
-	updatePlatform(name: string): Promise<Platform>;
-
 	/* Api keys */
-	createApiKey: () => Promise<ApiKeyResponse>;
-	listApiKeys: (limit?: number) => Promise<ApiKeyResponse[]>;
+	createApiKey: (platformId: string, keyType?: string) => Promise<ApiKeyResponse>;
+	listApiKeys: (platformId?: string, limit?: number) => Promise<ApiKeyResponse[]>;
 	getApiKey(keyId: string): Promise<ApiKeyResponse>;
-	deactivateApiKey: (keyId: string) => Promise<ApiKeyResponse>;
+	deleteApiKey: (keyId: string) => Promise<ApiKeyResponse>;
 	editApiKey: (keyId: string, description: string) => Promise<ApiKeyResponse>;
 }
+
+export type Organization = {
+	id: string;
+	createdAt: string;
+	deletedAt?: string;
+	name: string;
+	description: string;
+}
+
+export type Member = {
+	id: string;
+	createdAt: string;
+	deactivatedAt?: string;
+	deletedAt?: string;
+	email: string;
+	name: string;
+	role: Role;
+}
+
+export type Platform = {
+	id: string;
+	createdAt: string;
+	deletedAt?: string;
+	deactivatedAt?: string;
+	name: string;
+	description: string;
+	domains: string[];
+	ipAddresses: string[];
+	organizationId: string;
+}
+
+export interface UpdatePlatform {
+	platformName?: string;
+	platformDescription?: string;
+	domains?: string[];
+	ipAddresses?: string[];
+}
+
+/* Invites */
+
+export type InviteStatus = "pending" | "accepted" | "revoked" | "expired" | "invalid";
+
+export type Invite = {
+	id: string;
+	createdAt: string;
+	deletedAt?: string;
+	expiredAt?: string;
+	email: string;
+	name: string;
+	role: Role;
+	organizationName: string;
+	status: InviteStatus;
+}
+
+export interface RequestInvite {
+	email: string;
+	name: string;
+	role: Role;
+}
+
+export interface AcceptInvite {
+	password: string;
+	token: string;
+}
+
+/* Api Keys */
 
 export interface ApiKeyResponse {
 	id: string;
@@ -263,41 +358,7 @@ export interface ApiKeyResponse {
 	platformId: string;
 }
 
-export type Platform = {
-	id: string;
-	createdAt: string;
-	updatedAt: string;
-	deactivatedAt?: string;
-	activatedAt: string;
-	name: string;
-	description: string;
-	domains: string[];
-	ipAddresses: string[];
-};
-
-export type Member = {
-	id: string;
-	createdAt: string;
-	updatedAt: string;
-	deactivatedAt?: string;
-	email: string;
-	name: string;
-	role: Role;
-};
-
-export type InviteStatus = "pending" | "accepted" | "revoked" | "expired" | "invalid";
-
-export type Invite = {
-	id: string;
-	name: string;
-	email: string;
-	role: Role;
-	platformName: string;
-	status: InviteStatus;
-	acceptedAt?: string;
-	expiredAt?: string;
-	deactivatedAt?: string;
-};
+/* Errors */
 
 export enum ErrorCode {
 	BAD_REQUEST = "BAD_REQUEST",

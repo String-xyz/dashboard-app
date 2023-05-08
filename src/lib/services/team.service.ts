@@ -2,9 +2,10 @@ import { get as getStore } from "svelte/store";
 
 import { authService } from ".";
 import { formatDate } from "$lib/utils";
-import { type TeamItem, Role } from "$lib/common/types";
+import { type TeamItem, Role } from "$lib/common";
+import { Filter } from "$lib/constants";
 import type { ApiClient, Invite, Member } from "./apiClient";
-import { Filter, currentUser, activeFilter } from "$lib/stores";
+import { currentUser, activeFilter } from "$lib/stores";
 
 export function createTeamService(apiClient: ApiClient) {
 	async function buildTeamItems(): Promise<TeamItem[]> {
@@ -73,8 +74,6 @@ export function createTeamService(apiClient: ApiClient) {
 		_invites.forEach((invite) => {
 			// when invite status is accepted, it is already in the members list
 			if (invite.status === "accepted") return;
-			// Don't show revoked invites
-			if (invite.deactivatedAt) return;
 
 			_teamItems.push({
 				id: invite.id,

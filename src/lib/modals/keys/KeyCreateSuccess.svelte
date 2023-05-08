@@ -3,7 +3,7 @@
 	import StyledButton from "$lib/components/StyledButton.svelte";
 
 	import { keySuccessModalOpen, createdApiKey, apiKeyList, toast } from "$lib/stores";
-	import { commonErrorHandler } from "$lib/common/errors";
+	import { commonErrorHandler } from "$lib/common";
 	import { keyService } from "$lib/services";
 	import { copyText } from "$lib/utils";
 

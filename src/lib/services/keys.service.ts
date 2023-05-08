@@ -1,20 +1,20 @@
 import { formatDate } from "$lib/utils";
 
-import type { ApiKey } from "$lib/common/types";
+import type { ApiKey } from "$lib/common";
 import type { ApiClient } from "./apiClient";
 
 export function createKeysService(apiClient: ApiClient) {
 
-	async function createApiKey(): Promise<ApiKey> {
-		const apiKey = await apiClient.createApiKey() as ApiKey;
+	async function createApiKey(platformId = "", keyType = "public"): Promise<ApiKey> {
+		const apiKey = await apiClient.createApiKey(platformId, keyType) as ApiKey;
 		apiKey.createdAt = formatDate(apiKey.createdAt);
 		apiKey.showFullKey = false;
 
 		return apiKey;
 	}
 
-	async function listApiKeys(limit = -1): Promise<ApiKey[]> {
-		const apiKeys = await apiClient.listApiKeys(limit) as ApiKey[];
+	async function listApiKeys(platformId?: string, limit = 0): Promise<ApiKey[]> {
+		const apiKeys = (await apiClient.listApiKeys(platformId, limit)) as ApiKey[] ?? [];
 		if (!apiKeys) throw "Could not list API keys";
 
 		const activeKeys = [];
@@ -42,8 +42,8 @@ export function createKeysService(apiClient: ApiClient) {
 		return apiKey;
 	}
 
-	async function deactivateApiKey(keyId: string): Promise<ApiKey> {
-		const apiKey = await apiClient.deactivateApiKey(keyId);
+	async function deleteApiKey(keyId: string): Promise<ApiKey> {
+		const apiKey = await apiClient.deleteApiKey(keyId);
 		apiKey.createdAt = formatDate(apiKey.createdAt);
 
 		return apiKey;
@@ -56,5 +56,5 @@ export function createKeysService(apiClient: ApiClient) {
 		return apiKey;
 	}
 
-	return { createApiKey, listApiKeys, getApiKey, deactivateApiKey, editApiKey };
+	return { createApiKey, listApiKeys, getApiKey, deleteApiKey, editApiKey };
 }

@@ -6,7 +6,7 @@
 
 	import { keyService } from "$lib/services";
 	import { apiKeyList, createdApiKey, keySuccessModalOpen, toast } from "$lib/stores";
-	import { commonErrorHandler } from "$lib/common/errors";
+	import { commonErrorHandler } from "$lib/common";
 
 	const createApiKey = async () => {
 		if ($keySuccessModalOpen) {

@@ -6,7 +6,7 @@
 
 	import { ErrorCode, keyService } from "$lib/services";
 	import { apiKeyList, createdApiKey, editKey, keySuccessModalOpen, toast } from "$lib/stores";
-	import { commonErrorHandler } from "$lib/common/errors";
+	import { commonErrorHandler } from "$lib/common";
 
 	let descInput: string;
 
@@ -62,7 +62,7 @@
 
 {#if $apiKeyList?.length > 0}
 	<div class="keys w-full mb-7">
-		<div class="flex flex-nowrap py-4 pl-4 pr-9 gap-x-5 font-bold">
+		<div class="flex flex-nowrap py-4 pl-4 pr-6 font-bold">
 			<p class="col">Key</p>
 			<p class="col mr-2">Description</p>
 			<p class="col">Status</p>
@@ -70,7 +70,7 @@
 		</div>
 		<div class="rows">
 			{#each $apiKeyList as key, i}
-				<div class="row flex flex-nowrap items-center gap-x-5 py-6 pl-4 pr-9">
+				<div class="row flex flex-nowrap items-center py-6 pl-4 pr-6">
 					<div class="col flex flex-col">
 						<p class="font-bold">{key.hint}</p>
 						<span class="text-sm">

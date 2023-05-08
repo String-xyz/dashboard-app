@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { TeamItem } from "$lib/common/types";
+	import type { TeamItem } from "$lib/common";
 	import type { Member } from "$lib/services";
 
 	export let user: TeamItem | Member;
@@ -12,7 +12,7 @@
 	const path = type === 'self' ? assetPathSelf : assetPathOther;
 	
 	let pfp = "";
-	$: name = user.name || user.email;
+	$: name = user?.name || user?.email;
 
 	$: {
 		if ("isInvite" in user && user.isInvite) {

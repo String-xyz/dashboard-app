@@ -1,9 +1,9 @@
 import type { ApiClient, Invite, Member } from "./apiClient";
-import { Role } from "$lib/common/types";
+import { Role } from "$lib/common";
 
 export function createAuthService(apiClient: ApiClient) {
-	async function login(email: string, pwd: string): Promise<Member> {
-		const member = await apiClient.login(email, pwd);
+	async function login(email: string, password: string): Promise<Member> {
+		const member = await apiClient.login(email, password);
 		return member;
 	}
 
@@ -27,7 +27,7 @@ export function createAuthService(apiClient: ApiClient) {
 	}
 
 	async function acceptInvite(invite: Invite, password: string, token: string): Promise<Member> {
-		const newMember = await apiClient.acceptInvite(invite.id, password, token);
+		const newMember = await apiClient.acceptInvite(invite.id, { password, token });
 		// Because acceptInvite doesn't return Role
 		newMember.role = invite.role;
 

@@ -1,10 +1,8 @@
 <script lang="ts">
-	import { authService, keyService } from "$lib/services";
-	import { apiKeyList, editKey, currentUser, toast } from "$lib/stores";
-	import { copyText } from "$lib/utils";
-	import { commonErrorHandler, type ApiKey, Role } from "$lib/common";
+	import type { Platform } from "$lib/services";
+	import { platformDeactModalOpen, platformEditModalOpen, selectedPlatform } from "$lib/stores";
 
-	export let key: ApiKey;
+	export let platform: Platform;
 	export let dropdownOpen = false;
 
 	let dropdownElem: HTMLButtonElement;
@@ -13,7 +11,6 @@
 		name: string;
 		icon: string;
 		red?: boolean;
-		minPerms?: Role;
 		handler: Function;
 	}
 
@@ -21,24 +18,15 @@
 
 	const ddActions: DropdownAction[] = [
 		{
-			name: "Copy Key",
-			icon: assetPath + "copy.svg",
-			handler: () => {
-				copyText(key.data);
-				$toast.show("success", "Key copied to clipboard");
-			}
-		},
-		{
 			name: "Edit",
 			icon: assetPath + "edit.svg",
-			handler: () => setEdit()
+			handler: () => openEditModal()
 		},
 		{
 			name: "Deactivate",
 			icon: assetPath + "trash.svg",
 			red: true,
-			minPerms: Role.ADMIN,
-			handler: () => deactivateKey()
+			handler: () => openDeactivateModal()
 		}
 	];
 
@@ -51,25 +39,15 @@
 		}
 	};
 
-	const setEdit = () => {
-		$editKey = key;
+	const openEditModal = () => {
+		$selectedPlatform = platform;
+		$platformEditModalOpen = true;
 	};
 
-	const deactivateKey = async () => {
-		try {
-			if (authService.canView($currentUser.role, Role.ADMIN)) {
-				$toast.show("error", "You do not have permission to deactivate this key");
-				return;
-			}
-
-			await keyService.deleteApiKey(key.id);
-			$apiKeyList = await keyService.listApiKeys();
-
-			$toast.show("success", "Key deactivated");
-		} catch (e: any) {
-			return commonErrorHandler(e, "API key");
-		}
-	};
+	const openDeactivateModal = () => {
+		$selectedPlatform = platform;
+		$platformDeactModalOpen = true;
+	}
 
 	const handleAndClose = async (handler: Function) => {
 		await handler();
@@ -77,9 +55,6 @@
 		const btn = document.activeElement as HTMLButtonElement;
 		btn.blur();
 	};
-
-	const getKeyActions = () => ddActions.filter(a => authService.canView($currentUser.role, a.minPerms ?? Role.MEMBER));
-
 </script>
 
 <div class="dropdown dropdown-bottom dropdown-end overflow-visible">
@@ -88,7 +63,7 @@
 	</button>
 	<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 	<ul tabindex="0" class="dropdown-content menu">
-		{#each getKeyActions() as action}
+		{#each ddActions as action}
 			<li>
 				<button on:click={() => handleAndClose(action.handler)}>
 					<img src={action.icon} alt={action.name} class="mr-2 inline" />

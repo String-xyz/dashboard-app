@@ -1,5 +1,5 @@
 import { writable, type Writable } from 'svelte/store';
-import type { ApiKey } from '$lib/common/types';
+import type { ApiKey } from '$lib/common';
 
 export const apiKeyList: Writable<ApiKey[]> = writable();
 

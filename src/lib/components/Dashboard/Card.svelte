@@ -1,9 +1,8 @@
 <script lang="ts">
-	import { KYB_URL, DOCS_URL } from '$lib/config';
-	import { cards, CARD_NAME, type CardItem } from '$lib/constants/cards';
-	import { openLink } from '$lib/utils';
+	import config from '$lib/config';
+	import { cards, CARD_NAME, NavItem, type CardItem } from '$lib/constants';
+	import { openLink, navigateToView } from '$lib/utils';
 
-	import { activeTab, getTabByName, MenuItems } from '$lib/stores';
 	import StyledButton from '../StyledButton.svelte';
 	
 	export let card: CardItem;
@@ -11,10 +10,10 @@
 	/* Set cards actions */
 	const cardActionMap = new Map<CARD_NAME, () => void>();
 
-	cardActionMap.set(CARD_NAME.unlock_live, () => openLink(KYB_URL));
-	cardActionMap.set(CARD_NAME.explore_docs, () => openLink(DOCS_URL));
-	cardActionMap.set(CARD_NAME.manage_team, () => activeTab.set(getTabByName(MenuItems.MANAGE_TEAM)));
-	cardActionMap.set(CARD_NAME.create_key, () => activeTab.set(getTabByName(MenuItems.MANAGE_KEYS)));
+	cardActionMap.set(CARD_NAME.unlock_live, () => openLink(config.KYB_URL));
+	cardActionMap.set(CARD_NAME.explore_docs, () => openLink(config.DOCS_URL));
+	cardActionMap.set(CARD_NAME.manage_team, () => navigateToView(NavItem.MANAGE_TEAM));
+	cardActionMap.set(CARD_NAME.create_key, () => navigateToView(NavItem.MANAGE_KEYS));
 
 	cards.forEach((card) => card.action = cardActionMap.get(card.id));
 	/* End Set cards actions */

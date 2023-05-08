@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { commonErrorHandler } from "$lib/common/errors";
+	import { commonErrorHandler } from "$lib/common";
 	import { authService } from "$lib/services";
 
 

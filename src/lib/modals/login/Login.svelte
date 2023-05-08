@@ -11,7 +11,7 @@
 
 	import { activeModal, currentUser, loginEmail, toast } from "$lib/stores";
 	import { authService, ErrorCode } from "$lib/services";
-	import { commonErrorHandler } from "$lib/common/errors";
+	import { commonErrorHandler } from "$lib/common";
 	import { validator } from "$lib/utils";
 
 	let emailInput = "";
@@ -62,8 +62,8 @@
 	<ModalBase>
 		<form class="main flex flex-col items-center" on:submit={handleLogin}>
 			<img src="/assets/string_logo.svg" alt="String" width="76px" height="18px" class="mb-12" />
-			<h3 class="text-2xl font-bold">Login to String’s developer dashboard</h3>
-			<p class="my-8">Unlock the magic of String’s API by entering your email below.</p>
+			<h3 class="text-2xl font-bold">Login to String’s Developer Dashboard</h3>
+			<p class="my-8"></p>
 			<StyledInput
 				className="w-full"
 				type="email"

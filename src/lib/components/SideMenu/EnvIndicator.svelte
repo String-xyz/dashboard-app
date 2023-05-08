@@ -1,9 +1,7 @@
 <script lang="ts">
-	import { isSandbox } from "$lib/utils";
+	import config from '$lib/config';
 
-	const PROD_URL = import.meta.env.VITE_PROD_DASH_URL;
-
-	const TEST_URL = import.meta.env.VITE_TEST_DASH_URL;
+	const isSandbox = config.IS_SANDBOX;
 
 	const checkmark = isSandbox ? '/assets/test_check.svg' : '/assets/live_check.svg';
 
@@ -11,7 +9,7 @@
 
 	const visitText = isSandbox ? 'Visit production mode' : 'Visit sandbox mode';
 
-	const altLocation = isSandbox ? PROD_URL : TEST_URL;
+	const altLocation = isSandbox ? config.PROD_DASH_URL : config.SBOX_DASH_URL;
 </script>
 
 <div class="env">

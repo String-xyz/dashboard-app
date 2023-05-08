@@ -7,7 +7,7 @@
 	import Login from "../login/Login.svelte";
 
 	import { activeModal, loginEmail } from "$lib/stores";
-	import { commonErrorHandler } from "$lib/common/errors";
+	import { commonErrorHandler } from "$lib/common";
 	import { apiClient } from "$lib/services";
 	import { validator } from "$lib/utils";
 
