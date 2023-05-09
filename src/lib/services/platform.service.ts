@@ -17,6 +17,12 @@ export function createPlatformService(apiClient: ApiClient) {
 		return platforms.reverse();
 	}
 
+	async function getPlatform(platformId: string): Promise<Platform> {
+		const platform = await apiClient.getPlatform(platformId);
+
+		return platform;
+	}
+
 	async function updatePlatform(id: string, name: string, desc: string) {
 		const platform = await apiClient.updatePlatform(id, { platformName: name, description: desc });
 
@@ -27,5 +33,5 @@ export function createPlatformService(apiClient: ApiClient) {
 		// Unimplemented on the backend
 		console.debug("This function is not implemented")
 	}
-	return { createPlatform, listPlatforms, updatePlatform, deactivatePlatform }
+	return { createPlatform, listPlatforms, getPlatform, updatePlatform, deactivatePlatform }
 }

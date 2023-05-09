@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { authService, keyService } from "$lib/services";
-	import { apiKeyList, editKey, currentUser, toast } from "$lib/stores";
+	import { apiKeyList, selectedKey, currentUser, toast } from "$lib/stores";
 	import { copyText } from "$lib/utils";
 	import { commonErrorHandler, type ApiKey, Role } from "$lib/common";
 
@@ -52,7 +52,7 @@
 	};
 
 	const setEdit = () => {
-		$editKey = key;
+		$selectedKey = key;
 	};
 
 	const deactivateKey = async () => {

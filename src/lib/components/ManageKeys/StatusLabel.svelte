@@ -1,19 +1,24 @@
 <script lang="ts">
 	import config from '$lib/config';
-	import type { ApiKey } from "$lib/common";
+	import type { ApiKey } from '$lib/common';
+	import { onMount } from 'svelte';
 
 	export let key: ApiKey;
 
-	let status: string;
+	let status = "";
 
-	$: {
-		if (key.deactivatedAt) {
-			status = "deactivated";
-		} else {
-			status = config.IS_SANDBOX ? "test" : "live";
+	onMount(() => {
+		status = getStatus();
+	});
+
+	const getStatus = () => {
+		if (key.type === "secret") {
+			return "secret";
 		}
+
+		return config.IS_SANDBOX ? "test" : "live";
 	}
-	
+
 </script>
 
 <div class={"slabel flex items-center px-4 py-2 " + status}>
@@ -37,8 +42,9 @@
 		color: #07AD5E;
 	}
 
-	.deactivated {
+	.secret {
 		border-color: #BEBCBA;
 		color: #BEBCBA;
 	}
+
 </style>

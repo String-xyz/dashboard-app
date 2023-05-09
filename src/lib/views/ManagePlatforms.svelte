@@ -18,12 +18,7 @@
 	});
 
 	const createPlatform = async () => {
-		if ($platformCreateModalOpen) {
-			$platformCreateModalOpen = false;
-			return;
-		}
-
-		$platformCreateModalOpen = true;
+		$platformCreateModalOpen = !$platformCreateModalOpen;
 	}
 
 </script>

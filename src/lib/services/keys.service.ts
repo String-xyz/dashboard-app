@@ -1,4 +1,8 @@
+import { get as getStore } from "svelte/store";
+import { currentUser } from "$lib/stores";
 import { formatDate } from "$lib/utils";
+import { Role } from "$lib/common";
+import { authService } from ".";
 
 import type { ApiKey } from "$lib/common";
 import type { ApiClient } from "./apiClient";
@@ -17,22 +21,23 @@ export function createKeysService(apiClient: ApiClient) {
 		const apiKeys = (await apiClient.listApiKeys(platformId, limit)) as ApiKey[] ?? [];
 		if (!apiKeys) throw "Could not list API keys";
 
-		const activeKeys = [];
-		const deactivatedKeys = [];
+		const publicKeys = [];
+		const secretKeys = [];
 
-		for (const apiKey of apiKeys) {
+		const userRole = getStore(currentUser).role;
+
+		for (const apiKey of apiKeys.reverse()) {
 			apiKey.createdAt = formatDate(apiKey.createdAt);
 			apiKey.showFullKey = false;
 
-			// Put Deactivated keys at the bottom of the list
-			if (apiKey.deactivatedAt) {
-				deactivatedKeys.push(apiKey);
-			} else {
-				activeKeys.push(apiKey);
+			if (apiKey.type === "public") {
+				publicKeys.push(apiKey);
+			} else if (apiKey.type === "secret" && authService.canView(userRole, Role.ADMIN)) {
+				secretKeys.push(apiKey);
 			}
 		}
 
-		return [...activeKeys.reverse(), ...deactivatedKeys];
+		return [...secretKeys, ...publicKeys];
 	}
 
 	async function getApiKey(keyId: string): Promise<ApiKey> {

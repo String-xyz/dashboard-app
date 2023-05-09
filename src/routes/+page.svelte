@@ -14,10 +14,11 @@
 	import InviteTeammate from "$lib/modals/team/InviteTeammate.svelte";
 	import RemoveTeammate from "$lib/modals/team/RemoveTeammate.svelte";
 	import TransferOwnership from "$lib/modals/team/TransferOwnership.svelte";
-	import KeyCreateSuccess from "$lib/modals/keys/KeyCreateSuccess.svelte";
 	import CreatePlatform from "$lib/modals/platform/CreatePlatform.svelte";
 	import EditPlatform from "$lib/modals/platform/EditPlatform.svelte";
 	import DeactPlatform from "$lib/modals/platform/DeactPlatform.svelte";
+	import KeyCreate from "$lib/modals/keys/KeyCreate.svelte";
+	import KeySuccess from "$lib/modals/keys/KeySuccess.svelte";
 
 	/* Settings */
 	import MyAccount from "$lib/components/Settings/MyAccount.svelte";
@@ -88,7 +89,8 @@
 		<DeactPlatform />
 
 		<!-- Manage API Keys -->
-		<KeyCreateSuccess />
+		<KeyCreate />
+		<KeySuccess />
 
 	</div>
 {/if}
