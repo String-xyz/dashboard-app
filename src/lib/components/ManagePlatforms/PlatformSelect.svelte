@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from "svelte";
 	import { platformService, type Platform } from "$lib/services";
-	import { platformList } from "$lib/stores";
+	import { platformList, toast } from "$lib/stores";
 
 	export let platform: Platform | null = null;
 	
@@ -15,10 +15,15 @@
 	const radioInactive = [assetPath + "radio_inactive.svg", "radio-inactive"];
 
 	onMount(async () => {
-		$platformList = await platformService.listPlatforms();
+		try {
+			$platformList = await platformService.listPlatforms();
 
-		if ($platformList.length > 0) {
-			platform = $platformList[0];
+			if ($platformList.length > 0) {
+				platform = $platformList[0];
+			}
+		} catch (err: any) {
+			console.error(err);
+			$toast.show("error", "Error fetching platforms");
 		}
 	});
 

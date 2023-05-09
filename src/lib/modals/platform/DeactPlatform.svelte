@@ -5,7 +5,6 @@
 
 	import StyledButton from "$lib/components/StyledButton.svelte";
 	import StyledInput from "$lib/components/StyledInput.svelte";
-	import { onMount } from "svelte";
 
 	let apiKeys: ApiKey[] = [];
 
