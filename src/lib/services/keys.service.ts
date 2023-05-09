@@ -47,11 +47,8 @@ export function createKeysService(apiClient: ApiClient) {
 		return apiKey;
 	}
 
-	async function deleteApiKey(keyId: string): Promise<ApiKey> {
-		const apiKey = await apiClient.deleteApiKey(keyId);
-		apiKey.createdAt = formatDate(apiKey.createdAt);
-
-		return apiKey;
+	async function deleteApiKey(keyId: string) {
+		await apiClient.deleteApiKey(keyId);
 	}
 
 	async function editApiKey(keyId: string, description: string): Promise<ApiKey> {

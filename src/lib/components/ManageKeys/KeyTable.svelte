@@ -4,7 +4,7 @@
 	import KeyDropdown from "./KeyDropdown.svelte";
 
 	import { ErrorCode, keyService, platformService } from "$lib/services";
-	import { apiKeyList, createdApiKey, selectedKey, keyCreateModalOpen, toast } from "$lib/stores";
+	import { apiKeyList, selectedKey, keyCreateModalOpen, toast, platformList } from "$lib/stores";
 	import { commonErrorHandler, type ApiKey } from "$lib/common";
 
 	let descInput: string;
@@ -13,17 +13,8 @@
 	selectedKey.subscribe((key) => (descInput = key?.description ?? ""));
 
 	const createApiKey = async () => {
-		if (!$keyCreateModalOpen) {
-			const newApiKey = await keyService.createApiKey();
-
-			$createdApiKey = newApiKey;
-			$keyCreateModalOpen = true;
-
-			$apiKeyList = await keyService.listApiKeys();
-		} else {
-			$keyCreateModalOpen = false;
-		}
-	};
+		$keyCreateModalOpen = !$keyCreateModalOpen;
+	}
 
 	const updateDescription = async (keyid: string, keyIdx: number, description: string) => {
 		try {
@@ -134,8 +125,12 @@
 {:else}
 	<div class="flex flex-col justify-center items-center">
 		<img src="/assets/card/key_icon.svg" alt="key" width="75px" height="75px" />
-		<h6 class="font-bold my-9 text-center">You haven’t created any API keys yet. Create a key now.</h6>
-		<StyledButton className="btn-wide" action={createApiKey}>Create a Key</StyledButton>
+		{#if $platformList.length > 0}
+			<h6 class="font-bold my-9 text-center">You haven’t created any API keys yet. Create a key now.</h6>
+			<StyledButton className="btn-wide" action={createApiKey}>Create a Key</StyledButton>
+		{:else}
+			<h6 class="font-bold my-9 text-center">You need to create a platform first.</h6>
+		{/if}
 	</div>
 {/if}
 

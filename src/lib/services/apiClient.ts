@@ -141,7 +141,7 @@ export function createApiClient(): ApiClient {
 	}
 
 	async function deleteApiKey(keyId: string) {
-		return (await httpClient.delete<ApiKeyResponse>(`/apikeys/${keyId}`)).data;
+		return (await httpClient.delete<void>(`/apikeys/${keyId}`)).data;
 	}
 
 	/*---------- INTERCEPTORS ----------*/
@@ -275,7 +275,7 @@ export interface ApiClient {
 	createApiKey: (platformId: string, keyType?: string) => Promise<ApiKeyResponse>;
 	listApiKeys: (platformId?: string, limit?: number) => Promise<ApiKeyResponse[]>;
 	getApiKey(keyId: string): Promise<ApiKeyResponse>;
-	deleteApiKey: (keyId: string) => Promise<ApiKeyResponse>;
+	deleteApiKey: (keyId: string) => void;
 	editApiKey: (keyId: string, description: string) => Promise<ApiKeyResponse>;
 }
 

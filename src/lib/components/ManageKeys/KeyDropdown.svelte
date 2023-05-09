@@ -38,7 +38,7 @@
 			icon: assetPath + "trash.svg",
 			red: true,
 			minPerms: Role.ADMIN,
-			handler: () => deactivateKey()
+			handler: () => deleteKey()
 		}
 	];
 
@@ -55,10 +55,10 @@
 		$selectedKey = key;
 	};
 
-	const deactivateKey = async () => {
+	const deleteKey = async () => {
 		try {
-			if (authService.canView($currentUser.role, Role.ADMIN)) {
-				$toast.show("error", "You do not have permission to deactivate this key");
+			if (!authService.canView($currentUser.role, Role.ADMIN)) {
+				$toast.show("error", "You do not have permission to delete this key");
 				return;
 			}
 
