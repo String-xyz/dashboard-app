@@ -1,7 +1,6 @@
 <script lang="ts">
 	import StyledButton from "../StyledButton.svelte";
 	import StyledInput from "../StyledInput.svelte";
-	import StatusLabel from "./StatusLabel.svelte";
 	import KeyDropdown from "./KeyDropdown.svelte";
 
 	import { ErrorCode, keyService, platformService } from "$lib/services";
@@ -42,9 +41,16 @@
 		}
 	};
 
+	// TODO: Memoize by platformId to avoid flickering
 	const getPlatformName = async (key: ApiKey) => {
-		const platform = await platformService.getPlatform(key.platformId);
-		return platform.name;
+		try {
+			if (key.type === "secret") return "";
+
+			const platform = await platformService.getPlatform(key.platformId);
+			return platform.name;
+		} catch (e: any) {
+			return $toast.show("error", "Could not get game name");
+		}
 	}
 
 	const cancelEdit = () => {
@@ -71,25 +77,29 @@
 			<p class="col">Key</p>
 			<p class="col">Game</p>
 			<p class="col mr-2">Description</p>
-			<p class="col">Status</p>
-			<p class="col" />
+			<p class="col"></p>
 		</div>
 		<div class="rows">
 			{#each $apiKeyList as key, i}
 				<div class="row flex flex-nowrap items-center py-6 pl-4 pr-6 gap-x-5">
 					<div class="col flex flex-col">
 						<p class="font-bold">{key.hint}</p>
-						<span class="text-sm">
-							{#if key.showFullKey}
-								<span class="select-all text-clip break-all">{key.data}</span>
-								<button on:click={() => (key.showFullKey = !key.showFullKey)}>
-									<img src="/assets/dropdown/eye_con_hide.svg" alt="view" class="inline mx-2" />
-								</button>
+						<span class="text-sm flex items-center">
+							{#if key.type === "public"}
+								{#if key.showFullKey}
+									<span class="select-all text-clip break-all">{key.data}</span>
+									<button on:click={() => (key.showFullKey = !key.showFullKey)}>
+										<img src="/assets/dropdown/eye_con_hide.svg" alt="view" class="inline mx-1" />
+									</button>
+								{:else}
+									<button on:click={() => (key.showFullKey = !key.showFullKey)}>
+										View public key
+										<img src="/assets/dropdown/eye_con.svg" alt="view" class="inline mx-1" />
+									</button>
+								{/if}
 							{:else}
-								<button on:click={() => (key.showFullKey = !key.showFullKey)}>
-									View entire key
-									<img src="/assets/dropdown/eye_con.svg" alt="view" class="inline mx-2" />
-								</button>
+								<img src="/assets/indicator/lock.svg" alt="lock" class="inline mr-1" width="12px" height="12px" />
+								Secret
 							{/if}
 						</span>
 					</div>
@@ -103,11 +113,6 @@
 							<StyledInput className="mb-1" label="Description" placeholder="Optional. Max 144 chars" bind:val={descInput} autofocus={true} />
 						{:else}
 							<p class="break-all text-sm font-medium select-text">{key.description ?? ""}</p>
-						{/if}
-					</div>
-					<div class="col">
-						{#if key !== $selectedKey}
-							<StatusLabel {key} />
 						{/if}
 					</div>
 					<div class="col flex items-center justify-end info">
@@ -136,7 +141,7 @@
 
 <style>
 	.col {
-		width: 20%;
+		width: 25%;
 	}
 
 	.row {
