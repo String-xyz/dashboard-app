@@ -129,7 +129,7 @@
 			<h6 class="font-bold my-9 text-center">You haven’t created any API keys yet. Create a key now.</h6>
 			<StyledButton className="btn-wide" action={createApiKey}>Create a Key</StyledButton>
 		{:else}
-			<h6 class="font-bold my-9 text-center">You need to create a platform first.</h6>
+			<h6 class="font-bold my-9 text-center">You need to create a Game first.</h6>
 		{/if}
 	</div>
 {/if}

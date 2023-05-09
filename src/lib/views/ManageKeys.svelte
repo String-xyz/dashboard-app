@@ -4,8 +4,8 @@
 	import StyledButton from "$lib/components/StyledButton.svelte";
 	import Toast from "$lib/components/Toast.svelte";
 
-	import { keyService } from "$lib/services";
-	import { apiKeyList, keyCreateModalOpen, toast } from "$lib/stores";
+	import { keyService, platformService } from "$lib/services";
+	import { apiKeyList, platformList, keyCreateModalOpen, toast } from "$lib/stores";
 
 	const createApiKey = async () => {
 		$keyCreateModalOpen = !$keyCreateModalOpen;
@@ -14,6 +14,7 @@
 	onMount(async () => {
 		try {
 			$apiKeyList = await keyService.listApiKeys();
+			$platformList = await platformService.listPlatforms();
 		} catch (e) {
 			console.error(e);
 			$toast.show("error", "Error fetching API Keys");
