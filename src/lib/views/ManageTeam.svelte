@@ -1,16 +1,14 @@
 <script lang="ts">
 	import { onMount } from "svelte";
-	import { Role } from "$lib/common/types";
-	import { teamService } from "$lib/services";
-	import { commonErrorHandler } from "$lib/common/errors";
-	import { currentUser, inviteModalOpen, teamItems, activeFilter, Filter, toast } from "$lib/stores";
+	import { Role, commonErrorHandler } from "$lib/common";
+	import { authService, teamService } from "$lib/services";
+	import { Filter } from "$lib/constants";
+	import { currentUser, inviteModalOpen, teamItems, activeFilter, toast } from "$lib/stores";
 
 	import FilterDropdown from "$lib/components/ManageTeam/FilterDropdown.svelte";
 	import MemberTable from "$lib/components/ManageTeam/MemberTable.svelte";
 	import StyledButton from "$lib/components/StyledButton.svelte";
 	import Toast from "$lib/components/Toast.svelte";
-
-	$: canEdit = $currentUser.role !== Role.MEMBER;
 
 	onMount(async () => {
 		// subscribe to filter changes so we can update the member table
@@ -25,17 +23,17 @@
 </script>
 
 <svelte:head>
-	<title>Manage Team | String Dashboard</title>
+	<title>Your Organization | String Dashboard</title>
 </svelte:head>
 
 <div class="main h-full">
 	<header>
 		<div class="header flex justify-between items-center">
-			<h3 class="text-2xl font-bold">Manage Team</h3>
-			{#if canEdit}
-				<StyledButton className="btn-outline w-40" action={() => ($inviteModalOpen = true)}>
+			<h3 class="text-2xl font-bold">Your Organization</h3>
+			{#if authService.canView($currentUser.role, Role.ADMIN)}
+				<StyledButton className="btn-outline" action={() => ($inviteModalOpen = true)}>
 					<img src={"/assets/button/plus.svg"} alt="+" class="inline mr-3" />
-					Invite Team
+					Invite Member
 				</StyledButton>
 			{:else}
 				<span class="text-sm">

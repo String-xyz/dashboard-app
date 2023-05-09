@@ -15,9 +15,9 @@ export const cards: CardItem[] = [
 		id: CARD_NAME.manage_team,
 		icon: assetPath + 'group_icon.svg',
 		iconAlt: 'Team',
-		title: 'Manage team members',
+		title: 'Your Organization',
 		subtitle: `Manage your team's permissions all in one place.`,
-		btnText: 'Manage',
+		btnText: 'View Organization',
 	},
 	{
 		id: CARD_NAME.unlock_live,

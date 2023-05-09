@@ -3,34 +3,44 @@
 
 	import SideMenu from "$lib/components/SideMenu/SideMenu.svelte";
 
+	/* Views */
 	import Dashboard from "$lib/views/Dashboard.svelte";
 	import ManageTeam from "$lib/views/ManageTeam.svelte";
+	import ManagePlatforms from "$lib/views/ManagePlatforms.svelte";
 	import ManageKeys from "$lib/views/ManageKeys.svelte";
 	import Settings from "$lib/views/Settings.svelte";
 
+	/* Modals */
 	import InviteTeammate from "$lib/modals/team/InviteTeammate.svelte";
 	import RemoveTeammate from "$lib/modals/team/RemoveTeammate.svelte";
-	import KeyCreateSuccess from "$lib/modals/keys/KeyCreateSuccess.svelte";
 	import TransferOwnership from "$lib/modals/team/TransferOwnership.svelte";
+	import CreatePlatform from "$lib/modals/platform/CreatePlatform.svelte";
+	import EditPlatform from "$lib/modals/platform/EditPlatform.svelte";
+	import DeactPlatform from "$lib/modals/platform/DeactPlatform.svelte";
+	import KeyCreate from "$lib/modals/keys/KeyCreate.svelte";
+	import KeySuccess from "$lib/modals/keys/KeySuccess.svelte";
 
+	/* Settings */
 	import MyAccount from "$lib/components/Settings/MyAccount.svelte";
 	import ChangePassword from "$lib/components/Settings/ChangePassword.svelte";
 
-	import { MenuItems, activeTab, menuItems, SettingsTab, tabToViewMap, toast } from "$lib/stores";
+	import { activeTab, SettingsTab, tabToViewMap } from "$lib/stores";
+	import { menuItems, NavItem } from "$lib/constants";
 	import { authService } from "$lib/services";
 
 	let isLoggedIn = false;
 
 	onMount(async () => {
 		/* Set the view for each menu item */
-		const mapViewsToMenuItems = new Map<MenuItems, typeof SvelteComponent>();
+		const mapViewsToMenuItems = new Map<NavItem, typeof SvelteComponent>();
 
-		mapViewsToMenuItems.set(MenuItems.DASHBOARD, Dashboard);
-		mapViewsToMenuItems.set(MenuItems.MANAGE_TEAM, ManageTeam);
-		mapViewsToMenuItems.set(MenuItems.MANAGE_KEYS, ManageKeys);
-		mapViewsToMenuItems.set(MenuItems.SETTINGS, Settings);
+		mapViewsToMenuItems.set(NavItem.DASHBOARD, Dashboard);
+		mapViewsToMenuItems.set(NavItem.MANAGE_TEAM, ManageTeam);
+		mapViewsToMenuItems.set(NavItem.MANAGE_PLATFORMS, ManagePlatforms);
+		mapViewsToMenuItems.set(NavItem.MANAGE_KEYS, ManageKeys);
+		mapViewsToMenuItems.set(NavItem.SETTINGS, Settings);
 
-		$menuItems.forEach((item) => (item.view = mapViewsToMenuItems.get(item.name)));
+		menuItems.forEach((item) => (item.view = mapViewsToMenuItems.get(item.name)));
 		/* End Set the view for each menu item */
 
 		// Settings tabs
@@ -50,7 +60,7 @@
 			return;
 		}
 
-		$activeTab = $menuItems[0];
+		$activeTab = menuItems[0];
 	});
 </script>
 
@@ -67,10 +77,21 @@
 		</div>
 
 		<!-- In-page modals -->
+
+		<!-- Manage Team -->
 		<InviteTeammate />
 		<RemoveTeammate />
-		<KeyCreateSuccess />
 		<TransferOwnership />
+
+		<!-- Manage Platforms -->
+		<CreatePlatform />
+		<EditPlatform />
+		<DeactPlatform />
+
+		<!-- Manage API Keys -->
+		<KeyCreate />
+		<KeySuccess />
+
 	</div>
 {/if}
 

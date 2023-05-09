@@ -5,7 +5,7 @@
 	import { toast } from "$lib/stores";
 	import { validator } from "$lib/utils";
 	import { apiClient, ErrorCode } from "$lib/services";
-	import { commonErrorHandler } from "$lib/common/errors";
+	import { commonErrorHandler } from "$lib/common";
 
 	let oldPwdInput: string;
 	let newPwdInput: string;

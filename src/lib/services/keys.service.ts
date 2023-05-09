@@ -1,38 +1,43 @@
+import { get as getStore } from "svelte/store";
+import { currentUser } from "$lib/stores";
 import { formatDate } from "$lib/utils";
+import { Role } from "$lib/common";
+import { authService } from ".";
 
-import type { ApiKey } from "$lib/common/types";
+import type { ApiKey } from "$lib/common";
 import type { ApiClient } from "./apiClient";
 
 export function createKeysService(apiClient: ApiClient) {
 
-	async function createApiKey(): Promise<ApiKey> {
-		const apiKey = await apiClient.createApiKey() as ApiKey;
+	async function createApiKey(platformId = "", keyType = "public"): Promise<ApiKey> {
+		const apiKey = await apiClient.createApiKey(platformId, keyType) as ApiKey;
 		apiKey.createdAt = formatDate(apiKey.createdAt);
 		apiKey.showFullKey = false;
 
 		return apiKey;
 	}
 
-	async function listApiKeys(limit = -1): Promise<ApiKey[]> {
-		const apiKeys = await apiClient.listApiKeys(limit) as ApiKey[];
+	async function listApiKeys(platformId?: string, limit = 0): Promise<ApiKey[]> {
+		const apiKeys = (await apiClient.listApiKeys(platformId, limit)) as ApiKey[] ?? [];
 		if (!apiKeys) throw "Could not list API keys";
 
-		const activeKeys = [];
-		const deactivatedKeys = [];
+		const publicKeys = [];
+		const secretKeys = [];
 
-		for (const apiKey of apiKeys) {
+		const userRole = getStore(currentUser).role;
+
+		for (const apiKey of apiKeys.reverse()) {
 			apiKey.createdAt = formatDate(apiKey.createdAt);
 			apiKey.showFullKey = false;
 
-			// Put Deactivated keys at the bottom of the list
-			if (apiKey.deactivatedAt) {
-				deactivatedKeys.push(apiKey);
-			} else {
-				activeKeys.push(apiKey);
+			if (apiKey.type === "public") {
+				publicKeys.push(apiKey);
+			} else if (apiKey.type === "secret" && authService.canView(userRole, Role.ADMIN)) {
+				secretKeys.push(apiKey);
 			}
 		}
 
-		return [...activeKeys.reverse(), ...deactivatedKeys];
+		return [...secretKeys, ...publicKeys];
 	}
 
 	async function getApiKey(keyId: string): Promise<ApiKey> {
@@ -42,11 +47,8 @@ export function createKeysService(apiClient: ApiClient) {
 		return apiKey;
 	}
 
-	async function deactivateApiKey(keyId: string): Promise<ApiKey> {
-		const apiKey = await apiClient.deactivateApiKey(keyId);
-		apiKey.createdAt = formatDate(apiKey.createdAt);
-
-		return apiKey;
+	async function deleteApiKey(keyId: string) {
+		await apiClient.deleteApiKey(keyId);
 	}
 
 	async function editApiKey(keyId: string, description: string): Promise<ApiKey> {
@@ -56,5 +58,5 @@ export function createKeysService(apiClient: ApiClient) {
 		return apiKey;
 	}
 
-	return { createApiKey, listApiKeys, getApiKey, deactivateApiKey, editApiKey };
+	return { createApiKey, listApiKeys, getApiKey, deleteApiKey, editApiKey };
 }

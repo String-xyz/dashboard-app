@@ -6,7 +6,7 @@
 
 	import { apiClient } from "$lib/services";
 	import { activeModal, loginEmail } from "$lib/stores";
-	import { commonErrorHandler } from "$lib/common/errors";
+	import { commonErrorHandler } from "$lib/common";
 
 	const back = () => {
 		$activeModal = ForgotPassword;

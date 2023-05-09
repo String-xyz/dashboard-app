@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { onMount } from "svelte";
 	import { apiClient } from "$lib/services";
-	import { commonErrorHandler } from "$lib/common/errors";
-	import { Role, type TeamItem } from "$lib/common/types";
-	import { rolesList, currentUser, deactModalOpen, deactUser, transferOwnerModalOpen, ownershipTransferee, teamItems, toast } from "$lib/stores";
+	import { Role, commonErrorHandler, type TeamItem } from "$lib/common";
+	import { currentUser, deactModalOpen, deactUser,
+		transferOwnerModalOpen, ownershipTransferee, teamItems, toast } from "$lib/stores";
 
 	export let member: TeamItem | null = null;
 	export let activeRole: Role = Role.MEMBER;
@@ -69,7 +69,7 @@
 	};
 
 	const getFilteredRoles = () => {
-		return rolesList.filter((r) => {
+		return Object.values(Role).filter((r) => {
 			if (r === Role.OWNER) {
 				return $currentUser.role === Role.OWNER && !isForInvite;
 			} else {

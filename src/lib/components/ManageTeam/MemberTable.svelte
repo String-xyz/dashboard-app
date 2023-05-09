@@ -5,8 +5,7 @@
 
 	import { apiClient, authService, teamService } from "$lib/services";
 	import { teamItems, currentUser, toast } from "$lib/stores";
-	import { Role, type TeamItem } from "$lib/common/types";
-	import { commonErrorHandler } from "$lib/common/errors";
+	import { Role, commonErrorHandler, type TeamItem } from "$lib/common";
 	import { formatDate } from "$lib/utils";
 
 	const handleResend = async (id: string) => {
@@ -104,7 +103,7 @@
 			</div>
 		{:else}
 			<div class="row flex justify-center items-center p-6">
-				<p class="font-bold">No Entries Found</p>
+				<p class="font-bold">No Members Found</p>
 			</div>
 		{/each}
 	</div>

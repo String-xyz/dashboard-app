@@ -1,5 +1,7 @@
 <script lang="ts">
-	import { activeTab, type MenuItem } from '$lib/stores';
+	import { activeTab } from '$lib/stores';
+	import type { MenuItem } from '$lib/common';
+
 	export let tab: MenuItem;
 </script>
 

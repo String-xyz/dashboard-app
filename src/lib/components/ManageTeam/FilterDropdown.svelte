@@ -1,7 +1,8 @@
 <script lang="ts">
-	import { Role } from "$lib/common/types";
+	import { Role } from "$lib/common";
 	import { authService } from "$lib/services";
-	import { activeFilter, filterOptions, currentUser, type FilterOption } from "$lib/stores";
+	import { activeFilter, currentUser } from "$lib/stores";
+	import { filterOptions, type FilterOption } from "$lib/constants";
 
 	let dropdownElem: HTMLButtonElement;
 

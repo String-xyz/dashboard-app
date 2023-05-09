@@ -4,7 +4,7 @@
 
 	import { apiClient } from "$lib/services";
 	import { currentUser, toast } from "$lib/stores";
-	import { commonErrorHandler } from "$lib/common/errors";
+	import { commonErrorHandler } from "$lib/common";
 
 	let nameInput = $currentUser.name;
 

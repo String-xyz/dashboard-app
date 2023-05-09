@@ -37,7 +37,7 @@
 	<form on:submit={acceptInvite} class="main flex flex-col items-center">
 		<img src="/assets/string_logo.svg" alt="String" width="76px" height="18px" class="mb-10" />
 		<h3 class="text-2xl font-bold mb-2">You’ve been invited to join</h3>
-		<h3 class="text-2xl font-bold mb-2">"{$_invite.platformName}"</h3>
+		<h3 class="text-2xl font-bold mb-2">{$_invite.organizationName}</h3>
 		<p>Confirm your invitation by accepting your invite</p>
 
 		{#if $_invite.name}

@@ -53,6 +53,6 @@
 
 	.tab.tab-active {
 		@apply text-primary;
-		@apply border-primary;
+		@apply border-primary !important;
 	}
 </style>

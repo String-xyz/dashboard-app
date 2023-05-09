@@ -3,7 +3,7 @@
 	import StyledButton from "$lib/components/StyledButton.svelte";
 	import RoleDropdown from "$lib/components/ManageTeam/RoleDropdown.svelte";
 
-	import { Role } from "$lib/common/types";
+	import { Role } from "$lib/common";
 	import { validator } from "$lib/utils";
 	import { apiClient, ErrorCode, teamService } from "$lib/services";
 	import { inviteModalOpen, teamItems, toast } from "$lib/stores";

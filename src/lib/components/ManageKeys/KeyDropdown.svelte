@@ -1,9 +1,8 @@
 <script lang="ts">
-	import { keyService } from "$lib/services";
-	import { apiKeyList, editKey, toast } from "$lib/stores";
+	import { authService, keyService } from "$lib/services";
+	import { apiKeyList, selectedKey, currentUser, toast } from "$lib/stores";
 	import { copyText } from "$lib/utils";
-	import type { ApiKey } from "$lib/common/types";
-	import { commonErrorHandler } from "$lib/common/errors";
+	import { commonErrorHandler, type ApiKey, Role } from "$lib/common";
 
 	export let key: ApiKey;
 	export let dropdownOpen = false;
@@ -14,6 +13,7 @@
 		name: string;
 		icon: string;
 		red?: boolean;
+		minPerms?: Role;
 		handler: Function;
 	}
 
@@ -37,7 +37,8 @@
 			name: "Delete",
 			icon: assetPath + "trash.svg",
 			red: true,
-			handler: () => deactivateKey()
+			minPerms: Role.ADMIN,
+			handler: () => deleteKey()
 		}
 	];
 
@@ -51,12 +52,17 @@
 	};
 
 	const setEdit = () => {
-		$editKey = key;
+		$selectedKey = key;
 	};
 
-	const deactivateKey = async () => {
+	const deleteKey = async () => {
 		try {
-			await keyService.deactivateApiKey(key.id);
+			if (!authService.canView($currentUser.role, Role.ADMIN)) {
+				$toast.show("error", "You do not have permission to delete this key");
+				return;
+			}
+
+			await keyService.deleteApiKey(key.id);
 			$apiKeyList = await keyService.listApiKeys();
 
 			$toast.show("success", "Key deleted");
@@ -71,6 +77,9 @@
 		const btn = document.activeElement as HTMLButtonElement;
 		btn.blur();
 	};
+
+	const getKeyActions = () => ddActions.filter(a => authService.canView($currentUser.role, a.minPerms ?? Role.MEMBER));
+
 </script>
 
 <div class="dropdown dropdown-bottom dropdown-end overflow-visible">
@@ -79,7 +88,7 @@
 	</button>
 	<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 	<ul tabindex="0" class="dropdown-content menu">
-		{#each ddActions as action}
+		{#each getKeyActions() as action}
 			<li>
 				<button on:click={() => handleAndClose(action.handler)}>
 					<img src={action.icon} alt={action.name} class="mr-2 inline" />

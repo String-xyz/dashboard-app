@@ -1,12 +1,9 @@
 import { writable, type Writable } from "svelte/store";
 import { browser } from "$app/environment";
 import type { Member } from "$lib/services";
-import { Role } from "$lib/common/types";
 
 export const loginEmail = writable("");
 export const resetToken = writable("");
-
-export const rolesList = Object.values(Role);
 
 export const currentUser: Writable<Member> = writable();
 
