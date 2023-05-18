@@ -44,7 +44,7 @@ module "www_web_app" {
   zone_id     = data.aws_route53_zone.default.zone_id
 
   tags = {
-    Name        = "${local.env}-www-web-platform-admin-certificate"
+    Name        = "${local.env}-www-web-dashboard-app-certificate"
     Environment = local.env
   }
 }
