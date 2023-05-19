@@ -20,11 +20,8 @@
 	const deactivatePlatform = async () => {
 		try {
 			await platformService.deactivatePlatform($selectedPlatform.id);
-			let allPlatforms = await platformService.listPlatforms();
-			allPlatforms = allPlatforms.filter((p) => !p.deactivatedAt);
-			$platformList = allPlatforms;
-			console.log(allPlatforms);
-			console.log($platformList);
+			let platforms = await platformService.listPlatforms();
+			$platformList = platforms;
 
 			close();
 			$toast.show("success", "Game deactivated");
