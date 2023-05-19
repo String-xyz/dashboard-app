@@ -53,6 +53,14 @@ export function createApiClient(): ApiClient {
 		return (await httpClient.patch<Platform>(`/platforms/${platformId}`, request)).data;
 	}
 
+	async function deactivatePlatform(platformId: string) {
+		return (await httpClient.patch<Platform>(`/platforms/${platformId}/deactivate`)).data;
+	}
+
+	async function reactivatePlatform(platformId: string) {
+		return (await httpClient.patch<Platform>(`/platforms/${platformId}/reactivate`)).data;
+	}
+
 	/*********** MEMBERS ***********/
 	async function getMembers() {
 		return (await httpClient.get<Member[]>("/members")).data;
@@ -202,6 +210,8 @@ export function createApiClient(): ApiClient {
 		listPlatforms,
 		getPlatform,
 		updatePlatform,
+		deactivatePlatform,
+		reactivatePlatform,
 
 		/* Members */
 		getMembers,
@@ -249,6 +259,8 @@ export interface ApiClient {
 	listPlatforms(limit?: number): Promise<Platform[] | null>;
 	getPlatform(platformId: string): Promise<Platform>;
 	updatePlatform(platformId: string, request: UpdatePlatform): Promise<Platform>;
+	deactivatePlatform(platformId: string): Promise<Platform>;
+	reactivatePlatform(platformId: string): Promise<Platform>;
 
 	/* Members */
 	getMembers(): Promise<Member[]>;
@@ -285,7 +297,7 @@ export type Organization = {
 	deletedAt?: string;
 	name: string;
 	description: string;
-}
+};
 
 export type Member = {
 	id: string;
@@ -295,7 +307,7 @@ export type Member = {
 	email: string;
 	name: string;
 	role: Role;
-}
+};
 
 export type Platform = {
 	id: string;
@@ -307,7 +319,7 @@ export type Platform = {
 	domains: string[];
 	ipAddresses: string[];
 	organizationId: string;
-}
+};
 
 export interface UpdatePlatform {
 	platformName?: string;
@@ -330,7 +342,7 @@ export type Invite = {
 	role: Role;
 	organizationName: string;
 	status: InviteStatus;
-}
+};
 
 export interface RequestInvite {
 	email: string;
