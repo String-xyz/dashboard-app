@@ -25,7 +25,7 @@
 			close();
 			$toast.show("success", "Game deactivated");
 		} catch (err: any) {
-			commonErrorHandler(err, "Game");
+			commonErrorHandler(err, "game");
 		}
 	};
 

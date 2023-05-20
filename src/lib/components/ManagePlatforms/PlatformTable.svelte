@@ -15,9 +15,9 @@
 			await platformService.reactivatePlatform(platform.id);
 			$platformList = await platformService.listPlatforms();
 
-			$toast.show("success", "Platform reactivated!");
+			$toast.show("success", "Game reactivated!");
 		} catch (e: any) {
-			return commonErrorHandler(e, "platform");
+			return commonErrorHandler(e, "game");
 		}
 	}
 	
