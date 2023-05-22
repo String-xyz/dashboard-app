@@ -8,13 +8,24 @@ export function createPlatformService(apiClient: ApiClient) {
 	}
 
 	async function listPlatforms(): Promise<Platform[]> {
-		const platforms = await apiClient.listPlatforms();	
+		const platforms = await apiClient.listPlatforms();
 		// TODO: Remove null check once backend returns empty array instead of null
 		if (!platforms) {
 			return [] as Platform[];
 		}
 
-		return platforms.reverse();
+		const activePlatforms = [];
+		const deactPlatforms = [];
+
+		for (const platform of platforms.reverse()) {
+			if (platform.deactivatedAt) {
+				deactPlatforms.push(platform);
+			} else {
+				activePlatforms.push(platform);
+			}
+		}
+
+		return [...activePlatforms, ...deactPlatforms];
 	}
 
 	async function getPlatform(platformId: string): Promise<Platform> {
@@ -30,8 +41,12 @@ export function createPlatformService(apiClient: ApiClient) {
 	}
 
 	async function deactivatePlatform(id: string) {
-		// Unimplemented on the backend
-		console.debug("This function is not implemented")
+		return apiClient.deactivatePlatform(id);
 	}
-	return { createPlatform, listPlatforms, getPlatform, updatePlatform, deactivatePlatform }
+
+	async function reactivatePlatform(id: string) {
+		return apiClient.reactivatePlatform(id);
+	}
+
+	return { createPlatform, listPlatforms, getPlatform, updatePlatform, deactivatePlatform, reactivatePlatform };
 }

@@ -25,7 +25,7 @@
 			close();
 			$toast.show("success", "Game deactivated");
 		} catch (err: any) {
-			commonErrorHandler(err, "Game");
+			commonErrorHandler(err, "game");
 		}
 	};
 
@@ -63,8 +63,8 @@
 					<div class="flex">
 						<img src="/assets/indicator/warning.svg" alt="warning" width="32px" height="32px" class="ml-1 mr-4 mb-2" />
 						<p class="warning-text text-xs text-center mb-3">
-							Deactivating this Game will disable its associated API keys and deny it from using our services. 
-							Before deactivating, please consider the impact of disabling the following keys:
+							Deactivating this Game will disable its associated API keys and deny it from using our services. Before deactivating, please
+							consider the impact of disabling the following keys:
 						</p>
 					</div>
 					<div class="key-list w-full p-3 overflow-scroll">
@@ -114,14 +114,14 @@
 	}
 
 	.key-warning {
-		background: #FFFBED;
-		border: 1px solid #FCD28C;
+		background: #fffbed;
+		border: 1px solid #fcd28c;
 		border-radius: 4px;
 	}
 
 	.key-list {
 		height: 110px;
-		background: #FFFFFF;
+		background: #ffffff;
 		border-radius: 4px;
 	}
 
@@ -144,6 +144,4 @@
 		max-width: 600px;
 		height: 700px;
 	}
-
-
 </style>

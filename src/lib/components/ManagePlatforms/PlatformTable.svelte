@@ -2,12 +2,25 @@
 
 
 <script lang="ts">
-	import { Role } from "$lib/common";
-	import { authService } from "$lib/services";
-	import { platformList, currentUser } from "$lib/stores";
+	import { Role, commonErrorHandler } from "$lib/common";
+	import { authService, platformService, type Platform } from "$lib/services";
+	import { platformList, currentUser, toast } from "$lib/stores";
 	import { formatDate } from "$lib/utils";
 
+	import StyledButton from "../StyledButton.svelte";
 	import PlatformDropdown from "./PlatformDropdown.svelte";
+
+	const reactivatePlatform = async (platform: Platform) => {
+		try {
+			await platformService.reactivatePlatform(platform.id);
+			$platformList = await platformService.listPlatforms();
+
+			$toast.show("success", "Game reactivated!");
+		} catch (e: any) {
+			return commonErrorHandler(e, "game");
+		}
+	}
+	
 </script>
 
 <div class="main-table w-full">
@@ -26,8 +39,11 @@
 				</div>
 				<div class="w-1/4 flex items-center justify-end info">
 					{#if authService.canView($currentUser.role, Role.ADMIN)}
-						<p class="text-xs font-medium tabular-nums select-text mr-4" class:deactivated={platform.deactivatedAt}>Created on {formatDate(platform.createdAt)}</p>
-						{#if !platform.deactivatedAt}
+						{#if platform.deactivatedAt}
+							<p class="text-xs deactivated font-semibold tabular-nums select-text">Deactivated {formatDate(platform.deactivatedAt)}</p>
+							<StyledButton className="btn-warning rounded-3xl ml-6" action={() => reactivatePlatform(platform)}>Reactivate</StyledButton>
+						{:else}
+							<p class="text-xs font-medium tabular-nums select-text mr-4">Created on {formatDate(platform.createdAt)}</p>
 							<PlatformDropdown {platform} />
 						{/if}
 					{/if}
