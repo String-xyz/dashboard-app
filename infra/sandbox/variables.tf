@@ -1,12 +1,12 @@
 locals {
   region            = "us-west-2"
   root_domain       = "sandbox.string.xyz"
-  web_origin_id     = "sandbox-platform-web-app"
+  web_origin_id     = "sandbox-dashboard-web-app"
   web_bucket_name   = "sandbox.string.xyz"
   web_domain        = "sandbox.string.xyz"
   www_web_domain    = "www.sandbox.string.xyz"
   www_bucket_name   = "www.sandbox.string.xyz"
-  www_web_origin_id = "www-sandbox-platform-web-app"
+  www_web_origin_id = "www-sandbox-dashboard-web-app"
   env               = "sandbox"
 }
 
