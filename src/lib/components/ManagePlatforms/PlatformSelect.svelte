@@ -18,12 +18,18 @@
 		try {
 			$platformList = await platformService.listPlatforms();
 
-			if ($platformList.length > 0) {
+			if (platform == null && $platformList.length > 0) {
 				platform = $platformList[0];
 			}
 		} catch (err: any) {
 			console.error(err);
 			$toast.show("error", "Error fetching platforms");
+		}
+	});
+
+	platformList.subscribe((plats) => {
+		if (platform == null && plats.length > 0) {
+			platform = plats[0];
 		}
 	});
 

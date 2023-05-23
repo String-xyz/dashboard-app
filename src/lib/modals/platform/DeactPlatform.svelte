@@ -52,7 +52,7 @@
 			<button class="ml-auto" on:click={close}><img src="/assets/close.svg" alt="Close" /></button>
 			<form on:submit={deactivatePlatform} class="main flex flex-col items-center w-full pr-6 pt-2">
 				<h3 class="text-2xl font-bold mb-4">Deactivate Game</h3>
-				<p class="mb-8">Are you sure you want to <span class="text-warning">deactivate</span> this Game?</p>
+				<p class="mb-6">Are you sure you want to <span class="text-warning">deactivate</span> this Game?</p>
 				<div class="info-card flex flex-col justify-center items-center py-3 px-4 w-full mb-6">
 					<p class="font-bold">{$selectedPlatform?.name}</p>
 					{#if $selectedPlatform?.description}

@@ -12,6 +12,7 @@
 	interface DropdownAction {
 		name: string;
 		icon: string;
+		keyType?: string;
 		red?: boolean;
 		minPerms?: Role;
 		handler: Function;
@@ -23,6 +24,7 @@
 		{
 			name: "Copy Key",
 			icon: assetPath + "copy.svg",
+			keyType: "public",
 			handler: () => {
 				copyText(key.data);
 				$toast.show("success", "Key copied to clipboard");
@@ -78,7 +80,12 @@
 		btn.blur();
 	};
 
-	const getKeyActions = () => ddActions.filter(a => authService.canView($currentUser.role, a.minPerms ?? Role.MEMBER));
+	const getKeyActions = () => {
+		let filteredActions = ddActions.filter(a => a.keyType === key.type || a.keyType === undefined);
+		filteredActions = filteredActions.filter(a => authService.canView($currentUser.role, a.minPerms ?? Role.MEMBER));
+
+		return filteredActions;
+	}
 
 </script>
 
