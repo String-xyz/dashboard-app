@@ -18,9 +18,14 @@
 
 	const updateDescription = async (keyid: string, keyIdx: number, description: string) => {
 		try {
+			if (description == $selectedKey?.description) {
+				$selectedKey = null;
+				return;
+			}
+	
 			const updatedKey = await keyService.editApiKey(keyid, description);
-			$selectedKey = null;
 			$apiKeyList[keyIdx] = updatedKey;
+			$selectedKey = null;
 			descInput = "";
 
 			$toast.show("success", "Description updated");
@@ -96,14 +101,14 @@
 					</div>
 					<div class="col">
 						{#await getPlatformName(key) then platformName}
-							<p class="text-sm font-medium">{platformName}</p>
+							<p class="text-sm font-medium select-all break-words">{platformName}</p>
 						{/await}
 					</div>
 					<div class="col">
 						{#if key == $selectedKey}
 							<StyledInput className="mb-1" label="Description" placeholder="Optional. Max 144 chars" bind:val={descInput} autofocus={true} />
 						{:else}
-							<p class="break-all text-sm font-medium select-text">{key.description ?? ""}</p>
+							<p class="break-words text-sm font-medium select-text">{key.description ?? ""}</p>
 						{/if}
 					</div>
 					<div class="col flex items-center justify-end info">
@@ -112,7 +117,7 @@
 
 							<StyledButton className="rounded-3xl px-6" action={() => updateDescription(key.id, i, descInput)}>Save</StyledButton>
 						{:else}
-							<p class="text-xs mr-4 font-medium tabular-nums">Created on {key.createdAt}</p>
+							<p class="text-xs mr-4 font-medium tabular-num select-all">Created on {key.createdAt}</p>
 							{#if !key.deletedAt}
 								<KeyDropdown {key} />
 							{/if}

@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { onMount } from "svelte";
-
 	import ModalBase from "../ModalBase.svelte";
 	import StyledInput from "$lib/components/StyledInput.svelte";
 	import StyledButton from "$lib/components/StyledButton.svelte";
@@ -29,13 +27,6 @@
 		return isEmailValid && isPassValid;
 	};
 
-	onMount(async () => {
-		/* If user is already logged in, redirect to dashboard */
-		if (await authService.isUserLoggedIn()) {
-			window.location.href = "/";
-		}
-	});
-
 	const handleLogin = async (e: any) => {
 		if (!isValidInput()) return;
 
@@ -60,7 +51,7 @@
 
 <div>
 	<ModalBase>
-		<form class="main flex flex-col items-center" on:submit={handleLogin}>
+		<form class="main flex flex-col items-center" on:submit|preventDefault={handleLogin}>
 			<img src="/assets/string_logo.svg" alt="String" width="76px" height="18px" class="mb-12" />
 			<h3 class="text-2xl font-bold">Login to String’s Developer Dashboard</h3>
 			<p class="my-8"></p>

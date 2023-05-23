@@ -32,18 +32,18 @@
 		{#each $platformList as platform}
 			<div class="row flex flex-nowrap items-center px-5 py-8 ">
 				<div class="w-1/4">
-					<p class="font-semibold select-text" class:deactivated={platform.deactivatedAt}>{platform.name}</p>
+					<p class="font-semibold select-text break-words" class:deactivated={platform.deactivatedAt}>{platform.name}</p>
 				</div>
 				<div class="w-2/4">
-					<p class="font-semibold select-text" class:deactivated={platform.deactivatedAt}>{platform.description}</p>
+					<p class="font-semibold select-text break-words" class:deactivated={platform.deactivatedAt}>{platform.description}</p>
 				</div>
 				<div class="w-1/4 flex items-center justify-end info">
 					{#if authService.canView($currentUser.role, Role.ADMIN)}
 						{#if platform.deactivatedAt}
-							<p class="text-xs deactivated font-semibold tabular-nums select-text">Deactivated {formatDate(platform.deactivatedAt)}</p>
+							<p class="text-xs deactivated font-semibold tabular-nums select-all">Deactivated {formatDate(platform.deactivatedAt)}</p>
 							<StyledButton className="btn-warning rounded-3xl ml-6" action={() => reactivatePlatform(platform)}>Reactivate</StyledButton>
 						{:else}
-							<p class="text-xs font-medium tabular-nums select-text mr-4">Created on {formatDate(platform.createdAt)}</p>
+							<p class="text-xs font-medium tabular-nums select-all mr-4">Created on {formatDate(platform.createdAt)}</p>
 							<PlatformDropdown {platform} />
 						{/if}
 					{/if}

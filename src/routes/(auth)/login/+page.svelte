@@ -1,10 +1,18 @@
 <script lang="ts">
+	import { onMount, onDestroy } from 'svelte';
+	import { authService } from '$lib/services';
+	import { activeModal } from '$lib/stores';
+
 	import Login from '$lib/modals/login/Login.svelte';
 
-	import { activeModal } from '$lib/stores';
-	import { onDestroy } from 'svelte';
-
 	$activeModal = Login;
+
+	onMount(async () => {
+		/* If user is already logged in, redirect to dashboard */
+		if (await authService.isUserLoggedIn()) {
+			window.location.href = "/";
+		}
+	});
 
 	onDestroy(() => {
 		$activeModal = null;

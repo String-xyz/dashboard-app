@@ -19,11 +19,20 @@
 				return $toast.show("error", "Game name cannot be empty");
 			}
 
+			if (descInput == $selectedPlatform.description) {
+				close();
+				return;
+			}
+
+			if (descInput.length > 144) {
+				return $toast.show("error", "Description must be between 0 and 144 characters");
+			}
+
 			await platformService.updatePlatform($selectedPlatform.id, nameInput, descInput);
 			$platformList = await platformService.listPlatforms();
 
 			close();
-			$toast.show("success", "Game updated");
+			$toast.show("success", "Description updated");
 		} catch (err: any) {
 			commonErrorHandler(err, "Game");
 		}
