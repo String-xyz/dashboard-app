@@ -4,13 +4,14 @@ import { Role, type MenuItem } from "$lib/common/types";
 const assetPath = '/assets/tab/';
 
 export enum NavItem { 
-	DASHBOARD = 'Dashboard',
-	MANAGE_TEAM = 'Your Organization',
-	MANAGE_PLATFORMS = 'Manage Games',
-	MANAGE_KEYS = 'Manage API Keys',
-	VERIFY_ACCOUNT = 'Verify Account',
-	VIEW_DOCS = 'View API Docs',
-	SETTINGS = 'Settings'
+	DASHBOARD         = 'Dashboard',
+	MANAGE_TEAM       = 'Your Organization',
+	MANAGE_PLATFORMS  = 'Manage Games',
+	MANAGE_KEYS       = 'Manage API Keys',
+	MANAGE_CONTRACTS  = 'Your Smart Contracts',
+	VERIFY_ACCOUNT    = 'Verify Account',
+	VIEW_DOCS         = 'View API Docs',
+	SETTINGS          = 'Settings'
 };
 
 export const menuItems: MenuItem[] = [
@@ -29,6 +30,10 @@ export const menuItems: MenuItem[] = [
 	{
 		name: NavItem.MANAGE_KEYS,
 		icon: assetPath + 'manage_keys.svg',
+	},
+	{
+		name: NavItem.MANAGE_CONTRACTS,
+		icon: assetPath + 'manage_contracts.svg',
 	},
 	{
 		name: NavItem.VERIFY_ACCOUNT,

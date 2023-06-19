@@ -4,7 +4,7 @@
 	import UserCard from "$lib/components/ManageTeam/UserCard.svelte";
 	import StyledButton from "$lib/components/StyledButton.svelte";
 
-	import { deactModalOpen, deactUser, teamItems, toast } from "$lib/stores";
+	import { deactModalOpen, deactUser, memberList, toast } from "$lib/stores";
 
 	const handleDeactivate = async () => {
 		// Deactivate user
@@ -19,7 +19,7 @@
 				$toast.show("success", "Member deactivated!");
 			}
 
-			$teamItems = await teamService.rebuildTeamList();
+			$memberList = await teamService.rebuildTeamList();
 			$deactModalOpen = false;
 		} catch (e) {
 			console.error(e);

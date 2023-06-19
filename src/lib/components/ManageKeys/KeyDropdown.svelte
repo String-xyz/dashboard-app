@@ -98,7 +98,7 @@
 		{#each getKeyActions() as action}
 			<li>
 				<button on:click={() => handleAndClose(action.handler)}>
-					<img src={action.icon} alt={action.name} class="mr-2 inline" />
+					<img src={action.icon} alt={action.name} class="inline" />
 					<span class="text-sm whitespace-nowrap mr-9" class:text-warning={action.red}>{action.name}</span>
 				</button>
 			</li>

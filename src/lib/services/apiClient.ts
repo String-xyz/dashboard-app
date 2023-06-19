@@ -152,6 +152,35 @@ export function createApiClient(): ApiClient {
 		return (await httpClient.delete<void>(`/apikeys/${keyId}`)).data;
 	}
 
+	/*********** CONTRACTS ***********/
+	async function listNetworks(limit = 0) {
+		return (await httpClient.get<Network[]>(`/networks?limit=${limit}`)).data;
+	}
+
+	async function createContract(contract: ContractDetails) {
+		return (await httpClient.post<Contract>("/contracts", contract)).data;
+	}
+
+	async function listContracts(platformId = "", limit = 0) {
+		return (await httpClient.get<Contract[]>(`/contracts?platformId=${platformId}`, { params: { limit } })).data;
+	}
+
+	async function getContract(contractId: string) {
+		return (await httpClient.get<Contract>(`/contracts/${contractId}`)).data;
+	}
+
+	async function editContract(contractId: string, updates: ContractUpdate) {
+		return (await httpClient.patch<Contract>(`/contracts/${contractId}`, updates)).data;
+	}
+
+	async function deactivateContract(contractId: string) {
+		return (await httpClient.patch<Contract>(`/contracts/${contractId}/deactivate`)).data;
+	}
+
+	async function reactivateContract(contractId: string) {
+		return (await httpClient.patch<Contract>(`/contracts/${contractId}/reactivate`)).data;
+	}
+
 	/*---------- INTERCEPTORS ----------*/
 
 	httpClient.interceptors.response.use(
@@ -239,7 +268,16 @@ export function createApiClient(): ApiClient {
 		listApiKeys,
 		getApiKey,
 		deleteApiKey,
-		editApiKey
+		editApiKey,
+
+		/* Contracts */
+		listNetworks,
+		createContract,
+		listContracts,
+		getContract,
+		editContract,
+		deactivateContract,
+		reactivateContract,
 	};
 }
 
@@ -283,12 +321,21 @@ export interface ApiClient {
 	changeInviteRole(inviteId: string, role: Role): Promise<void>;
 	revokeInvite(inviteId: string): Promise<void>;
 
-	/* Api keys */
-	createApiKey: (platformId: string, keyType?: string) => Promise<ApiKeyResponse>;
-	listApiKeys: (platformId?: string, limit?: number) => Promise<ApiKeyResponse[]>;
+	/* API Keys */
+	createApiKey(platformId: string, keyType?: string): Promise<ApiKeyResponse>;
+	listApiKeys(platformId?: string, limit?: number): Promise<ApiKeyResponse[]>;
 	getApiKey(keyId: string): Promise<ApiKeyResponse>;
-	deleteApiKey: (keyId: string) => void;
-	editApiKey: (keyId: string, description: string) => Promise<ApiKeyResponse>;
+	deleteApiKey(keyId: string): void;
+	editApiKey(keyId: string, description: string): Promise<ApiKeyResponse>;
+
+	/* Contracts */
+	listNetworks(): Promise<Network[]>;
+	createContract(contract: ContractDetails): Promise<Contract>;
+	listContracts(platformId?: string, limit?: number): Promise<Contract[]>;
+	getContract(contractId: string): Promise<Contract>;
+	editContract(contractId: string, contract: ContractUpdate): Promise<Contract>;
+	deactivateContract(contractId: string): Promise<Contract>;
+	reactivateContract(contractId: string): Promise<Contract>;
 }
 
 export type Organization = {
@@ -368,6 +415,45 @@ export interface ApiKeyResponse {
 	description: string;
 	createdBy: string;
 	platformId: string;
+}
+
+export interface Network {
+	id: string;
+	name: string;
+	chainId: number;
+}
+
+// export interface ShortPlatformInfo {
+// 	id: string;
+// 	name: string;
+// }
+
+export interface Contract {
+	id: string;
+	createdAt: string;
+	updatedAt: string;
+	deactivatedAt?: string;
+	name: string;
+	address: string;
+	functions: string[];
+	networkId: string;
+	platformId: string;
+	// platforms: ShortPlatformInfo[];
+}
+
+export interface ContractDetails {
+	name: string;
+	address: string;
+	functions: string[];
+	networkId: string;
+	platformId: string;
+}
+
+export interface ContractUpdate {
+	name?: string;
+	address?: string;
+	functions?: string[];
+	networkId?: string;
 }
 
 /* Errors */

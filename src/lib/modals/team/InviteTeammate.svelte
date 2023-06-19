@@ -6,7 +6,7 @@
 	import { Role } from "$lib/common";
 	import { validator } from "$lib/utils";
 	import { apiClient, ErrorCode, teamService } from "$lib/services";
-	import { inviteModalOpen, teamItems, toast } from "$lib/stores";
+	import { inviteModalOpen, memberList, toast } from "$lib/stores";
 
 	let dropdownOpen: boolean;
 	let inviteRole: Role;
@@ -28,7 +28,7 @@
 			emailInput = validator.normalizeEmail(emailInput);
 			await apiClient.sendInvite(emailInput, nameInput, inviteRole);
 
-			$teamItems = await teamService.rebuildTeamList();
+			$memberList = await teamService.rebuildTeamList();
 
 			// clear inputs
 			emailInput = "";

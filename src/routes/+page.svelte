@@ -8,6 +8,7 @@
 	import ManageTeam from "$lib/views/ManageTeam.svelte";
 	import ManagePlatforms from "$lib/views/ManagePlatforms.svelte";
 	import ManageKeys from "$lib/views/ManageKeys.svelte";
+	import ManageContracts from "$lib/views/ManageContracts.svelte";
 	import Settings from "$lib/views/Settings.svelte";
 
 	/* Modals */
@@ -38,6 +39,7 @@
 		mapViewsToMenuItems.set(NavItem.MANAGE_TEAM, ManageTeam);
 		mapViewsToMenuItems.set(NavItem.MANAGE_PLATFORMS, ManagePlatforms);
 		mapViewsToMenuItems.set(NavItem.MANAGE_KEYS, ManageKeys);
+		mapViewsToMenuItems.set(NavItem.MANAGE_CONTRACTS, ManageContracts);
 		mapViewsToMenuItems.set(NavItem.SETTINGS, Settings);
 
 		menuItems.forEach((item) => (item.view = mapViewsToMenuItems.get(item.name)));
