@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { contractCreateModalOpen, contractList, toast } from "$lib/stores";
 	import { commonErrorHandler } from "$lib/common";
-	import { contractService } from "$lib/services";
+	import { contractService, type Network } from "$lib/services";
 
 	import StyledInput from "$lib/components/StyledInput.svelte";
 	import StyledButton from "$lib/components/StyledButton.svelte";
@@ -9,29 +9,28 @@
 
 	let currentStep: "info" | "games" | "functions" = "info";
 
+	let selectedNetwork: Network | null;
+
 	let nameInput = "";
 	let addrInput = "";
 	let functionsInput = "";
-	let networkIdInput = "";
 	let platformIdInput = "";
 
-	$: infoDisabled = !nameInput || !addrInput || !networkIdInput;
+	$: infoDisabled = !nameInput || !addrInput || !selectedNetwork;
 	$: gamesDisabled = !platformIdInput;
 	$: functionsDisabled = !functionsInput;
 
-	// $: currentDisabled = currentStep == "info" ? infoDisabled : currentStep == "games" ? gamesDisabled : functionsDisabled;
-
-	$: currentDisabled = false;
+	$: currentDisabled = currentStep == "info" ? infoDisabled : currentStep == "games" ? gamesDisabled : functionsDisabled;
 
 	const createContract = async () => {
 		try {
-			if (infoDisabled || gamesDisabled || functionsDisabled) return;
+			if (!selectedNetwork || infoDisabled || gamesDisabled || functionsDisabled) return;
 
 			await contractService.createContract({
 				name: nameInput,
 				address: addrInput,
 				functions: [functionsInput],
-				networkId: networkIdInput,
+				networkId: selectedNetwork.id,
 				platformId: platformIdInput,
 			});
 			$contractList = await contractService.listContracts();
@@ -75,8 +74,8 @@
 		nameInput = "";
 		addrInput = "";
 		functionsInput = "";
-		networkIdInput = "";
 		platformIdInput = "";
+		selectedNetwork = null;
 
 		currentStep = "info";
 
@@ -145,7 +144,7 @@
 							bind:val={addrInput}
 							required
 						/>
-						<NetworkSelect />
+						<NetworkSelect bind:selectedNetwork />
 					{/if}
 					{#if currentStep == "games"}
 						<StyledInput
