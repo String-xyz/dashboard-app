@@ -143,6 +143,24 @@
 						/>
 						<NetworkSelect />
 					{/if}
+					{#if currentStep == "games"}
+						<StyledInput
+							className="w-full mb-6"
+							label="Platform ID"
+							placeholder="Platform ID"
+							bind:val={platformIdInput}
+							required
+						/>
+					{/if}
+					{#if currentStep == "functions"}
+						<StyledInput
+							className="w-full mb-6"
+							label="Function"
+							placeholder="Function"
+							bind:val={functionsInput[0]}
+							required
+						/>
+					{/if}
 					<div class="flex justify-between items-center mt-8">
 						{#if currentStep != "info"}
 							<div class="w-1/2">
