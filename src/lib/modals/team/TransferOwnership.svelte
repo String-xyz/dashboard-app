@@ -95,7 +95,7 @@
 			<StyledButton className="btn-warning w-full" action={handleTransferOwnership} {disabled}>
 				Transfer Ownership
 			</StyledButton>
-			<button class="mt-7 p-1 bg-transparent text-sm text-primary font-bold tracking-wider border-none no-animation uppercase" on:click={close}>
+			<button class="mt-7 p-1 bg-transparent text-sm text-primary font-bold tracking-wider border-none no-animation uppercase" on:click|preventDefault={close}>
 				Cancel
 			</button>
 		</div>

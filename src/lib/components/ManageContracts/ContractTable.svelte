@@ -8,6 +8,11 @@
 	import StyledButton from "../StyledButton.svelte";
 	import ContractDropdown from "./ContractDropdown.svelte";
 
+	let copyIcon = "/assets/dropdown/copy.svg";
+	let copiedIcon = "/assets/dropdown/copied.svg";
+
+	let currentCopyIcon = copyIcon;
+
 	const openCreateContract = () => {
 		$contractCreateModalOpen = true;
 	}
@@ -21,6 +26,15 @@
 		} catch (e: any) {
 			return commonErrorHandler(e, "contract");
 		}
+	}
+
+	const handleCopy = (address: string) => {
+		copyText(address)
+		currentCopyIcon = copiedIcon;
+
+		setTimeout(() => {
+			currentCopyIcon = copyIcon;
+		}, 2000);
 	}
 </script>
 
@@ -43,8 +57,8 @@
 					</div>
 					<div class="w-1/6 mr-2 flex items-center">
 						<span class="select-all text-clip break-all" class:deactivated={contract.deactivatedAt}>{formatAddr(contract.address, 8)}</span>
-						<button on:click={() => copyText(contract.address)}>
-							<img src="/assets/dropdown/copy.svg" alt="copy" class="mx-2" width="16px" height="16px" />
+						<button on:click={() => handleCopy(contract.address)}>
+							<img src={currentCopyIcon} alt="copy" class="mx-2" width="16px" height="16px" />
 						</button>
 					</div>
 					<div class="col mr-2 flex items-center">
@@ -52,16 +66,6 @@
 						<p class="select-all break-words" class:deactivated={contract.deactivatedAt}>{networkName}</p>
 					</div>
 					<div class="w-1/6 mr-2 flex flex-col">
-						<!-- {#each contract.platforms as game}
-							<div class="bg-info text-gray-blue-10 rounded-md px-2 py-1">
-								<p class="select-text break-words">{game.name}</p>
-							</div>
-							{#if contract.platforms.length > 2}
-								<button>
-									See more
-								</button>
-							{/if}
-						{/each} -->
 						{#await platformService.getPlatform(contract.platformId) then platform}
 							<div class="bg-primary text-gray-blue-10 rounded-md px-2 py-1 w-fit">
 								<p class="select-all break-words inline">{platform.name}</p>

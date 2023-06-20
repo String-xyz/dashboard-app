@@ -4,7 +4,6 @@ import type { Network, Contract } from '$lib/services';
 export const networkList: Writable<Network[]> = writable([]);
 export const contractList: Writable<Contract[]> = writable([]);
 export const selectedContract: Writable<Contract | null> = writable();
-export const createdContract: Writable<Contract | null> = writable();
 
 // Manage Contracts modals
 export const contractCreateModalOpen = writable(false);

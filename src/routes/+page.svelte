@@ -20,6 +20,9 @@
 	import DeactPlatform from "$lib/modals/platform/DeactPlatform.svelte";
 	import KeyCreate from "$lib/modals/keys/KeyCreate.svelte";
 	import KeySuccess from "$lib/modals/keys/KeySuccess.svelte";
+	import CreateContract from "$lib/modals/contracts/CreateContract.svelte";
+	import EditContract from "$lib/modals/contracts/EditContract.svelte";
+	import DeactContract from "$lib/modals/contracts/DeactContract.svelte";
 
 	/* Settings */
 	import MyAccount from "$lib/components/Settings/MyAccount.svelte";
@@ -93,6 +96,11 @@
 		<!-- Manage API Keys -->
 		<KeyCreate />
 		<KeySuccess />
+
+		<!-- Manage Contracts -->
+		<CreateContract	/>
+		<EditContract />
+		<DeactContract />
 
 	</div>
 {/if}
