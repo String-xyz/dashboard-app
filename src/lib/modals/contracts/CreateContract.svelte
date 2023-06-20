@@ -9,15 +9,19 @@
 
 	let currentStep: "info" | "games" | "functions" = "info";
 
-	let nameInput: string;
-	let addrInput: string;
-	let functionsInput: string[];
-	let networkIdInput: string;
-	let platformIdInput: string;
+	let nameInput = "";
+	let addrInput = "";
+	let functionsInput = "";
+	let networkIdInput = "";
+	let platformIdInput = "";
 
 	$: infoDisabled = !nameInput || !addrInput || !networkIdInput;
 	$: gamesDisabled = !platformIdInput;
 	$: functionsDisabled = !functionsInput;
+
+	// $: currentDisabled = currentStep == "info" ? infoDisabled : currentStep == "games" ? gamesDisabled : functionsDisabled;
+
+	$: currentDisabled = false;
 
 	const createContract = async () => {
 		try {
@@ -26,7 +30,7 @@
 			await contractService.createContract({
 				name: nameInput,
 				address: addrInput,
-				functions: functionsInput,
+				functions: [functionsInput],
 				networkId: networkIdInput,
 				platformId: platformIdInput,
 			});
@@ -70,7 +74,7 @@
 	const close = () => {
 		nameInput = "";
 		addrInput = "";
-		functionsInput = [];
+		functionsInput = "";
 		networkIdInput = "";
 		platformIdInput = "";
 
@@ -135,7 +139,7 @@
 							autofocus
 						/>
 						<StyledInput
-							className="w-full mb-6"
+							className="w-full mb-8"
 							label="Contract address"
 							placeholder="Contract address"
 							bind:val={addrInput}
@@ -157,21 +161,20 @@
 							className="w-full mb-6"
 							label="Function"
 							placeholder="Function"
-							bind:val={functionsInput[0]}
+							bind:val={functionsInput}
 							required
 						/>
 					{/if}
-					<div class="flex justify-between items-center mt-8">
+					<div class="flex justify-between items-center mt-10">
 						{#if currentStep != "info"}
-							<div class="w-1/2">
-								<button on:click|preventDefault={backStep} class="w-full bg-transparent text-sm text-primary font-bold tracking-wider border-none no-animation uppercase p-1">
-									Back
-								</button>
-							</div>
+							<button on:click|preventDefault={backStep} class="w-1/2 bg-transparent text-sm text-primary font-bold tracking-wider border-none no-animation uppercase p-1">
+								Back
+							</button>
 						{/if}
 						<StyledButton
 							className="w-full"
 							action={nextStep}
+							disabled={currentDisabled}
 						>
 							Continue
 						</StyledButton>
