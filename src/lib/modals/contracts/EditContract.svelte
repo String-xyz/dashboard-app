@@ -101,7 +101,7 @@
 				Sorry!
 			</h1>
 			<p>
-				This feature is not yet available. Unfortunately you must delete the contract and add it again right now.
+				This feature is not yet available. Unfortunately you must remove the contract and add it again as of now.
 			</p>
 			<!-- <form on:submit={editContract} class="main flex flex-col items-center w-full">
 				<div class="flex justify-between w-full font-bold uppercase text-sm pr-4">

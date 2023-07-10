@@ -11,7 +11,7 @@
 	let copyIcon = "/assets/dropdown/copy.svg";
 	let copiedIcon = "/assets/dropdown/copied.svg";
 
-	let currentCopyIcon = copyIcon;
+	let copiedIdx: number | undefined;
 
 	const openCreateContract = () => {
 		$contractCreateModalOpen = true;
@@ -28,12 +28,12 @@
 		}
 	}
 
-	const handleCopy = (address: string) => {
+	const handleCopy = (address: string, idx: number) => {
+		copiedIdx = idx;
 		copyText(address)
-		currentCopyIcon = copiedIcon;
 
 		setTimeout(() => {
-			currentCopyIcon = copyIcon;
+			copiedIdx = undefined;
 		}, 2000);
 	}
 </script>
@@ -49,7 +49,7 @@
 			<p class="w-1/12"></p>
 		</div>
 		<div class="rows">
-			{#each $contractList as contract}
+			{#each $contractList as contract, i}
 				{@const networkName = contractService.getNameByNetworkId(contract.networkId, $networkList)}
 				<div class="row flex flex-nowrap items-center px-5 py-8 font-medium text-sm">
 					<div class="col mr-2">
@@ -57,18 +57,18 @@
 					</div>
 					<div class="w-1/6 mr-2 flex items-center">
 						<span class="select-all text-clip break-all" class:deactivated={contract.deactivatedAt}>{formatAddr(contract.address, 8)}</span>
-						<button on:click={() => handleCopy(contract.address)}>
-							<img src={currentCopyIcon} alt="copy" class="mx-2" width="16px" height="16px" />
+						<button on:click={() => handleCopy(contract.address, i)}>
+							<img src={copiedIdx == i ? copiedIcon : copyIcon} alt="copy" class="mx-2" width="16px" height="16px" />
 						</button>
 					</div>
 					<div class="col mr-2 flex items-center">
 						<img src={contractService.getNetworkIconPath(networkName)} alt={`${networkName} logo`} class="mr-2" />
 						<p class="select-all break-words" class:deactivated={contract.deactivatedAt}>{networkName}</p>
 					</div>
-					<div class="w-1/6 mr-2 flex flex-col">
-						{#each contract.platformIds as platId}
+					<div class="w-1/6 mr-2 flex">
+						{#each contract.platformIds as platId, i}
 							{#await platformService.getPlatform(platId) then platform}
-								<div class="bg-info text-gray-blue-10 rounded-md px-2 py-1 w-fit">
+								<div class="bg-info text-gray-blue-10 rounded-md px-2 py-1 w-fit" class:mr-2={i == 0}>
 									<p class="select-all break-words">{platform.name}</p>
 								</div>
 								{#if contract.functions.length > 2}
@@ -79,9 +79,9 @@
 							{/await}
 						{/each}
 					</div>
-					<div class="w-1/6 mr-2 flex flex-col">
-						{#each contract.functions as func}
-							<div class="bg-info text-gray-blue-10 rounded-md px-2 py-1 w-fit">
+					<div class="w-1/6 mr-2 flex">
+						{#each contract.functions as func, i}
+							<div class="bg-info text-gray-blue-10 rounded-md px-2 py-1 w-fit" class:mr-2={i == 0}>
 								<p class="select-all break-words">{func}</p>
 							</div>
 							{#if contract.functions.length > 2}

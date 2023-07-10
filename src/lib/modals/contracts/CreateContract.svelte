@@ -9,7 +9,7 @@
 	import GameSelect from "$lib/components/ManageContracts/GameSelect.svelte";
 	import FunctionSelect from "$lib/components/ManageContracts/FunctionSelect.svelte";
 
-	let currentStep: "info" | "games" | "functions" = "games";
+	let currentStep: "info" | "games" | "functions" = "info";
 
 	let selectedNetwork: Network | null;
 	let selectedGames: Platform[] = [];
