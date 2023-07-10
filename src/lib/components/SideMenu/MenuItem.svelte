@@ -5,7 +5,7 @@
 	export let tab: MenuItem;
 </script>
 
-<li>
+<li class="whitespace-nowrap">
 	{#if tab.view}
 		<button on:click={() => ($activeTab = tab)} class:active={tab.view === $activeTab.view}>
 			<img src={tab.icon} alt="icon" />

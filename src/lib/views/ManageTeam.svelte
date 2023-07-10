@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { onMount } from "svelte";
+	import { NavItem, Filter } from "$lib/constants";
 	import { Role, commonErrorHandler } from "$lib/common";
 	import { authService, teamService } from "$lib/services";
-	import { Filter } from "$lib/constants";
-	import { currentUser, inviteModalOpen, teamItems, activeFilter, toast } from "$lib/stores";
+	import { currentUser, inviteModalOpen, memberList, activeFilter, toast } from "$lib/stores";
 
 	import FilterDropdown from "$lib/components/ManageTeam/FilterDropdown.svelte";
 	import MemberTable from "$lib/components/ManageTeam/MemberTable.svelte";
@@ -12,7 +12,7 @@
 
 	onMount(async () => {
 		// subscribe to filter changes so we can update the member table
-		activeFilter.subscribe(async (filter) => ($teamItems = await teamService.rebuildTeamList()));
+		activeFilter.subscribe(async (filter) => ($memberList = await teamService.rebuildTeamList()));
 
 		try {
 			$activeFilter.filter = Filter.ALL_MEMBERS;
@@ -23,16 +23,16 @@
 </script>
 
 <svelte:head>
-	<title>Your Organization | String Dashboard</title>
+	<title>{NavItem.MANAGE_TEAM} | String Dashboard</title>
 </svelte:head>
 
 <div class="main h-full">
 	<header>
 		<div class="header flex justify-between items-center">
-			<h3 class="text-2xl font-bold">Your Organization</h3>
+			<h3 class="text-2xl font-bold">{NavItem.MANAGE_TEAM}</h3>
 			{#if authService.canView($currentUser.role, Role.ADMIN)}
 				<StyledButton className="btn-outline" action={() => ($inviteModalOpen = true)}>
-					<img src={"/assets/button/plus.svg"} alt="+" class="inline mr-3" />
+					<img src="/assets/button/plus.svg" alt="+" class="inline mr-3" />
 					Invite Member
 				</StyledButton>
 			{:else}

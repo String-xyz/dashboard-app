@@ -1,6 +1,3 @@
-
-
-
 <script lang="ts">
 	import { Role, commonErrorHandler } from "$lib/common";
 	import { authService, platformService, type Platform } from "$lib/services";

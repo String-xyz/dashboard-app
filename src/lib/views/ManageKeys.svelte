@@ -1,11 +1,12 @@
 <script lang="ts">
 	import { onMount } from "svelte";
+	import { NavItem } from "$lib/constants";
+	import { keyService, platformService } from "$lib/services";
+	import { apiKeyList, platformList, keyCreateModalOpen, toast } from "$lib/stores";
+
 	import KeyTable from "$lib/components/ManageKeys/KeyTable.svelte";
 	import StyledButton from "$lib/components/StyledButton.svelte";
 	import Toast from "$lib/components/Toast.svelte";
-
-	import { keyService, platformService } from "$lib/services";
-	import { apiKeyList, platformList, keyCreateModalOpen, toast } from "$lib/stores";
 
 	const createApiKey = async () => {
 		$keyCreateModalOpen = !$keyCreateModalOpen;
@@ -23,15 +24,15 @@
 </script>
 
 <svelte:head>
-	<title>Manage API Keys | String Dashboard</title>
+	<title>{NavItem.MANAGE_KEYS} | String Dashboard</title>
 </svelte:head>
 
 <div class="main h-full">
 	<header>
 		<div class="header flex justify-between items-center">
-			<h3 class="text-2xl font-bold">Manage API Keys</h3>
+			<h3 class="text-2xl font-bold">{NavItem.MANAGE_KEYS}</h3>
 			<StyledButton className="btn-outline" action={createApiKey}>
-				<img src={"/assets/button/plus.svg"} alt="+" class="inline mr-3" />
+				<img src="/assets/button/plus.svg" alt="+" class="inline mr-3" />
 				Create a Key
 			</StyledButton>
 		</div>

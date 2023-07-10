@@ -30,6 +30,7 @@
 	};
 
 	const close = () => {
+		pwdInput = "";
 		$platformDeactModalOpen = false;
 	};
 
@@ -99,7 +100,7 @@
 					<div class="mb-8" />
 				{/if}
 				<StyledButton className="w-full btn-warning" type="submit" {disabled}>Deactivate</StyledButton>
-				<button class="mt-6 p-1 bg-transparent text-sm text-primary font-bold tracking-wider border-none no-animation uppercase" on:click={close}>
+				<button on:click|preventDefault={close} class="mt-6 p-1 bg-transparent text-sm text-primary font-bold tracking-wider border-none no-animation uppercase">
 					Cancel
 				</button>
 			</form>

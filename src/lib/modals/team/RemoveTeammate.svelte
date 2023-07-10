@@ -4,7 +4,7 @@
 	import UserCard from "$lib/components/ManageTeam/UserCard.svelte";
 	import StyledButton from "$lib/components/StyledButton.svelte";
 
-	import { deactModalOpen, deactUser, teamItems, toast } from "$lib/stores";
+	import { deactModalOpen, deactUser, memberList, toast } from "$lib/stores";
 
 	const handleDeactivate = async () => {
 		// Deactivate user
@@ -19,7 +19,7 @@
 				$toast.show("success", "Member deactivated!");
 			}
 
-			$teamItems = await teamService.rebuildTeamList();
+			$memberList = await teamService.rebuildTeamList();
 			$deactModalOpen = false;
 		} catch (e) {
 			console.error(e);
@@ -64,7 +64,7 @@
 			<StyledButton className="btn-warning w-full" action={handleDeactivate}>
 				{$deactUser?.isInvite ? "Revoke" : "Deactivate"}
 			</StyledButton>
-			<button class="mt-7 p-1 bg-transparent text-sm text-primary font-bold tracking-wider border-none no-animation uppercase" on:click={close}>
+			<button class="mt-7 p-1 bg-transparent text-sm text-primary font-bold tracking-wider border-none no-animation uppercase" on:click|preventDefault={close}>
 				Cancel
 			</button>
 		</div>

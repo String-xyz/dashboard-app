@@ -8,6 +8,7 @@
 	import ManageTeam from "$lib/views/ManageTeam.svelte";
 	import ManagePlatforms from "$lib/views/ManagePlatforms.svelte";
 	import ManageKeys from "$lib/views/ManageKeys.svelte";
+	import ManageContracts from "$lib/views/ManageContracts.svelte";
 	import Settings from "$lib/views/Settings.svelte";
 
 	/* Modals */
@@ -19,6 +20,9 @@
 	import DeactPlatform from "$lib/modals/platform/DeactPlatform.svelte";
 	import KeyCreate from "$lib/modals/keys/KeyCreate.svelte";
 	import KeySuccess from "$lib/modals/keys/KeySuccess.svelte";
+	import CreateContract from "$lib/modals/contracts/CreateContract.svelte";
+	import EditContract from "$lib/modals/contracts/EditContract.svelte";
+	import DeactContract from "$lib/modals/contracts/DeactContract.svelte";
 
 	/* Settings */
 	import MyAccount from "$lib/components/Settings/MyAccount.svelte";
@@ -38,6 +42,7 @@
 		mapViewsToMenuItems.set(NavItem.MANAGE_TEAM, ManageTeam);
 		mapViewsToMenuItems.set(NavItem.MANAGE_PLATFORMS, ManagePlatforms);
 		mapViewsToMenuItems.set(NavItem.MANAGE_KEYS, ManageKeys);
+		mapViewsToMenuItems.set(NavItem.MANAGE_CONTRACTS, ManageContracts);
 		mapViewsToMenuItems.set(NavItem.SETTINGS, Settings);
 
 		menuItems.forEach((item) => (item.view = mapViewsToMenuItems.get(item.name)));
@@ -91,6 +96,11 @@
 		<!-- Manage API Keys -->
 		<KeyCreate />
 		<KeySuccess />
+
+		<!-- Manage Contracts -->
+		<CreateContract	/>
+		<EditContract />
+		<DeactContract />
 
 	</div>
 {/if}

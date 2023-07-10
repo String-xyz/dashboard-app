@@ -1,7 +1,8 @@
 <script lang="ts">
-	import Toast from "$lib/components/Toast.svelte";
-
+	import { NavItem } from "$lib/constants";
 	import { activeSettingsTab, SettingsTab, tabToViewMap, toast } from "$lib/stores";
+
+	import Toast from "$lib/components/Toast.svelte";
 
 	const switchTab = (tab: SettingsTab) => {
 		$activeSettingsTab = tab;
@@ -9,7 +10,7 @@
 </script>
 
 <svelte:head>
-	<title>Settings | String Dashboard</title>
+	<title>{NavItem.SETTINGS} | String Dashboard</title>
 </svelte:head>
 
 <div class="main">

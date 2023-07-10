@@ -1,6 +1,20 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
 	content: ['./src/**/*.{html,js,svelte,ts}'],
+	theme: {
+		extend: {
+			colors: {
+				'gray-blue': {
+					'10':  '#ECEEF1',
+					'20':  '#D8DDE2',
+					'40':  '#8A98A9',
+					'60':  '#3C5370',
+					'80':  '#243243',
+					'100': '#0C1116',
+				}
+			},
+		},
+	},
 	daisyui: {
 		themes: [
 			{
@@ -17,15 +31,7 @@ module.exports = {
 
 					warning: '#F56161',
 
-					error: '#F92572',
-
-					'hover-light': '#DFF1FF',
-
-					'label-live': '#07AD5E',
-
-					'label-test': '#F3B04B',
-
-					'dark-grey': '#BEBCBA'
+					error: '#F92572'
 				}
 			}
 		]

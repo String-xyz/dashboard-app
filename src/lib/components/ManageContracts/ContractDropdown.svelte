@@ -1,8 +1,8 @@
 <script lang="ts">
-	import type { Platform } from "$lib/services";
-	import { platformDeactModalOpen, platformEditModalOpen, selectedPlatform } from "$lib/stores";
+	import type { Contract } from "$lib/services";
+	import { contractDeactModalOpen, contractEditModalOpen, selectedContract } from "$lib/stores";
 
-	export let platform: Platform;
+	export let contract: Contract;
 	export let dropdownOpen = false;
 
 	let dropdownElem: HTMLButtonElement;
@@ -40,13 +40,13 @@
 	};
 
 	const openEditModal = () => {
-		$selectedPlatform = platform;
-		$platformEditModalOpen = true;
+		$selectedContract = contract;
+		$contractEditModalOpen = true;
 	};
 
 	const openDeactivateModal = () => {
-		$selectedPlatform = platform;
-		$platformDeactModalOpen = true;
+		$selectedContract = contract;
+		$contractDeactModalOpen = true;
 	}
 
 	const handleAndClose = async (handler: Function) => {
