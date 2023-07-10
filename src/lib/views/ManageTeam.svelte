@@ -32,7 +32,7 @@
 			<h3 class="text-2xl font-bold">{NavItem.MANAGE_TEAM}</h3>
 			{#if authService.canView($currentUser.role, Role.ADMIN)}
 				<StyledButton className="btn-outline" action={() => ($inviteModalOpen = true)}>
-					<img src={"/assets/button/plus.svg"} alt="+" class="inline mr-3" />
+					<img src="/assets/button/plus.svg" alt="+" class="inline mr-3" />
 					Invite Member
 				</StyledButton>
 			{:else}

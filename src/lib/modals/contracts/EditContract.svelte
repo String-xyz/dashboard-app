@@ -97,7 +97,13 @@
 	<div class="modal-box relative">
 		<div class="flex flex-col">
 			<button class="ml-auto mb-4" on:click={close}><img src="/assets/close.svg" alt="Close" /></button>
-			<form on:submit={editContract} class="main flex flex-col items-center w-full">
+			<h1 class="text-2xl font-bold mb-4">
+				Sorry!
+			</h1>
+			<p>
+				This feature is not yet available. Unfortunately you must delete the contract and add it again right now.
+			</p>
+			<!-- <form on:submit={editContract} class="main flex flex-col items-center w-full">
 				<div class="flex justify-between w-full font-bold uppercase text-sm pr-4">
 					<div class="flex items-center">
 						<div class="dot mr-2" class:active-dot={currentStep == "info"}>
@@ -156,7 +162,7 @@
 						</StyledButton>
 					</div>
 				</div>
-			</form>
+			</form> -->
 		</div>
 	</div>
 </div>

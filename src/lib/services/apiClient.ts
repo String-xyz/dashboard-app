@@ -423,6 +423,7 @@ export interface Network {
 	chainId: number;
 }
 
+// To make the frontend more efficient, eventually I would like the contract endpoints to return the platform names as well
 // export interface ShortPlatformInfo {
 // 	id: string;
 // 	name: string;
@@ -437,8 +438,8 @@ export interface Contract {
 	address: string;
 	functions: string[];
 	networkId: string;
-	platformId: string;
-	// platforms: ShortPlatformInfo[];
+	platformIds: string[];
+	organizationId: string;
 }
 
 export interface ContractDetails {
@@ -446,7 +447,7 @@ export interface ContractDetails {
 	address: string;
 	functions: string[];
 	networkId: string;
-	platformId: string;
+	platformIds: string[];
 }
 
 export interface ContractUpdate {
@@ -454,6 +455,7 @@ export interface ContractUpdate {
 	address?: string;
 	functions?: string[];
 	networkId?: string;
+	platformIds?: string[];
 }
 
 /* Errors */

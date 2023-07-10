@@ -66,11 +66,18 @@
 						<p class="select-all break-words" class:deactivated={contract.deactivatedAt}>{networkName}</p>
 					</div>
 					<div class="w-1/6 mr-2 flex flex-col">
-						{#await platformService.getPlatform(contract.platformId) then platform}
-							<div class="bg-primary text-gray-blue-10 rounded-md px-2 py-1 w-fit">
-								<p class="select-all break-words inline">{platform.name}</p>
-							</div>
-						{/await}
+						{#each contract.platformIds as platId}
+							{#await platformService.getPlatform(platId) then platform}
+								<div class="bg-info text-gray-blue-10 rounded-md px-2 py-1 w-fit">
+									<p class="select-all break-words">{platform.name}</p>
+								</div>
+								{#if contract.functions.length > 2}
+									<button>
+										See more
+									</button>
+								{/if}
+							{/await}
+						{/each}
 					</div>
 					<div class="w-1/6 mr-2 flex flex-col">
 						{#each contract.functions as func}

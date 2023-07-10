@@ -32,7 +32,7 @@
 		<div class="header flex justify-between items-center">
 			<h3 class="text-2xl font-bold">{NavItem.MANAGE_KEYS}</h3>
 			<StyledButton className="btn-outline" action={createApiKey}>
-				<img src={"/assets/button/plus.svg"} alt="+" class="inline mr-3" />
+				<img src="/assets/button/plus.svg" alt="+" class="inline mr-3" />
 				Create a Key
 			</StyledButton>
 		</div>

@@ -34,7 +34,7 @@
 			<h3 class="text-2xl font-bold">{NavItem.MANAGE_PLATFORMS}</h3>
 			{#if authService.canView($currentUser.role, Role.ADMIN)}
 				<StyledButton className="btn-outline" action={createPlatform}>
-					<img src={"/assets/button/plus.svg"} alt="+" class="inline mr-3" />
+					<img src="/assets/button/plus.svg" alt="+" class="inline mr-3" />
 					New Game
 				</StyledButton>
 			{:else}

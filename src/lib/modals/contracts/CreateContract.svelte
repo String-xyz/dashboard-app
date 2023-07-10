@@ -1,38 +1,45 @@
 <script lang="ts">
 	import { contractCreateModalOpen, contractList, toast } from "$lib/stores";
 	import { commonErrorHandler } from "$lib/common";
-	import { contractService, type Network } from "$lib/services";
+	import { contractService, type Network, type Platform } from "$lib/services";
 
 	import StyledInput from "$lib/components/StyledInput.svelte";
 	import StyledButton from "$lib/components/StyledButton.svelte";
 	import NetworkSelect from "$lib/components/ManageContracts/NetworkSelect.svelte";
+	import GameSelect from "$lib/components/ManageContracts/GameSelect.svelte";
+	import FunctionSelect from "$lib/components/ManageContracts/FunctionSelect.svelte";
 
-	let currentStep: "info" | "games" | "functions" = "info";
+	let currentStep: "info" | "games" | "functions" = "games";
 
 	let selectedNetwork: Network | null;
+	let selectedGames: Platform[] = [];
+	let selectedFunctions: string[] = [];
 
 	let nameInput = "";
 	let addrInput = "";
-	let functionsInput = "";
-	let platformIdInput = "";
 
 	$: infoDisabled = !nameInput || !addrInput || !selectedNetwork;
-	$: gamesDisabled = !platformIdInput;
-	$: functionsDisabled = !functionsInput;
+	$: gamesDisabled = (selectedGames?.length == 0 ?? true);
+	$: functionsDisabled = (selectedFunctions?.length == 0 ?? true) || gamesDisabled || infoDisabled;
 
 	$: currentDisabled = currentStep == "info" ? infoDisabled : currentStep == "games" ? gamesDisabled : functionsDisabled;
 
 	const createContract = async () => {
 		try {
+			console.log("create contract")
+			console.log(selectedNetwork)
+			console.log(selectedGames)
+			console.log(selectedFunctions)
 			if (!selectedNetwork || infoDisabled || gamesDisabled || functionsDisabled) return;
 
 			await contractService.createContract({
 				name: nameInput,
 				address: addrInput,
-				functions: [functionsInput],
+				functions: selectedFunctions,
 				networkId: selectedNetwork.id,
-				platformId: platformIdInput,
+				platformIds: selectedGames.map((game) => game.id),
 			});
+
 			$contractList = await contractService.listContracts();
 
 			close();
@@ -71,16 +78,15 @@
 	}
 
 	const close = () => {
-		nameInput = "";
-		addrInput = "";
-		functionsInput = "";
-		platformIdInput = "";
-		selectedNetwork = null;
-
-		currentStep = "info";
-
 		$contractCreateModalOpen = false;
 
+		nameInput = "";
+		addrInput = "";
+		selectedNetwork = null;
+		selectedGames = [];
+		selectedFunctions = [];
+
+		currentStep = "info";
 	};
 
 	const handleKeyboard = (e: KeyboardEvent) => {
@@ -100,7 +106,7 @@
 <input type="checkbox" id="contract-create-modal" class="modal-toggle" bind:checked={$contractCreateModalOpen} />
 
 <div class="modal">
-	<div class="modal-box relative">
+	<div class="modal-box relative" class:functionSelectHeight={currentStep == "functions"}>
 		<div class="flex flex-col">
 			<button class="ml-auto mb-4" on:click={close}><img src="/assets/close.svg" alt="Close" /></button>
 			<form on:submit={createContract} class="main flex flex-col items-center w-full">
@@ -147,35 +153,35 @@
 						<NetworkSelect bind:selectedNetwork />
 					{/if}
 					{#if currentStep == "games"}
-						<StyledInput
-							className="w-full mb-6"
-							label="Platform ID"
-							placeholder="Platform ID"
-							bind:val={platformIdInput}
-							required
-						/>
+						<div class="flex flex-col border border-[##BEBCBA] rounded-[4px] bg-[#FAF9F9] w-full p-3">
+							<h1 class="font-bold text-sm tracking-wider uppercase mr-auto mb-2">Associated games</h1>
+							<p class="text-xs">Select the games you want able to use this contract</p>
+							<GameSelect bind:selectedGames />
+						</div>
 					{/if}
 					{#if currentStep == "functions"}
-						<StyledInput
-							className="w-full mb-6"
-							label="Function"
-							placeholder="Function"
-							bind:val={functionsInput}
-							required
-						/>
+						<div class="flex flex-col border border-[##BEBCBA] rounded-[4px] bg-[#FAF9F9] w-full p-3">
+							<h1 class="font-bold text-sm tracking-wider uppercase mr-auto mb-2">Contract functions</h1>
+							<p class="text-xs">Enter the function signatures you want this contract to be able to use</p>
+							<FunctionSelect bind:selectedFunctions />
+						</div>
 					{/if}
 					<div class="flex justify-between items-center mt-10">
 						{#if currentStep != "info"}
-							<button on:click|preventDefault={backStep} class="w-1/2 bg-transparent text-sm text-primary font-bold tracking-wider border-none no-animation uppercase p-1">
+							<button on:click|preventDefault={backStep} class="w-1/2 bg-transparent text-sm text-primary font-bold tracking-wider border-none no-animation uppercase p-1 mr-4">
 								Back
 							</button>
 						{/if}
 						<StyledButton
-							className="w-full"
+							className={currentStep == "info" ? "w-full " : "w-1/2 "}
 							action={nextStep}
 							disabled={currentDisabled}
 						>
-							Continue
+							{#if currentStep == "functions"}
+								Complete
+							{:else}
+								Continue
+							{/if}
 						</StyledButton>
 					</div>
 				</div>
@@ -217,5 +223,9 @@
 		width: 600px;
 		max-width: 600px;
 		height: 700px;
+	}
+
+	.functionSelectHeight {
+		height: 750px;
 	}
 </style>
