@@ -5,6 +5,7 @@
 	import { apiClient } from "$lib/services";
 	import { currentUser, toast } from "$lib/stores";
 	import { commonErrorHandler } from "$lib/common";
+	import { formatDate } from "$lib/utils";
 
 	let nameInput = $currentUser.name;
 
@@ -51,30 +52,37 @@
 	<h6 class="font-bold mr-auto mb-6 text-lg">Account Details</h6>
 
 	<div class="flex items-center ">
-		<div class="pl-5 mr-6 w-1/3">
+		<div class="pl-5 mr-6 w-1/4">
 			{#if isEditingName}
 				<StyledInput label="Your Name" bind:val={nameInput} autofocus />
 			{:else}
-				<span class="mb-2 font-medium text-sm">
-					<img src="/assets/label/name.svg" alt="name" class="mr-1 inline" />
+				<span class="flex items-center mb-2 font-medium text-sm">
+					<img src="/assets/label/name.svg" alt="name" class="mr-2 inline" />
 					Your Name
 				</span>
 				<p class="select-all">{$currentUser.name}</p>
 			{/if}
 		</div>
-		<div class="pl-5 mr-6 w-1/3">
-			<span class="mb-2 font-medium text-sm">
-				<img src="/assets/label/email.svg" alt="email" class="mr-1 inline" />
+		<div class="pl-5 mr-6 w-1/4">
+			<span class="flex items-center mb-2 font-medium text-sm">
+				<img src="/assets/label/email.svg" alt="email" class="mr-2 inline" />
 				Account Email
 			</span>
 			<p class="select-all">{$currentUser.email}</p>
 		</div>
-		<div class="pl-5 w-1/3">
-			<span class="mb-2 font-medium text-sm">
-				<img src="/assets/label/permissions.svg" alt="permissions" class="mr-1 inline" />
+		<div class="pl-5 mr-6 w-1/4">
+			<span class="flex items-center mb-2 font-medium text-sm">
+				<img src="/assets/label/permissions.svg" alt="permissions" class="mr-2 inline" />
 				Your Permissions
 			</span>
 			<p class="select-all">{$currentUser.role}</p>
+		</div>
+		<div class="pl-5 w-1/4">
+			<span class="flex items-center mb-2 font-medium text-sm">
+				<img src="/assets/label/calendar.svg" alt="calendar" class="mr-2 inline" />
+				Join Date
+			</span>
+			<p class="select-all">{formatDate($currentUser.createdAt)}</p>
 		</div>
 	</div>
 	{#if isEditingName}

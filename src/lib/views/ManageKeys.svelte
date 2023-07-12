@@ -9,6 +9,11 @@
 	import Toast from "$lib/components/Toast.svelte";
 
 	const createApiKey = async () => {
+		if ($platformList.length === 0) {
+			$toast.show("error", "You must create a game first");
+			return;
+		}
+
 		$keyCreateModalOpen = !$keyCreateModalOpen;
 	}
 

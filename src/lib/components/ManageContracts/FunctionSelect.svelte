@@ -4,9 +4,9 @@
 
 	export let selectedFunctions: string[];
 
-	let functionInput = "";
+	export let showInput = true;
 
-	let showInput = true;
+	let functionInput = "";
 
 	let showEdit = false;
 

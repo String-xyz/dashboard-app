@@ -4,7 +4,7 @@
 
 	export let selectedGames: Platform[];
 
-	let showDropdown = true;
+	export let showDropdown = true;
 
 	const showAddGame = () => {
 		showDropdown = true;
