@@ -1,9 +1,9 @@
 resource "aws_cloudfront_origin_access_identity" "web" {
-  comment = "${local.env} string platform web origin"
+  comment = "${local.env} string dashboard web origin"
 }
 
 resource "aws_cloudfront_origin_access_identity" "www_web" {
-  comment = "${local.env} string platform www origin"
+  comment = "${local.env} string dashboard www origin"
 }
 
 resource "aws_cloudfront_distribution" "web_app" {
