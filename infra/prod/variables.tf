@@ -1,12 +1,12 @@
 locals {
   region            = "us-west-2"
   root_domain       = "dashboard.string.xyz"
-  web_origin_id     = "platform-web-app"
+  web_origin_id     = "dashboard-web-app"
   web_bucket_name   = "dashboard.string.xyz"
   web_domain        = "dashboard.string.xyz"
   www_web_domain    = "www.dashboard.string.xyz"
   www_bucket_name   = "www.dashboard.string.xyz"
-  www_web_origin_id = "www-platform-web-app"
+  www_web_origin_id = "www-dashboard-web-app"
   env               = "prod"
 }
 

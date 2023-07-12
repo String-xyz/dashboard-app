@@ -32,7 +32,7 @@ module "web_app" {
   aws_region  = "us-east-1"
   zone_id     = data.aws_route53_zone.default.zone_id
   tags = {
-    Name        = "${local.env}-web-plaform-admin-certificate"
+    Name        = "${local.env}-web-dashboard-admin-certificate"
     Environment = local.env
   }
 }
@@ -44,7 +44,7 @@ module "www_web_app" {
   zone_id     = data.aws_route53_zone.default.zone_id
 
   tags = {
-    Name        = "${local.env}-www-web-platform-admin-certificate"
+    Name        = "${local.env}-www-web-dashboard-admin-certificate"
     Environment = local.env
   }
 }
