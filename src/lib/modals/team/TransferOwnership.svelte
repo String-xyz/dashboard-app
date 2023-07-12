@@ -3,7 +3,7 @@
 	import StyledButton from '$lib/components/StyledButton.svelte';
 	import StyledInput from '$lib/components/StyledInput.svelte';
 
-	import { transferOwnerModalOpen, ownershipTransferee, currentUser, teamItems, toast } from '$lib/stores';
+	import { transferOwnerModalOpen, ownershipTransferee, currentUser, memberList, toast } from '$lib/stores';
 	import { apiClient, teamService } from '$lib/services';
 	import { validator } from '$lib/utils';
 	import { Role } from '$lib/common';
@@ -22,7 +22,7 @@
 				await apiClient.transferOwnership($ownershipTransferee.id, pwdInput);
 
 				$currentUser.role = Role.ADMIN;
-				$teamItems = await teamService.rebuildTeamList();
+				$memberList = await teamService.rebuildTeamList();
 
 				close();
 				$toast.show("success", "Ownership transferred!");
@@ -95,7 +95,7 @@
 			<StyledButton className="btn-warning w-full" action={handleTransferOwnership} {disabled}>
 				Transfer Ownership
 			</StyledButton>
-			<button class="mt-7 p-1 bg-transparent text-sm text-primary font-bold tracking-wider border-none no-animation uppercase" on:click={close}>
+			<button class="mt-7 p-1 bg-transparent text-sm text-primary font-bold tracking-wider border-none no-animation uppercase" on:click|preventDefault={close}>
 				Cancel
 			</button>
 		</div>

@@ -4,7 +4,7 @@
 	import RoleDropdown from "./RoleDropdown.svelte";
 
 	import { apiClient, authService, teamService } from "$lib/services";
-	import { teamItems, currentUser, toast } from "$lib/stores";
+	import { memberList, currentUser, toast } from "$lib/stores";
 	import { Role, commonErrorHandler, type TeamItem } from "$lib/common";
 	import { formatDate } from "$lib/utils";
 
@@ -20,7 +20,7 @@
 	const reactivateMember = async (member: TeamItem) => {
 		try {
 			await apiClient.reactivateMember(member.id);
-			$teamItems = await teamService.rebuildTeamList();
+			$memberList = await teamService.rebuildTeamList();
 
 			$toast.show("success", "Member reactivated!");
 		} catch (e: any) {
@@ -35,7 +35,7 @@
 		<p class="mr-6">Access Level</p>
 	</div>
 	<div class="rows">
-		{#each $teamItems as member}
+		{#each $memberList as member}
 			<div class="row flex justify-between items-center p-6 ">
 				{#if member.self}
 					<div class="flex justify-items-start items-center">

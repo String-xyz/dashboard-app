@@ -8,3 +8,4 @@ export * from "./keys";
 export * from "./settings";
 export * from "./toast";
 export * from "./platforms";
+export * from "./contracts";

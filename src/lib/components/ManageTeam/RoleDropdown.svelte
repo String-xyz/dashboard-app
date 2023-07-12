@@ -3,7 +3,7 @@
 	import { apiClient } from "$lib/services";
 	import { Role, commonErrorHandler, type TeamItem } from "$lib/common";
 	import { currentUser, deactModalOpen, deactUser,
-		transferOwnerModalOpen, ownershipTransferee, teamItems, toast } from "$lib/stores";
+		transferOwnerModalOpen, ownershipTransferee, memberList, toast } from "$lib/stores";
 
 	export let member: TeamItem | null = null;
 	export let activeRole: Role = Role.MEMBER;
@@ -56,10 +56,10 @@
 				$toast.show("success", "Member role updated!");
 			}
 
-			const memberIdx = $teamItems.findIndex((t) => t.id === member?.id);
+			const memberIdx = $memberList.findIndex((t) => t.id === member?.id);
 
 			if (memberIdx > 0) {
-				$teamItems[memberIdx].role = activeRole;
+				$memberList[memberIdx].role = activeRole;
 			}
 		} catch (e: any) {
 			activeRole = prevActiveRole;

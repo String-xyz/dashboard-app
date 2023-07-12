@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { cards } from "$lib/constants/cards";
+	import { toast, currentUser } from "$lib/stores";
+
 	import Card from "$lib/components/Dashboard/Card.svelte";
 	import Toast from "$lib/components/Toast.svelte";
-	import { toast, currentUser } from "$lib/stores";
 </script>
 
 <svelte:head>

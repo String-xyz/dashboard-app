@@ -12,7 +12,7 @@
 	// This is to allow the default value to be the key's current description
 	selectedKey.subscribe((key) => (descInput = key?.description ?? ""));
 
-	const createApiKey = async () => {
+	const createApiKey = () => {
 		$keyCreateModalOpen = !$keyCreateModalOpen;
 	}
 
