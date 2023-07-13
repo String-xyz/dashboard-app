@@ -9,3 +9,5 @@ export const selectedContract: Writable<Contract | null> = writable();
 export const contractCreateModalOpen = writable(false);
 export const contractEditModalOpen = writable(false);
 export const contractDeactModalOpen = writable(false);
+export const contractGamesModalOpen = writable(false);
+export const contractFunctionsModalOpen = writable(false);

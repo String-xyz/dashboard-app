@@ -3,7 +3,7 @@
 	import { Role } from "$lib/common";
 	import { NavItem } from "$lib/constants";
 	import { contractService, apiClient, authService } from "$lib/services";
-	import { contractCreateModalOpen, networkList, contractList, toast, currentUser } from "$lib/stores";
+	import { contractCreateModalOpen, networkList, contractList, platformList, toast, currentUser } from "$lib/stores";
 
 	import StyledButton from "$lib/components/StyledButton.svelte";
 	import ContractTable from "$lib/components/ManageContracts/ContractTable.svelte";
@@ -24,6 +24,11 @@
 	});
 
 	const openCreateContract = async () => {
+		if ($platformList.length === 0) {
+			$toast.show("error", "You must create a game first");
+			return;
+		}
+
 		$contractCreateModalOpen = !$contractCreateModalOpen;
 	}
 
@@ -39,7 +44,7 @@
 			<h3 class="text-2xl font-bold">{NavItem.MANAGE_CONTRACTS}</h3>
 			{#if authService.canView($currentUser.role, Role.ADMIN)}
 				<StyledButton className="btn-outline" action={openCreateContract}>
-					<img src={"/assets/button/plus.svg"} alt="+" class="inline mr-3" />
+					<img src="/assets/button/plus.svg" alt="+" class="inline mr-3" />
 					Add Smart Contract
 				</StyledButton>
 			{:else}

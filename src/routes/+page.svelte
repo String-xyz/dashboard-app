@@ -23,6 +23,8 @@
 	import CreateContract from "$lib/modals/contracts/CreateContract.svelte";
 	import EditContract from "$lib/modals/contracts/EditContract.svelte";
 	import DeactContract from "$lib/modals/contracts/DeactContract.svelte";
+	import AssociatedGames from "$lib/modals/contracts/AssociatedGames.svelte";
+	import FunctionSignatures from "$lib/modals/contracts/FunctionSignatures.svelte";
 
 	/* Settings */
 	import MyAccount from "$lib/components/Settings/MyAccount.svelte";
@@ -101,6 +103,8 @@
 		<CreateContract	/>
 		<EditContract />
 		<DeactContract />
+		<AssociatedGames />
+		<FunctionSignatures />
 
 	</div>
 {/if}

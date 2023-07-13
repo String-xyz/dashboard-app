@@ -4,7 +4,7 @@
 
 	export let selectedGames: Platform[];
 
-	let showDropdown = true;
+	export let showDropdown = true;
 
 	const showAddGame = () => {
 		showDropdown = true;
@@ -33,7 +33,7 @@
 
 <div class="flex flex-col justify-center items-center mt-4 w-full">
 	{#if showDropdown}
-		<div class="border border-[#E6E4DF] rounded-[4px] bg-white h-[100px] w-full overflow-scroll">
+		<div class="border border-[#E6E4DF] rounded-[4px] bg-white h-[125px] w-full overflow-scroll">
 			{#each getFilteredList() as platform}
 				<button class="flex items-center p-3 hover:bg-[#FAF9F9] w-full" on:click|preventDefault={() => addGameToList(platform)}>
 					<img src="/assets/game_icon.svg" alt="game" class="mr-2" />
@@ -49,7 +49,7 @@
 			{/each}
 		</div>
 	{:else}
-		<div class="border border-[#F2F2F2] rounded-[4px] bg-white w-full h-[100px] overflow-scroll">
+		<div class="border border-[#F2F2F2] rounded-[4px] bg-white w-full h-[125px] overflow-scroll">
 			{#each selectedGames as platform, i}
 				<div class="flex justify-between items-center p-3" class:row={i > 0}>
 					<p class="text-semibold text-primary">{platform.name}</p>

@@ -26,10 +26,6 @@
 
 	const createContract = async () => {
 		try {
-			console.log("create contract")
-			console.log(selectedNetwork)
-			console.log(selectedGames)
-			console.log(selectedFunctions)
 			if (!selectedNetwork || infoDisabled || gamesDisabled || functionsDisabled) return;
 
 			await contractService.createContract({
@@ -87,7 +83,7 @@
 		selectedFunctions = [];
 
 		currentStep = "info";
-	};
+	}
 
 	const handleKeyboard = (e: KeyboardEvent) => {
 		if ($contractCreateModalOpen) {
@@ -109,7 +105,7 @@
 	<div class="modal-box relative" class:functionSelectHeight={currentStep == "functions"}>
 		<div class="flex flex-col">
 			<button class="ml-auto mb-4" on:click={close}><img src="/assets/close.svg" alt="Close" /></button>
-			<form on:submit={createContract} class="main flex flex-col items-center w-full">
+			<form class="main flex flex-col items-center w-full">
 				<div class="flex justify-between w-full font-bold uppercase text-sm pr-4">
 					<div class="flex items-center">
 						<div class="dot mr-2" class:active-dot={currentStep == "info"}>

@@ -1,38 +1,70 @@
 <script lang="ts">
 	import { commonErrorHandler } from "$lib/common";
-	import { contractService } from "$lib/services";
-	import { contractEditModalOpen, contractList, selectedContract, toast } from "$lib/stores";
+	import { contractService, type Network, type Platform } from "$lib/services";
+	import { contractEditModalOpen, contractList, networkList, platformList, selectedContract, toast } from "$lib/stores";
 
 	import StyledInput from "$lib/components/StyledInput.svelte";
 	import StyledButton from "$lib/components/StyledButton.svelte";
 	import NetworkSelect from "$lib/components/ManageContracts/NetworkSelect.svelte";
+	import GameSelect from "$lib/components/ManageContracts/GameSelect.svelte";
+	import FunctionSelect from "$lib/components/ManageContracts/FunctionSelect.svelte";
 
 	let currentStep: "info" | "games" | "functions" = "info";
 
-	let nameInput: string;
-	let addrInput: string;
-	let functionsInput: string[];
-	let networkIdInput: string;
-	let platformIdInput: string;
+	let selectedNetwork: Network | null;
+	let selectedGames: Platform[] = [];
+	let selectedFunctions: string[] = [];
 
-	$: infoDisabled = !nameInput || !addrInput || !networkIdInput;
-	$: gamesDisabled = !platformIdInput;
-	$: functionsDisabled = !functionsInput;
+	let initialNetwork: Network | null;
+	let initialGames: Platform[] = [];
+
+	let nameInput = "";
+	let addrInput = "";
+
+	$: infoDisabled = !nameInput || !addrInput || !selectedNetwork;
+	$: gamesDisabled = (selectedGames?.length == 0 ?? true);
+	$: functionsDisabled = (selectedFunctions?.length == 0 ?? true) || gamesDisabled || infoDisabled;
+
+	$: currentDisabled = currentStep == "info" ? infoDisabled : currentStep == "games" ? gamesDisabled : functionsDisabled;
+
+	selectedContract.subscribe((contract) => {
+		nameInput = contract?.name ?? "";
+		addrInput = contract?.address ?? "";
+	
+		initialNetwork = $networkList.find((net) => net.id == $selectedContract?.networkId) ?? null;
+		initialGames = $platformList.filter(plat => $selectedContract?.platformIds.includes(plat.id));
+
+		selectedNetwork = initialNetwork;
+		selectedGames = initialGames;
+		selectedFunctions = contract?.functions ?? [];
+	});
 
 	const editContract = async () => {
 		try {
-			if (!$selectedContract || infoDisabled || gamesDisabled || functionsDisabled) return;
+			if (!$selectedContract || !selectedNetwork || infoDisabled || gamesDisabled || functionsDisabled) return;
 
-			await contractService.editContract($selectedContract?.id, {
+			if (
+				nameInput == $selectedContract.name &&
+				addrInput == $selectedContract.address &&
+				selectedNetwork == initialNetwork &&
+				selectedGames == initialGames &&
+				selectedFunctions == $selectedContract.functions
+			) {
+				close();
+				return;
+			}
+
+			await contractService.editContract($selectedContract.id, {
 				name: nameInput,
 				address: addrInput,
-				functions: functionsInput,
-				networkId: networkIdInput,
+				functions: selectedFunctions,
+				networkId: selectedNetwork.id,
+				platformIds: selectedGames.map((game) => game.id),
 			});
 			$contractList = await contractService.listContracts();
 
 			close();
-			$toast.show("success", "Contract added");
+			$toast.show("success", "Contract edited");
 		} catch (err: any) {
 			commonErrorHandler(err, "contract");
 		}
@@ -67,15 +99,16 @@
 	}
 
 	const close = () => {
-		nameInput = "";
-		addrInput = "";
-		functionsInput = [];
-		networkIdInput = "";
-		platformIdInput = "";
-
 		$contractEditModalOpen = false;
 
-	};
+		nameInput = "";
+		addrInput = "";
+		selectedNetwork = null;
+		selectedGames = [];
+		selectedFunctions = [];
+
+		currentStep = "info";
+	}
 
 	const handleKeyboard = (e: KeyboardEvent) => {
 		if ($contractEditModalOpen) {
@@ -94,16 +127,10 @@
 <input type="checkbox" id="contract-edit-modal" class="modal-toggle" bind:checked={$contractEditModalOpen} />
 
 <div class="modal">
-	<div class="modal-box relative">
+	<div class="modal-box relative" class:functionSelectHeight={currentStep == "functions"}>
 		<div class="flex flex-col">
 			<button class="ml-auto mb-4" on:click={close}><img src="/assets/close.svg" alt="Close" /></button>
-			<h1 class="text-2xl font-bold mb-4">
-				Sorry!
-			</h1>
-			<p>
-				This feature is not yet available. Unfortunately you must remove the contract and add it again as of now.
-			</p>
-			<!-- <form on:submit={editContract} class="main flex flex-col items-center w-full">
+			<form class="main flex flex-col items-center w-full">
 				<div class="flex justify-between w-full font-bold uppercase text-sm pr-4">
 					<div class="flex items-center">
 						<div class="dot mr-2" class:active-dot={currentStep == "info"}>
@@ -138,31 +165,48 @@
 							autofocus
 						/>
 						<StyledInput
-							className="w-full mb-6"
+							className="w-full mb-8"
 							label="Contract address"
 							placeholder="Contract address"
 							bind:val={addrInput}
 							required
 						/>
-						<NetworkSelect />
+						<NetworkSelect bind:selectedNetwork />
 					{/if}
-					<div class="flex justify-between items-center mt-8">
+					{#if currentStep == "games"}
+						<div class="flex flex-col border border-[##BEBCBA] rounded-[4px] bg-[#FAF9F9] w-full p-3">
+							<h1 class="font-bold text-sm tracking-wider uppercase mr-auto mb-2">Associated games</h1>
+							<p class="text-xs">Select the games you want able to use this contract</p>
+							<GameSelect bind:selectedGames showDropdown={false} />
+						</div>
+					{/if}
+					{#if currentStep == "functions"}
+						<div class="flex flex-col border border-[##BEBCBA] rounded-[4px] bg-[#FAF9F9] w-full p-3">
+							<h1 class="font-bold text-sm tracking-wider uppercase mr-auto mb-2">Contract functions</h1>
+							<p class="text-xs">Enter the function signatures you want this contract to be able to use</p>
+							<FunctionSelect bind:selectedFunctions showInput={false} />
+						</div>
+					{/if}
+					<div class="flex justify-between items-center mt-10">
 						{#if currentStep != "info"}
-							<div class="w-1/2">
-								<button on:click|preventDefault={backStep} class="w-full bg-transparent text-sm text-primary font-bold tracking-wider border-none no-animation uppercase p-1">
-									Back
-								</button>
-							</div>
+							<button on:click|preventDefault={backStep} class="w-1/2 bg-transparent text-sm text-primary font-bold tracking-wider border-none no-animation uppercase p-1 mr-4">
+								Back
+							</button>
 						{/if}
 						<StyledButton
-							className="w-full"
+							className={currentStep == "info" ? "w-full " : "w-1/2 "}
 							action={nextStep}
+							disabled={currentDisabled}
 						>
-							Continue
+							{#if currentStep == "functions"}
+								Complete
+							{:else}
+								Continue
+							{/if}
 						</StyledButton>
 					</div>
 				</div>
-			</form> -->
+			</form>
 		</div>
 	</div>
 </div>
