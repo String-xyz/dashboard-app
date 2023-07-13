@@ -83,7 +83,7 @@
 			</div>
 		</div>
 	{:else}
-		<div class="border border-[#F2F2F2] rounded-[4px] bg-white w-full h-[100px] overflow-scroll">
+		<div class="border border-[#F2F2F2] rounded-[4px] bg-white w-full h-[125px] overflow-scroll">
 			{#each selectedFunctions as funcSig, i}
 				<div class="flex justify-between items-center p-3" class:row={i > 0}>
 					<p class="text-sm text-primary">{funcSig}</p>

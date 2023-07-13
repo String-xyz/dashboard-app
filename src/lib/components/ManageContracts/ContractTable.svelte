@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { Role, commonErrorHandler } from "$lib/common";
-	import { authService, contractService, type Contract, platformService } from "$lib/services";
-	import { contractList, contractCreateModalOpen, currentUser,
-		networkList, platformList, toast } from "$lib/stores";
+	import { authService, contractService, type Contract } from "$lib/services";
+	import { contractList, contractCreateModalOpen,
+		contractGamesModalOpen, contractFunctionsModalOpen,
+		currentUser, networkList, platformList, toast, selectedContract } from "$lib/stores";
 	import { copyText, formatAddr, formatDate } from "$lib/utils";
 
 	import StyledButton from "../StyledButton.svelte";
@@ -36,6 +37,24 @@
 			copiedIdx = undefined;
 		}, 2000);
 	}
+
+	const showMore = (contract: Contract, type: "games" | "functions") => {
+		$selectedContract = contract;
+		switch (type) {
+			case "games":
+				$contractGamesModalOpen = true;
+			break;
+
+			case "functions":
+				$contractFunctionsModalOpen = true;
+			break;
+		}
+	}
+
+	const getAssociatedGames = (contract: Contract) => {
+		return $platformList.filter(plat => contract.platformIds.includes(plat.id));
+	}
+
 </script>
 
 {#if $contractList?.length > 0}
@@ -51,6 +70,8 @@
 		<div class="rows">
 			{#each $contractList as contract, i}
 				{@const networkName = contractService.getNameByNetworkId(contract.networkId, $networkList)}
+				{@const associatedGames = getAssociatedGames(contract)}
+
 				<div class="row flex flex-nowrap items-center px-5 py-8 font-medium text-sm">
 					<div class="col mr-2">
 						<p class="font-semibold select-all break-words" class:deactivated={contract.deactivatedAt}>{contract.name}</p>
@@ -65,31 +86,31 @@
 						<img src={contractService.getNetworkIconPath(networkName)} alt={`${networkName} logo`} class="mr-2" />
 						<p class="select-all break-words" class:deactivated={contract.deactivatedAt}>{networkName}</p>
 					</div>
-					<div class="w-1/6 mr-2 flex">
-						{#each contract.platformIds as platId, i}
-							{#await platformService.getPlatform(platId) then platform}
-								<div class="bg-info text-gray-blue-10 rounded-md px-2 py-1 w-fit" class:mr-2={i == 0}>
-									<p class="select-all break-words">{platform.name}</p>
-								</div>
-								{#if contract.functions.length > 2}
-									<button>
-										See more
-									</button>
-								{/if}
-							{/await}
+					<div class="w-1/6 mr-2 flex flex-col">
+						{#each associatedGames.slice(0, 2) as platform}
+							<div class="bg-info text-gray-blue-10 rounded-md px-2 py-1 w-fit mb-1">
+								<p class="select-all break-words">{platform.name}</p>
+							</div>
 						{/each}
+						{#if associatedGames.length > 2}
+							<button on:click={() => showMore(contract, "games")} class="bg-[#F2F2F2] text-sm rounded-[4px] w-24 h-6">
+								See more
+								<img src="/assets/button/plus_neutral.svg" alt="plus" class="inline ml-1" />
+							</button>
+						{/if}
 					</div>
-					<div class="w-1/6 mr-2 flex">
-						{#each contract.functions as func, i}
-							<div class="bg-info text-gray-blue-10 rounded-md px-2 py-1 w-fit" class:mr-2={i == 0}>
+					<div class="w-1/6 mr-2 flex flex-col">
+						{#each contract.functions.slice(0, 2) as func}
+							<div class="bg-info text-gray-blue-10 rounded-md px-2 py-1 w-fit mb-1">
 								<p class="select-all break-words">{func}</p>
 							</div>
-							{#if contract.functions.length > 2}
-								<button>
-									See more
-								</button>
-							{/if}
 						{/each}
+						{#if contract.functions.length > 2}
+							<button on:click={() => showMore(contract, "functions")} class="bg-[#F2F2F2] text-sm rounded-[4px] w-24 h-6">
+								See more
+								<img src="/assets/button/plus_neutral.svg" alt="plus" class="inline ml-1" />
+							</button>
+						{/if}
 					</div>
 					<div class="w-1/12 flex items-center justify-end info">
 						{#if authService.canView($currentUser.role, Role.ADMIN)}
@@ -142,7 +163,7 @@
 		border-radius: 4px;
 	}
 
-	@media (max-width: 900px) {
+	@media (max-width: 1000px) {
 		.row {
 			flex-direction: column;
 			row-gap: 20px;

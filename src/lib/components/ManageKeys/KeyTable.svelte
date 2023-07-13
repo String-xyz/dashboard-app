@@ -77,6 +77,8 @@
 		</div>
 		<div class="rows">
 			{#each $apiKeyList as key, i}
+				{@const platform = $platformList.find((p) => p.id == key.platformId)}
+
 				<div class="row flex flex-nowrap items-center py-6 pl-4 pr-6 gap-x-5">
 					<div class="col flex flex-col">
 						<p class="font-bold">{key.hint}</p>
@@ -100,9 +102,9 @@
 						</span>
 					</div>
 					<div class="col">
-						{#await getPlatformName(key) then platformName}
-							<p class="text-sm font-medium select-all break-words">{platformName}</p>
-						{/await}
+						{#if platform && key.type == "public"}
+							<p class="text-sm font-medium select-all break-words">{platform.name}</p>
+						{/if}
 					</div>
 					<div class="col">
 						{#if key == $selectedKey}
