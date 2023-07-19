@@ -79,6 +79,11 @@ export function createContractService(apiClient: ApiClient) {
 				icon = "arbitrum";
 			break;
 
+			case "dfk_subnet":
+			case "dfk_testnet":
+				icon = "dfk";
+			break;
+
 			default:
 				icon = fmtdName;
 		}

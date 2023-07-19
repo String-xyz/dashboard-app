@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { contractCreateModalOpen, contractList, toast } from "$lib/stores";
 	import { commonErrorHandler } from "$lib/common";
-	import { contractService, type Network, type Platform } from "$lib/services";
+	import { contractService, type Network, type Platform, type ContractType } from "$lib/services";
 
 	import StyledInput from "$lib/components/StyledInput.svelte";
 	import StyledButton from "$lib/components/StyledButton.svelte";
@@ -9,7 +9,9 @@
 	import GameSelect from "$lib/components/ManageContracts/GameSelect.svelte";
 	import FunctionSelect from "$lib/components/ManageContracts/FunctionSelect.svelte";
 
-	let currentStep: "info" | "games" | "functions" = "info";
+	type CreationStep = "info" | "games" | "functions";
+
+	let currentStep: CreationStep = "info";
 
 	let selectedNetwork: Network | null;
 	let selectedGames: Platform[] = [];
@@ -18,7 +20,11 @@
 	let nameInput = "";
 	let addrInput = "";
 
-	$: infoDisabled = !nameInput || !addrInput || !selectedNetwork;
+	let nftChecked = false;
+	let tokenChecked = false;
+	let contractType: ContractType = "";
+
+	$: infoDisabled = !nameInput || !addrInput || !contractType || !selectedNetwork;
 	$: gamesDisabled = (selectedGames?.length == 0 ?? true);
 	$: functionsDisabled = (selectedFunctions?.length == 0 ?? true) || gamesDisabled || infoDisabled;
 
@@ -30,6 +36,7 @@
 
 			await contractService.createContract({
 				name: nameInput,
+				type: contractType,
 				address: addrInput,
 				functions: selectedFunctions,
 				networkId: selectedNetwork.id,
@@ -73,11 +80,29 @@
 		}
 	}
 
+	const selectContractType = () => {
+		if (nftChecked && tokenChecked) {
+			contractType = "NFT_AND_TOKEN";
+		} else if (nftChecked) {
+			contractType = "NFT";
+		} else if (tokenChecked) {
+			contractType = "TOKEN";
+		} else {
+			contractType = "";
+		}
+	}
+
 	const close = () => {
 		$contractCreateModalOpen = false;
 
+		// Reset all values
 		nameInput = "";
 		addrInput = "";
+
+		nftChecked = false;
+		tokenChecked = false;
+		contractType = "";
+
 		selectedNetwork = null;
 		selectedGames = [];
 		selectedFunctions = [];
@@ -102,7 +127,7 @@
 <input type="checkbox" id="contract-create-modal" class="modal-toggle" bind:checked={$contractCreateModalOpen} />
 
 <div class="modal">
-	<div class="modal-box relative" class:functionSelectHeight={currentStep == "functions"}>
+	<div class="modal-box relative">
 		<div class="flex flex-col">
 			<button class="ml-auto mb-4" on:click={close}><img src="/assets/close.svg" alt="Close" /></button>
 			<form class="main flex flex-col items-center w-full">
@@ -129,7 +154,7 @@
 				<div class="divider" />
 				<img src="/assets/card/contract_icon.svg" alt="contract" class="mb-4" />
 				<h3 class="text-2xl font-bold mb-4">Add Smart Contract</h3>
-				<div class="border border-[#F2F2F2] rounded-[4px] w-full p-8">
+				<div class="border border-[#F2F2F2] rounded-[4px] w-full p-8 pt-7">
 					{#if currentStep == "info"}
 						<StyledInput
 							className="w-full mb-6"
@@ -147,6 +172,23 @@
 							required
 						/>
 						<NetworkSelect bind:selectedNetwork />
+						<div class="flex items-center border border-[#BEBCBA] rounded-[4px] w-full p-3 mt-7">
+							<p class="text-sm font-medium">Contract type</p>
+							<div class="flex items-center ml-2 pl-4 border-l-[1px]">
+								<div class="form-control mr-3">
+									<label class="label cursor-pointer p-0">
+										<span class="label-text text-neutral font-medium mr-2">NFT</span> 
+										<input type="checkbox" class="checkbox checkbox-primary" bind:checked={nftChecked} on:change={selectContractType} />
+									</label>
+								</div>
+								<div class="form-control">
+									<label class="label cursor-pointer p-0">
+										<span class="label-text text-neutral font-medium mr-2">Token</span> 
+										<input type="checkbox" class="checkbox checkbox-primary" bind:checked={tokenChecked} on:change={selectContractType} />
+									</label>
+								</div>
+							</div>
+						</div>
 					{/if}
 					{#if currentStep == "games"}
 						<div class="flex flex-col border border-[##BEBCBA] rounded-[4px] bg-[#FAF9F9] w-full p-3">
@@ -206,8 +248,6 @@
 		@apply text-gray-blue-10;
 	}
 
-
-
 	.modal {
 		background: rgba(252, 252, 252, 0.4);
 		backdrop-filter: blur(2px);
@@ -218,10 +258,7 @@
 		border-radius: 8px;
 		width: 600px;
 		max-width: 600px;
-		height: 700px;
-	}
-
-	.functionSelectHeight {
 		height: 750px;
 	}
+
 </style>

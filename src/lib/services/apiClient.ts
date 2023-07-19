@@ -429,6 +429,8 @@ export interface Network {
 // 	name: string;
 // }
 
+export type ContractType = "NFT" | "TOKEN" | "NFT_AND_TOKEN" | "";
+
 export interface Contract {
 	id: string;
 	createdAt: string;
@@ -437,6 +439,7 @@ export interface Contract {
 	name: string;
 	address: string;
 	functions: string[];
+	type: ContractType;
 	networkId: string;
 	platformIds: string[];
 	organizationId: string;
@@ -444,6 +447,7 @@ export interface Contract {
 
 export interface ContractDetails {
 	name: string;
+	type: ContractType;
 	address: string;
 	functions: string[];
 	networkId: string;
@@ -452,6 +456,7 @@ export interface ContractDetails {
 
 export interface ContractUpdate {
 	name?: string;
+	type?: ContractType;
 	address?: string;
 	functions?: string[];
 	networkId?: string;
